@@ -1,0 +1,9 @@
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\Models\bin\Debug\netcoreapp2.1\OnlineGameStore.Domain.deps.json
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\Models\bin\Debug\netcoreapp2.1\OnlineGameStore.Domain.dll
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\Models\bin\Debug\netcoreapp2.1\OnlineGameStore.Domain.pdb
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\Models\obj\Debug\netcoreapp2.1\OnlineGameStore.Domain.csproj.CoreCompileInputs.cache
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\Models\obj\Debug\netcoreapp2.1\OnlineGameStore.Domain.AssemblyInfoInputs.cache
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\Models\obj\Debug\netcoreapp2.1\OnlineGameStore.Domain.AssemblyInfo.cs
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\Models\obj\Debug\netcoreapp2.1\OnlineGameStore.Domain.dll
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\Models\obj\Debug\netcoreapp2.1\OnlineGameStore.Domain.pdb
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\Models\obj\Debug\netcoreapp2.1\OnlineGameStore.Domain.csprojAssemblyReference.cache
