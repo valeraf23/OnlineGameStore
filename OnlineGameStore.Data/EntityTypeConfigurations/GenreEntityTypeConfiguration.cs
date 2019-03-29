@@ -11,7 +11,7 @@ namespace OnlineGameStore.Data.EntityTypeConfigurations
             builder
                 .HasMany(u => u.SubGenres)
                 .WithOne(p => p.ParentGenre)
-                .HasForeignKey(p => p.ParentId).OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(p => p.ParentId).OnDelete(DeleteBehavior.Restrict);
 
             builder.HasIndex(p => new {p.Name})
                 .IsUnique();

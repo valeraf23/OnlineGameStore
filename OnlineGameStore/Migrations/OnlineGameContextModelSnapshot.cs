@@ -113,6 +113,96 @@ namespace OnlineGameStore.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 5,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Adventure"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Misc"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "PuzzleSkill"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "RPG"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Races"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Sports"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Name = "Strategy"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "FPS",
+                            ParentId = 5
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "TPS",
+                            ParentId = 5
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "rally",
+                            ParentId = 4
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "arcade",
+                            ParentId = 4
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "formula",
+                            ParentId = 4
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "off-road",
+                            ParentId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "RTS",
+                            ParentId = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "TBS",
+                            ParentId = 1
+                        });
                 });
 
             modelBuilder.Entity("OnlineGameStore.Domain.Entities.PlatformType", b =>
@@ -130,6 +220,28 @@ namespace OnlineGameStore.Migrations
                         .HasFilter("[Type] IS NOT NULL");
 
                     b.ToTable("PlatformTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            Type = "Browser"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Type = "Console"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Type = "Desktop"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Type = "Mobile"
+                        });
                 });
 
             modelBuilder.Entity("OnlineGameStore.Domain.Entities.Publisher", b =>
@@ -157,7 +269,7 @@ namespace OnlineGameStore.Migrations
                     b.HasOne("OnlineGameStore.Domain.Entities.Comment", "ParentComment")
                         .WithMany("Answers")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("OnlineGameStore.Domain.Entities.Game", b =>
@@ -199,7 +311,7 @@ namespace OnlineGameStore.Migrations
                     b.HasOne("OnlineGameStore.Domain.Entities.Genre", "ParentGenre")
                         .WithMany("SubGenres")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

@@ -5,70 +5,87 @@ namespace OnlineGameStore.Data.Data
 {
     public static class DefaultSubGenresManager
     {
-        public static ICollection<Genre> Strategy(int parentId) => new List<Genre>
+        public static ICollection<Genre> Strategy
         {
-            new Genre
+            get
             {
-                Id = 9,
-                Name = "RTS",
-                ParentId = parentId
-            },
-            new Genre
-            {
-                Id = 10,
-                Name = "TBS",
-                ParentId = parentId
+                var id = DefaultGenresManager.Strategy.Id;
+                return new List<Genre>
+                {
+                    new Genre
+                    {
+                        Id = 9,
+                        Name = "RTS",
+                        ParentId = id
+                    },
+                    new Genre
+                    {
+                        Id = 10,
+                        Name = "TBS",
+                        ParentId = id
+                    }
+                };
             }
-        };
+        }
 
-        public static ICollection<Genre> Races(int parentId) => new List<Genre>
+        public static ICollection<Genre> Races
         {
-            new Genre
+            get
             {
-                Id = 11,
-                Name = "rally",
-                ParentId = parentId
-            },
-            new Genre
-            {
-                Id = 12,
-                Name = "arcade",
-                ParentId = parentId
-            },
-            new Genre
-            {
-                Id = 13,
-                Name = "formula",
-                ParentId = parentId
-            },
-            new Genre
-            {
-                Id = 14,
-                Name = "off-road",
-                ParentId = parentId
-            }
-        };
+                var id = DefaultGenresManager.Races.Id;
+                return new List<Genre>
+                {
 
-        public static ICollection<Genre> Action(int parentId) => new List<Genre>
-        {
-            new Genre
-            {
-                Id = 15,
-                Name = "FPS",
-                ParentId = parentId
-            },
-            new Genre
-            {
-                Id = 16,
-                Name = "TPS",
-                ParentId = parentId
-            },
-            new Genre
-            {
-                Id = 17,
-                Name = "Misc",
-                ParentId = parentId
+                    new Genre
+                    {
+                        Id = 11,
+                        Name = "rally",
+                        ParentId = id
+                    },
+                    new Genre
+                    {
+                        Id = 12,
+                        Name = "arcade",
+                        ParentId = id
+                    },
+                    new Genre
+                    {
+                        Id = 13,
+                        Name = "formula",
+                        ParentId = id
+                    },
+                    new Genre
+                    {
+                        Id = 14,
+                        Name = "off-road",
+                        ParentId = id
+                    }
+                };
             }
-        };
+        }
+
+        public static ICollection<Genre> Action
+        {
+            get
+            {
+                var id = DefaultGenresManager.Action.Id;
+                return new List<Genre>
+                {
+                    new Genre
+                    {
+                        Id = 15,
+                        Name = "FPS",
+                        ParentId = id
+                    },
+                    new Genre
+                    {
+                        Id = 16,
+                        Name = "TPS",
+                        ParentId = id
+                    }
+                };
+            }
+
+        }
     }
 }

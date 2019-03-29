@@ -24,7 +24,7 @@ namespace OnlineGameStore.Migrations
                         column: x => x.ParentId,
                         principalTable: "Genres",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,7 +99,7 @@ namespace OnlineGameStore.Migrations
                         column: x => x.ParentId,
                         principalTable: "Comments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -148,6 +148,47 @@ namespace OnlineGameStore.Migrations
                         principalTable: "PlatformTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Genres",
+                columns: new[] { "Id", "Name", "ParentId" },
+                values: new object[,]
+                {
+                    { 5, "Action", null },
+                    { 6, "Adventure", null },
+                    { 8, "Misc", null },
+                    { 7, "PuzzleSkill", null },
+                    { 2, "RPG", null },
+                    { 4, "Races", null },
+                    { 3, "Sports", null },
+                    { 1, "Strategy", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PlatformTypes",
+                columns: new[] { "Id", "Type" },
+                values: new object[,]
+                {
+                    { 2, "Browser" },
+                    { 4, "Console" },
+                    { 3, "Desktop" },
+                    { 1, "Mobile" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Genres",
+                columns: new[] { "Id", "Name", "ParentId" },
+                values: new object[,]
+                {
+                    { 15, "FPS", 5 },
+                    { 16, "TPS", 5 },
+                    { 11, "rally", 4 },
+                    { 12, "arcade", 4 },
+                    { 13, "formula", 4 },
+                    { 14, "off-road", 4 },
+                    { 9, "RTS", 1 },
+                    { 10, "TBS", 1 }
                 });
 
             migrationBuilder.CreateIndex(

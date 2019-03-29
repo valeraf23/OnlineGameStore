@@ -11,7 +11,7 @@ namespace OnlineGameStore.Data.EntityTypeConfigurations
             builder
                 .HasMany(u => u.Answers)
                 .WithOne(p => p.ParentComment)
-                .HasForeignKey(p => p.ParentId).OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(p => p.ParentId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
