@@ -12,6 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Migrations\20190326154739_initial.cs" />
+    <Compile Include="Migrations\20190326154739_initial.Designer.cs" />
+    <Compile Include="Migrations\OnlineGameContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

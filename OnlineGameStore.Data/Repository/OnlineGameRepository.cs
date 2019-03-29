@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using OnlineGameStore.Data.Data;
 using OnlineGameStore.Domain.Entities;
 
-namespace OnlineGameStore.Data.Services
+namespace OnlineGameStore.Data.Repository
 {
     public class OnlineGameRepository : IOnlineGameRepository, IDisposable
     {

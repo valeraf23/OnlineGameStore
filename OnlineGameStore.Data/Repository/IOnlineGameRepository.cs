@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using OnlineGameStore.Domain.Entities;
 
-namespace OnlineGameStore.Data.Services
+namespace OnlineGameStore.Data.Repository
 {
     public interface IOnlineGameRepository
     {

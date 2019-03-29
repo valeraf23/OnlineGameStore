@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineGameStore.Data.EntityTypeConfigurations;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Domain.Entities;
 
@@ -19,21 +20,12 @@ namespace OnlineGameStore.Data.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder
-                .Entity<Genre>()
-                .HasMany(u => u.SubGenres)
-                .WithOne(p => p.ParentGenre)
-                .HasForeignKey(p => p.ParentId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.ApplyConfiguration(new CommentEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new GameGenreEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new GamePlatformTypeEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new GenreEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new PlatformTypeEntityTypeConfiguration());
 
-            modelBuilder
-                .Entity<Comment>()
-                .HasMany(u => u.Answers)
-                .WithOne(p => p.ParentComment)
-                .HasForeignKey(p => p.ParentId).OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.SetUniqueValues();
-            modelBuilder.CreatingManyToManyGameGenre();
-            modelBuilder.CreatingManyToManyGamePlatformType();
             modelBuilder.EnsureSeedDataForContext();
             base.OnModelCreating(modelBuilder);
         }

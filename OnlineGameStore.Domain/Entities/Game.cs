@@ -17,8 +17,7 @@ namespace OnlineGameStore.Domain.Entities
 
         public int PublisherId { get; set; }
 
-        public virtual ICollection<Comment> Comments { get; set; }
-            = new List<Comment>();
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         public virtual ICollection<GameGenre> GameGenre { get; set; } = new List<GameGenre>();
         public virtual ICollection<GamePlatformType> GamePlatformType { get; set; } = new List<GamePlatformType>();

@@ -3,71 +3,71 @@ using OnlineGameStore.Domain.Entities;
 
 namespace OnlineGameStore.Data.Data
 {
-    public static class DefaultSubGenresFactories
+    public static class DefaultSubGenresManager
     {
-        public static ICollection<Genre> Strategy => new List<Genre>
+        public static ICollection<Genre> Strategy(int parentId) => new List<Genre>
         {
             new Genre
             {
                 Id = 9,
                 Name = "RTS",
-                ParentId = 1
+                ParentId = parentId
             },
             new Genre
             {
                 Id = 10,
                 Name = "TBS",
-                ParentId = 1
+                ParentId = parentId
             }
         };
 
-        public static ICollection<Genre> Races => new List<Genre>
+        public static ICollection<Genre> Races(int parentId) => new List<Genre>
         {
             new Genre
             {
                 Id = 11,
                 Name = "rally",
-                ParentId = 4
+                ParentId = parentId
             },
             new Genre
             {
                 Id = 12,
                 Name = "arcade",
-                ParentId = 4
+                ParentId = parentId
             },
             new Genre
             {
                 Id = 13,
                 Name = "formula",
-                ParentId = 4
+                ParentId = parentId
             },
             new Genre
             {
                 Id = 14,
                 Name = "off-road",
-                ParentId = 4
+                ParentId = parentId
             }
         };
 
-        public static ICollection<Genre> Action => new List<Genre>
+        public static ICollection<Genre> Action(int parentId) => new List<Genre>
         {
             new Genre
             {
                 Id = 15,
                 Name = "FPS",
-                ParentId = 5
+                ParentId = parentId
             },
             new Genre
             {
                 Id = 16,
                 Name = "TPS",
-                ParentId = 5
+                ParentId = parentId
             },
             new Genre
             {
                 Id = 17,
                 Name = "Misc",
-                ParentId = 5
+                ParentId = parentId
             }
         };
     }

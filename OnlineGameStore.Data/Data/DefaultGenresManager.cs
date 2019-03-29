@@ -1,15 +1,16 @@
-﻿using OnlineGameStore.Domain.Entities;
+﻿using System.Runtime.CompilerServices;
+using OnlineGameStore.Domain.Entities;
 
 namespace OnlineGameStore.Data.Data
 {
-    public static class DefaultGenresFactories
+    public static class DefaultGenresManager
     {
         public static Genre Strategy =>
             new Genre
             {
                 Id = 1,
                 Name = "Strategy",
-                SubGenres = DefaultSubGenresFactories.Strategy
+               // SubGenres = DefaultSubGenresManager.Strategy(1)
             };
 
         public static Genre Rpg =>
@@ -30,14 +31,14 @@ namespace OnlineGameStore.Data.Data
             {
                 Id = 4,
                 Name = "Races",
-                SubGenres = DefaultSubGenresFactories.Races
+              //  SubGenres = DefaultSubGenresManager.Races(4)
             };
         public static Genre Action =>
             new Genre
             {
                 Id = 5,
                 Name = "Action",
-                SubGenres = DefaultSubGenresFactories.Action
+               // SubGenres = DefaultSubGenresManager.Action(5)
             };
         public static Genre Adventure =>
             new Genre

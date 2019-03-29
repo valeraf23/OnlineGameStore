@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineGameStore.Data.Data;
-using OnlineGameStore.Data.Services;
 using AutoMapper;
+using OnlineGameStore.Data.Repository;
 
 
 namespace OnlineGameStore

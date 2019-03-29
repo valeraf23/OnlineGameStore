@@ -14,4 +14,3 @@ C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Domain\o
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Domain\obj\Debug\netcoreapp2.2\OnlineGameStore.Domain.AssemblyInfo.cs
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Domain\obj\Debug\netcoreapp2.2\OnlineGameStore.Domain.dll
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Domain\obj\Debug\netcoreapp2.2\OnlineGameStore.Domain.pdb
-C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Domain\obj\Debug\netcoreapp2.2\OnlineGameStore.Domain.csprojAssemblyReference.cache
