@@ -4,8 +4,7 @@ namespace OnlineGameStore.Data.Helpers
 {
     public static class GuidsManager
     {
-        public static Guid[] Get = new[]
-        {
+        public static Guid[] Get = {
             new Guid("0ee71fc4-5f4d-49f7-ad82-2049508a00eb"),
             new Guid("4b6f4c7f-eb42-4ce1-9ece-882b63fc662b"),
             new Guid("1c7650ec-4f9f-4999-b78d-2079d2b4e9fb"),
