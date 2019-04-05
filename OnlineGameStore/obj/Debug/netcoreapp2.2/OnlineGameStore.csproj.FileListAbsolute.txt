@@ -3,7 +3,9 @@ C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\bin\Debu
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\bin\Debug\netcoreapp2.2\OnlineGameStore.runtimeconfig.dev.json
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\bin\Debug\netcoreapp2.2\OnlineGameStore.dll
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\bin\Debug\netcoreapp2.2\OnlineGameStore.pdb
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\bin\Debug\netcoreapp2.2\OnlineGameStore.Data.dll
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\bin\Debug\netcoreapp2.2\OnlineGameStore.Domain.dll
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\bin\Debug\netcoreapp2.2\OnlineGameStore.Data.pdb
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\bin\Debug\netcoreapp2.2\OnlineGameStore.Domain.pdb
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\obj\Debug\netcoreapp2.2\OnlineGameStore.csprojAssemblyReference.cache
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\obj\Debug\netcoreapp2.2\OnlineGameStore.csproj.CoreCompileInputs.cache
@@ -15,5 +17,3 @@ C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\obj\Debu
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\obj\Debug\netcoreapp2.2\OnlineGameStore.csproj.CopyComplete
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\obj\Debug\netcoreapp2.2\OnlineGameStore.dll
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\obj\Debug\netcoreapp2.2\OnlineGameStore.pdb
-C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\bin\Debug\netcoreapp2.2\OnlineGameStore.Data.dll
-C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore\bin\Debug\netcoreapp2.2\OnlineGameStore.Data.pdb

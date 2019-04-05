@@ -1,34 +1,34 @@
 ﻿using OnlineGameStore.Domain.Entities;
 
-namespace OnlineGameStore.Data.Data
+namespace OnlineGameStore.Data.Helpers
 {
-    public static class PlatformTypeFactory
+    public static class PlatformTypeManager
     {
         public static PlatformType Mobile =>
             new PlatformType
             {
-                Id = 1,
+                Id = GuidsManager.Get[1],
                 Type = "Mobile"
             };
 
         public static PlatformType Browser =>
             new PlatformType
             {
-                Id = 2,
+                Id = GuidsManager.Get[2],
                 Type = "Browser"
             };
 
         public static PlatformType Desktop =>
             new PlatformType
             {
-                Id = 3,
+                Id = GuidsManager.Get[3],
                 Type = "Desktop"
             };
 
         public static PlatformType Console =>
             new PlatformType
             {
-                Id = 4,
+                Id = GuidsManager.Get[4],
                 Type = "Console"
             };
     }

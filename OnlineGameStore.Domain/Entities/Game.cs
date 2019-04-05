@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,8 +7,7 @@ namespace OnlineGameStore.Domain.Entities
 {
     public class Game
     {
-
-        [Key] public int Id { get; set; }
+        [Key] public Guid Id { get; set; }
 
         [Required] [MaxLength(50)] public string Name { get; set; }
 
@@ -15,7 +15,7 @@ namespace OnlineGameStore.Domain.Entities
 
         [ForeignKey("PublisherId")] public Publisher Publisher { get; set; }
 
-        public int PublisherId { get; set; }
+        public Guid PublisherId { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 

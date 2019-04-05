@@ -36,10 +36,10 @@ namespace OnlineGameStore.Data.Helpers
         {
             modelBuilder.Entity<PlatformType>().HasData
             (
-                PlatformTypeFactory.Browser,
-                PlatformTypeFactory.Console,
-                PlatformTypeFactory.Desktop,
-                PlatformTypeFactory.Mobile
+                PlatformTypeManager.Browser,
+                PlatformTypeManager.Console,
+                PlatformTypeManager.Desktop,
+                PlatformTypeManager.Mobile
             );
         }
     }

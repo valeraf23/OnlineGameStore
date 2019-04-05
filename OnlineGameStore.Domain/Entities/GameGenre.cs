@@ -1,10 +1,12 @@
-﻿namespace OnlineGameStore.Domain.Entities
+﻿using System;
+
+namespace OnlineGameStore.Domain.Entities
 {
     public class GameGenre
     {
-        public int GameId { get; set; }
+        public Guid GameId { get; set; }
         public Game Game { get; set; }
-        public int GenreId { get; set; }
+        public Guid GenreId { get; set; }
         public Genre Genre { get; set; }
     }
 }

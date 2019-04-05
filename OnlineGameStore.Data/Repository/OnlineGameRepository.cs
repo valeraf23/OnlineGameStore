@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using OnlineGameStore.Data.Data;
 using OnlineGameStore.Domain.Entities;
 
@@ -12,90 +11,117 @@ namespace OnlineGameStore.Data.Repository
 {
     public class OnlineGameRepository : IOnlineGameRepository, IDisposable
     {
-        private OnlineGameContext _context;
         private CancellationTokenSource _cancellationTokenSource;
+        private OnlineGameContext _context;
 
         public OnlineGameRepository(OnlineGameContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task AddGame(Game gameToAdd)
+        public async Task AddGame(Game game)
         {
-            if (gameToAdd == null)
+            if (game == null) throw new ArgumentNullException(nameof(game));
+            game.Id = Guid.NewGuid();
+            _context.Games.Add(game);
+            await _context.Games.AddAsync(game);
+        }
+
+        public async Task<Game> GetGame(Guid gameId)
+        {
+            var games = await GetGames(x => x.Id == gameId);
+            return games.FirstOrDefault();
+        }
+
+        public void DeleteGame(Game game)
+        {
+            if (game == null) throw new ArgumentNullException(nameof(game));
+
+            _context.Games.Remove(game);
+        }
+
+        public async Task AddComment(Guid gameId, Comment comment)
+        {
+            if (gameId == default(Guid))
+                throw new ArgumentOutOfRangeException($"{nameof(gameId)} should not be greater default");
+
+            if (comment.Id == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(gameToAdd));
+                comment.Id = Guid.NewGuid();
+                FillIdForComments(comment.Answers);
             }
 
-            await _context.AddAsync(gameToAdd);
+            var game = await GetGame(gameId);
+            game.Comments.Add(comment);
+            await _context.Comments.AddAsync(comment);
         }
 
-        public Task UpdateGame(Game game)
+        public async Task<IEnumerable<Game>> GetGamesByGenre(Guid genreId)
         {
-            throw new System.NotImplementedException();
+            return await GetGames(x => x.GameGenre.Any(g => g.GenreId == genreId));
         }
 
-        public async Task<Game> GetGame(int gameId)
+        public async Task<IEnumerable<Game>> GetGamesByPlatformTypes(Guid genreId)
         {
-            return await Get().FirstOrDefaultAsync(x => x.Id == gameId);
+            return await GetGames(x => x.GamePlatformType.Any(g => g.PlatformTypeId == genreId));
+        }
+
+        public Task<IEnumerable<Comment>> GetAllCommentsForGame(Guid id)
+        {
+            return GetAllComments(comment => comment.GameId == id);
         }
 
         public async Task<IEnumerable<Game>> GetGames()
         {
-            var games = await Get().ToListAsync();
-            return games;
+            return await GetGames(game => true);
         }
 
-        public Task DeleteGame(int gameId)
+        private static void FillIdForComments(ICollection<Comment> answers)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public Task AddComment(int gameId, Comment comment)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<IEnumerable<Comment>> GetAllCommentsForGame(int gameId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Game>> GetGamesByGenre(int genreId)
-        {
-            var games = await Get().Where(x => x.GameGenre.Any(g => g.GenreId == genreId)).ToArrayAsync();
-            return games;
-        }
-
-        public Task<IEnumerable<Game>> GetGamesByPlatformTypes(int genreId)
-        {
-            throw new System.NotImplementedException();
+            if (!answers.Any()) return;
+            foreach (var answer in answers)
+            {
+                answer.Id = Guid.NewGuid();
+                FillIdForComments(answer.Answers);
+            }
         }
 
         public async Task<bool> SaveChangesAsync()
         {
-            return (await _context.SaveChangesAsync() > 0);
-        }
-
-        private IIncludableQueryable<Game, List<Genre>> Get()
-        {
-            var games =
-                _context.Games
-                    .Include(s => s.Publisher)
-                    .Include(s => s.Comments).ThenInclude(x =>
-                        x.Answers.Where(a => a.ParentComment == null).Select(f => new Comment
-                            {Id = f.Id, Name = f.Name, ParentId = f.ParentId, Answers = f.Answers}).ToList())
-                    .Include(c => c.GamePlatformType).ThenInclude(p => p.PlatformType)
-                    .Include(c => c.GameGenre).ThenInclude(p => p.Genre).ThenInclude(c =>
-                        c.SubGenres.Where(p => p.ParentGenre == null).Select(f => new Genre
-                            {Id = f.Id, Name = f.Name, ParentId = f.ParentId, SubGenres = f.SubGenres}).ToList());
-            return games;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        private async Task<IEnumerable<Comment>> GetAllComments(Func<Comment, bool> predicate)
+        {
+            return await _context.Comments.Where(x => x.ParentComment == null && predicate(x))
+                .Include(x => x.Answers).ToListAsync();
+        }
+
+        private async Task<IEnumerable<Comment>> GetAllComments()
+        {
+            return await GetAllComments(comment => true);
+        }
+
+        private async Task<IEnumerable<Game>> GetGames(Func<Game, bool> predicate)
+        {
+            var allGames =
+                _context.Games
+                    .Include(game => game.Publisher)
+                    .Include(game => game.GameGenre)
+                    .ThenInclude(gameGenre => gameGenre.Genre)
+                    .ThenInclude(genre => genre.SubGenres)
+                    .Include(game => game.GamePlatformType)
+                    .ThenInclude(gamePlatformType => gamePlatformType.PlatformType);
+
+            foreach (var game in allGames) game.Comments = (await GetAllCommentsForGame(game.Id)).ToList();
+
+            return allGames.Where(predicate);
         }
 
         protected virtual void Dispose(bool disposing)

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using OnlineGameStore.Domain.Entities;
 
-namespace OnlineGameStore.Data.Data
+namespace OnlineGameStore.Data.Helpers
 {
     public static class DefaultSubGenresManager
     {
@@ -14,13 +14,13 @@ namespace OnlineGameStore.Data.Data
                 {
                     new Genre
                     {
-                        Id = 9,
+                        Id = GuidsManager.Get[9],
                         Name = "RTS",
                         ParentId = id
                     },
                     new Genre
                     {
-                        Id = 10,
+                        Id = GuidsManager.Get[10],
                         Name = "TBS",
                         ParentId = id
                     }
@@ -38,25 +38,25 @@ namespace OnlineGameStore.Data.Data
 
                     new Genre
                     {
-                        Id = 11,
+                        Id = GuidsManager.Get[11],
                         Name = "rally",
                         ParentId = id
                     },
                     new Genre
                     {
-                        Id = 12,
+                        Id = GuidsManager.Get[12],
                         Name = "arcade",
                         ParentId = id
                     },
                     new Genre
                     {
-                        Id = 13,
+                        Id = GuidsManager.Get[13],
                         Name = "formula",
                         ParentId = id
                     },
                     new Genre
                     {
-                        Id = 14,
+                        Id = GuidsManager.Get[14],
                         Name = "off-road",
                         ParentId = id
                     }
@@ -73,13 +73,13 @@ namespace OnlineGameStore.Data.Data
                 {
                     new Genre
                     {
-                        Id = 15,
+                        Id = GuidsManager.Get[15],
                         Name = "FPS",
                         ParentId = id
                     },
                     new Genre
                     {
-                        Id = 16,
+                        Id = GuidsManager.Get[16],
                         Name = "TPS",
                         ParentId = id
                     }

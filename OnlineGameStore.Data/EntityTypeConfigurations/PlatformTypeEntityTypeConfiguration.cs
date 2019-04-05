@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OnlineGameStore.Domain.Entities;
 
-namespace OnlineGameStore.Data.Helpers
+namespace OnlineGameStore.Data.EntityTypeConfigurations
 {
     internal class PlatformTypeEntityTypeConfiguration : IEntityTypeConfiguration<PlatformType>
     {

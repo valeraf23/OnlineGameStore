@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnlineGameStore.Domain.Entities
@@ -7,7 +8,7 @@ namespace OnlineGameStore.Domain.Entities
     {
         public virtual ICollection<GamePlatformType> GamePlatformType { get; set; } = new List<GamePlatformType>();
 
-        [Key] public int Id { get; set; }
+        [Key] public Guid Id { get; set; }
         public string Type { get; set; }
     }
 }

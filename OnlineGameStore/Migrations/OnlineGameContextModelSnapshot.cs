@@ -21,20 +21,19 @@ namespace OnlineGameStore.Migrations
 
             modelBuilder.Entity("OnlineGameStore.Domain.Entities.Comment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Body")
                         .IsRequired();
 
-                    b.Property<int>("GameId");
+                    b.Property<Guid?>("GameId");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<int?>("ParentId");
+                    b.Property<Guid?>("ParentId");
 
                     b.HasKey("Id");
 
@@ -47,9 +46,8 @@ namespace OnlineGameStore.Migrations
 
             modelBuilder.Entity("OnlineGameStore.Domain.Entities.Game", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description")
                         .IsRequired();
@@ -58,7 +56,7 @@ namespace OnlineGameStore.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<int>("PublisherId");
+                    b.Property<Guid>("PublisherId");
 
                     b.HasKey("Id");
 
@@ -69,9 +67,9 @@ namespace OnlineGameStore.Migrations
 
             modelBuilder.Entity("OnlineGameStore.Domain.Entities.GameGenre", b =>
                 {
-                    b.Property<int>("GameId");
+                    b.Property<Guid>("GameId");
 
-                    b.Property<int>("GenreId");
+                    b.Property<Guid>("GenreId");
 
                     b.HasKey("GameId", "GenreId");
 
@@ -82,9 +80,9 @@ namespace OnlineGameStore.Migrations
 
             modelBuilder.Entity("OnlineGameStore.Domain.Entities.GamePlatformType", b =>
                 {
-                    b.Property<int>("GameId");
+                    b.Property<Guid>("GameId");
 
-                    b.Property<int>("PlatformTypeId");
+                    b.Property<Guid>("PlatformTypeId");
 
                     b.HasKey("GameId", "PlatformTypeId");
 
@@ -95,15 +93,14 @@ namespace OnlineGameStore.Migrations
 
             modelBuilder.Entity("OnlineGameStore.Domain.Entities.Genre", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<int?>("ParentId");
+                    b.Property<Guid?>("ParentId");
 
                     b.HasKey("Id");
 
@@ -117,99 +114,98 @@ namespace OnlineGameStore.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 5,
+                            Id = new Guid("add83210-313f-47f4-ae78-ebe248c88e70"),
                             Name = "Action"
                         },
                         new
                         {
-                            Id = 6,
+                            Id = new Guid("3d175368-0858-497f-baab-e118ed96b581"),
                             Name = "Adventure"
                         },
                         new
                         {
-                            Id = 8,
+                            Id = new Guid("dde9588c-891a-4a45-bb4d-97c73876db16"),
                             Name = "Misc"
                         },
                         new
                         {
-                            Id = 7,
+                            Id = new Guid("79417700-8164-4235-a59e-fabac36f0630"),
                             Name = "PuzzleSkill"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("1c7650ec-4f9f-4999-b78d-2079d2b4e9fb"),
                             Name = "RPG"
                         },
                         new
                         {
-                            Id = 4,
+                            Id = new Guid("7cd7d02c-eb2c-4050-bda3-44791b159433"),
                             Name = "Races"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = new Guid("02553495-4059-455f-8554-e6be30a5228e"),
                             Name = "Sports"
                         },
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("4b6f4c7f-eb42-4ce1-9ece-882b63fc662b"),
                             Name = "Strategy"
                         },
                         new
                         {
-                            Id = 15,
+                            Id = new Guid("28efabea-38b8-4166-8bea-e6954716683c"),
                             Name = "FPS",
-                            ParentId = 5
+                            ParentId = new Guid("add83210-313f-47f4-ae78-ebe248c88e70")
                         },
                         new
                         {
-                            Id = 16,
+                            Id = new Guid("dbb44617-ec8d-412b-bbbf-ee25eb0e91ac"),
                             Name = "TPS",
-                            ParentId = 5
+                            ParentId = new Guid("add83210-313f-47f4-ae78-ebe248c88e70")
                         },
                         new
                         {
-                            Id = 11,
+                            Id = new Guid("3e331a5f-88e4-434c-b820-dd3ee3299d2d"),
                             Name = "rally",
-                            ParentId = 4
+                            ParentId = new Guid("7cd7d02c-eb2c-4050-bda3-44791b159433")
                         },
                         new
                         {
-                            Id = 12,
+                            Id = new Guid("0387d3ee-1c21-4620-9a0f-02e1ee5a7f96"),
                             Name = "arcade",
-                            ParentId = 4
+                            ParentId = new Guid("7cd7d02c-eb2c-4050-bda3-44791b159433")
                         },
                         new
                         {
-                            Id = 13,
+                            Id = new Guid("a9d17356-1c52-458e-a0bb-51740b3e1688"),
                             Name = "formula",
-                            ParentId = 4
+                            ParentId = new Guid("7cd7d02c-eb2c-4050-bda3-44791b159433")
                         },
                         new
                         {
-                            Id = 14,
+                            Id = new Guid("4cd13094-ee40-4a31-b781-c9fca7196bc1"),
                             Name = "off-road",
-                            ParentId = 4
+                            ParentId = new Guid("7cd7d02c-eb2c-4050-bda3-44791b159433")
                         },
                         new
                         {
-                            Id = 9,
+                            Id = new Guid("de521ddc-8aa1-41f5-978e-5bea90970ee6"),
                             Name = "RTS",
-                            ParentId = 1
+                            ParentId = new Guid("4b6f4c7f-eb42-4ce1-9ece-882b63fc662b")
                         },
                         new
                         {
-                            Id = 10,
+                            Id = new Guid("0713dfb5-c361-400b-a7ff-d1f9ef0c7d80"),
                             Name = "TBS",
-                            ParentId = 1
+                            ParentId = new Guid("4b6f4c7f-eb42-4ce1-9ece-882b63fc662b")
                         });
                 });
 
             modelBuilder.Entity("OnlineGameStore.Domain.Entities.PlatformType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Type");
 
@@ -224,31 +220,30 @@ namespace OnlineGameStore.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("1c7650ec-4f9f-4999-b78d-2079d2b4e9fb"),
                             Type = "Browser"
                         },
                         new
                         {
-                            Id = 4,
+                            Id = new Guid("7cd7d02c-eb2c-4050-bda3-44791b159433"),
                             Type = "Console"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = new Guid("02553495-4059-455f-8554-e6be30a5228e"),
                             Type = "Desktop"
                         },
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("4b6f4c7f-eb42-4ce1-9ece-882b63fc662b"),
                             Type = "Mobile"
                         });
                 });
 
             modelBuilder.Entity("OnlineGameStore.Domain.Entities.Publisher", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -263,8 +258,7 @@ namespace OnlineGameStore.Migrations
                 {
                     b.HasOne("OnlineGameStore.Domain.Entities.Game", "Game")
                         .WithMany("Comments")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("GameId");
 
                     b.HasOne("OnlineGameStore.Domain.Entities.Comment", "ParentComment")
                         .WithMany("Answers")

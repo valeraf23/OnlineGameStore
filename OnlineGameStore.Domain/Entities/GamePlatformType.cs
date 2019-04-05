@@ -1,10 +1,12 @@
-﻿namespace OnlineGameStore.Domain.Entities
+﻿using System;
+
+namespace OnlineGameStore.Domain.Entities
 {
     public class GamePlatformType
     {
-        public int GameId { get; set; }
+        public Guid GameId { get; set; }
         public Game Game { get; set; }
-        public int PlatformTypeId { get; set; }
+        public Guid PlatformTypeId { get; set; }
         public PlatformType PlatformType { get; set; }
     }
 }
