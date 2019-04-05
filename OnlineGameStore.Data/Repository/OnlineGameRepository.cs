@@ -14,10 +14,8 @@ namespace OnlineGameStore.Data.Repository
         private CancellationTokenSource _cancellationTokenSource;
         private OnlineGameContext _context;
 
-        public OnlineGameRepository(OnlineGameContext context)
-        {
+        public OnlineGameRepository(OnlineGameContext context) =>
             _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
 
         public async Task AddGame(Game game)
         {
@@ -27,11 +25,7 @@ namespace OnlineGameStore.Data.Repository
             await _context.Games.AddAsync(game);
         }
 
-        public async Task<Game> GetGame(Guid gameId)
-        {
-            var games = await GetGames(x => x.Id == gameId);
-            return games.FirstOrDefault();
-        }
+        public async Task<Game> GetGame(Guid gameId) => (await GetGames(x => x.Id == gameId)).FirstOrDefault();
 
         public void DeleteGame(Game game)
         {
@@ -56,25 +50,16 @@ namespace OnlineGameStore.Data.Repository
             await _context.Comments.AddAsync(comment);
         }
 
-        public async Task<IEnumerable<Game>> GetGamesByGenre(Guid genreId)
-        {
-            return await GetGames(x => x.GameGenre.Any(g => g.GenreId == genreId));
-        }
+        public async Task<IEnumerable<Game>> GetGamesByGenre(Guid genreId) =>
+            await GetGames(x => x.GameGenre.Any(g => g.GenreId == genreId));
 
-        public async Task<IEnumerable<Game>> GetGamesByPlatformTypes(Guid genreId)
-        {
-            return await GetGames(x => x.GamePlatformType.Any(g => g.PlatformTypeId == genreId));
-        }
+        public async Task<IEnumerable<Game>> GetGamesByPlatformTypes(Guid genreId) =>
+            await GetGames(x => x.GamePlatformType.Any(g => g.PlatformTypeId == genreId));
 
-        public Task<IEnumerable<Comment>> GetAllCommentsForGame(Guid id)
-        {
-            return GetAllComments(comment => comment.GameId == id);
-        }
+        public Task<IEnumerable<Comment>> GetAllCommentsForGame(Guid id) =>
+            GetAllComments(comment => comment.GameId == id);
 
-        public async Task<IEnumerable<Game>> GetGames()
-        {
-            return await GetGames(game => true);
-        }
+        public async Task<IEnumerable<Game>> GetGames() => await GetGames(game => true);
 
         private static void FillIdForComments(ICollection<Comment> answers)
         {
@@ -86,10 +71,7 @@ namespace OnlineGameStore.Data.Repository
             }
         }
 
-        public async Task<bool> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
+        public async Task<bool> SaveChangesAsync() => await _context.SaveChangesAsync() > 0;
 
         public void Dispose()
         {
@@ -97,16 +79,9 @@ namespace OnlineGameStore.Data.Repository
             GC.SuppressFinalize(this);
         }
 
-        private async Task<IEnumerable<Comment>> GetAllComments(Func<Comment, bool> predicate)
-        {
-            return await _context.Comments.Where(x => x.ParentComment == null && predicate(x))
+        private async Task<IEnumerable<Comment>> GetAllComments(Func<Comment, bool> predicate) =>
+            await _context.Comments.Where(x => x.ParentComment == null && predicate(x))
                 .Include(x => x.Answers).ToListAsync();
-        }
-
-        private async Task<IEnumerable<Comment>> GetAllComments()
-        {
-            return await GetAllComments(comment => true);
-        }
 
         private async Task<IEnumerable<Game>> GetGames(Func<Game, bool> predicate)
         {

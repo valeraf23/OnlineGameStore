@@ -15,5 +15,6 @@ namespace OnlineGameStore.Data.Repository
         Task<IEnumerable<Comment>> GetAllCommentsForGame(Guid gameId);
         Task<IEnumerable<Game>> GetGamesByGenre(Guid genreId);
         Task<IEnumerable<Game>> GetGamesByPlatformTypes(Guid genreId);
+        Task<bool> SaveChangesAsync();
     }
 }
