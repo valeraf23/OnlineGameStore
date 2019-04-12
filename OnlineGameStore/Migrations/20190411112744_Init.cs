@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace OnlineGameStore.Migrations
+namespace OnlineGameStore.Api.Migrations
 {
     public partial class Init : Migration
     {

@@ -4465,10 +4465,37 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
+      "OnlineGame.DataAccess/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.2",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "2.2.3",
+          "OnlineGameStore.Common": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/OnlineGame.DataAccess.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OnlineGame.DataAccess.dll": {}
+        }
+      },
+      "OnlineGameStore.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.2",
+        "compile": {
+          "bin/placeholder/OnlineGameStore.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OnlineGameStore.Common.dll": {}
+        }
+      },
       "OnlineGameStore.Data/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
+          "AutoMapper": "8.0.0",
+          "OnlineGame.DataAccess": "1.0.0",
+          "OnlineGameStore.Common": "1.0.0",
           "OnlineGameStore.Domain": "1.0.0"
         },
         "compile": {
@@ -4483,7 +4510,8 @@
         "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "2.2.3",
-          "Microsoft.EntityFrameworkCore.SqlServer": "2.2.3"
+          "Microsoft.EntityFrameworkCore.SqlServer": "2.2.3",
+          "OnlineGame.DataAccess": "1.0.0"
         },
         "compile": {
           "bin/placeholder/OnlineGameStore.Domain.dll": {}
@@ -12145,6 +12173,16 @@
         "system.xml.xpath.xdocument.nuspec"
       ]
     },
+    "OnlineGame.DataAccess/1.0.0": {
+      "type": "project",
+      "path": "../OnlineGame.DataAccess/OnlineGame.DataAccess.csproj",
+      "msbuildProject": "../OnlineGame.DataAccess/OnlineGame.DataAccess.csproj"
+    },
+    "OnlineGameStore.Common/1.0.0": {
+      "type": "project",
+      "path": "../OnlineGameStore.Common/OnlineGameStore.Common.csproj",
+      "msbuildProject": "../OnlineGameStore.Common/OnlineGameStore.Common.csproj"
+    },
     "OnlineGameStore.Data/1.0.0": {
       "type": "project",
       "path": "../OnlineGameStore.Data/OnlineGameStore.Data.csproj",
@@ -12172,9 +12210,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\valerii_fedorenko\\source\\repos\\OnlineGameStore\\OnlineGameStore\\OnlineGameStore.csproj",
-      "projectName": "OnlineGameStore",
-      "projectPath": "C:\\Users\\valerii_fedorenko\\source\\repos\\OnlineGameStore\\OnlineGameStore\\OnlineGameStore.csproj",
+      "projectUniqueName": "C:\\Users\\valerii_fedorenko\\source\\repos\\OnlineGameStore\\OnlineGameStore\\OnlineGameStore.Api.csproj",
+      "projectName": "OnlineGameStore.Api",
+      "projectPath": "C:\\Users\\valerii_fedorenko\\source\\repos\\OnlineGameStore\\OnlineGameStore\\OnlineGameStore.Api.csproj",
       "packagesPath": "C:\\Users\\valerii_fedorenko\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\valerii_fedorenko\\source\\repos\\OnlineGameStore\\OnlineGameStore\\obj\\",
       "projectStyle": "PackageReference",

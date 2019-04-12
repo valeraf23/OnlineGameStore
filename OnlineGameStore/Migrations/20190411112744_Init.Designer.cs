@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineGameStore.Data.Data;
 
-namespace OnlineGameStore.Migrations
+namespace OnlineGameStore.Api.Migrations
 {
     [DbContext(typeof(OnlineGameContext))]
-    [Migration("20190404151915_Init")]
+    [Migration("20190411112744_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -297,7 +297,7 @@ namespace OnlineGameStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineGameStore.Domain.Entities.PlatformType", "PlatformType")
-                        .WithMany("GamePlatformType")
+                        .WithMany("Games")
                         .HasForeignKey("PlatformTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

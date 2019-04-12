@@ -9,7 +9,8 @@
       "OnlineGameStore.Domain/1.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "2.2.3",
-          "Microsoft.EntityFrameworkCore.SqlServer": "2.2.3"
+          "Microsoft.EntityFrameworkCore.SqlServer": "2.2.3",
+          "OnlineGame.DataAccess": "1.0.0"
         },
         "runtime": {
           "OnlineGameStore.Domain.dll": {}
@@ -500,6 +501,20 @@
         "dependencies": {
           "System.Runtime": "4.1.0"
         }
+      },
+      "OnlineGame.DataAccess/1.0.0": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "2.2.3",
+          "OnlineGameStore.Common": "1.0.0"
+        },
+        "runtime": {
+          "OnlineGame.DataAccess.dll": {}
+        }
+      },
+      "OnlineGameStore.Common/1.0.0": {
+        "runtime": {
+          "OnlineGameStore.Common.dll": {}
+        }
       }
     }
   },
@@ -879,6 +894,16 @@
       "sha512": "sha512-k1S4Gc6IGwtHGT8188RSeGaX86Qw/wnrgNLshJvsdNUOPP9etMmo8S07c+UlOAx4K/xLuN9ivA1bD0LVurtIxQ==",
       "path": "system.threading.tasks/4.0.11",
       "hashPath": "system.threading.tasks.4.0.11.nupkg.sha512"
+    },
+    "OnlineGame.DataAccess/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "OnlineGameStore.Common/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

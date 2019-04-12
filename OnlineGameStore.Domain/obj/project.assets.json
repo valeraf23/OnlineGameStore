@@ -906,6 +906,30 @@
         "compile": {
           "ref/netstandard1.3/System.Threading.Tasks.dll": {}
         }
+      },
+      "OnlineGame.DataAccess/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.2",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "2.2.3",
+          "OnlineGameStore.Common": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/OnlineGame.DataAccess.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OnlineGame.DataAccess.dll": {}
+        }
+      },
+      "OnlineGameStore.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.2",
+        "compile": {
+          "bin/placeholder/OnlineGameStore.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/OnlineGameStore.Common.dll": {}
+        }
       }
     }
   },
@@ -3457,13 +3481,24 @@
         "system.threading.tasks.4.0.11.nupkg.sha512",
         "system.threading.tasks.nuspec"
       ]
+    },
+    "OnlineGame.DataAccess/1.0.0": {
+      "type": "project",
+      "path": "../OnlineGame.DataAccess/OnlineGame.DataAccess.csproj",
+      "msbuildProject": "../OnlineGame.DataAccess/OnlineGame.DataAccess.csproj"
+    },
+    "OnlineGameStore.Common/1.0.0": {
+      "type": "project",
+      "path": "../OnlineGameStore.Common/OnlineGameStore.Common.csproj",
+      "msbuildProject": "../OnlineGameStore.Common/OnlineGameStore.Common.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.2": [
       "Microsoft.EntityFrameworkCore >= 2.2.3",
       "Microsoft.EntityFrameworkCore.SqlServer >= 2.2.3",
-      "Microsoft.NETCore.App >= 2.2.0"
+      "Microsoft.NETCore.App >= 2.2.0",
+      "OnlineGame.DataAccess >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -3495,7 +3530,11 @@
       },
       "frameworks": {
         "netcoreapp2.2": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\valerii_fedorenko\\source\\repos\\OnlineGameStore\\OnlineGame.DataAccess\\OnlineGame.DataAccess.csproj": {
+              "projectPath": "C:\\Users\\valerii_fedorenko\\source\\repos\\OnlineGameStore\\OnlineGame.DataAccess\\OnlineGame.DataAccess.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

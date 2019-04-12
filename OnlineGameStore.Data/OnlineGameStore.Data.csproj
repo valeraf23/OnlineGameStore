@@ -5,12 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OnlineGameStore.Domain\OnlineGameStore.Domain.csproj" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\OnlineGame.DataAccess\OnlineGame.DataAccess.csproj" />
+    <ProjectReference Include="..\OnlineGameStore.Common\OnlineGameStore.Common.csproj" />
+    <ProjectReference Include="..\OnlineGameStore.Domain\OnlineGameStore.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ using OnlineGameStore.Data.EntityTypeConfigurations;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Domain.Entities;
 
+
 namespace OnlineGameStore.Data.Data
 {
     public class OnlineGameContext : DbContext

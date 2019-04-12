@@ -18,7 +18,7 @@ namespace OnlineGameStore.Data.EntityTypeConfigurations
 
             builder
                 .HasOne(pc => pc.PlatformType)
-                .WithMany(c => c.GamePlatformType)
+                .WithMany(c => c.Games)
                 .HasForeignKey(pc => pc.PlatformTypeId);
         }
 

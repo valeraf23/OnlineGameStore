@@ -68,6 +68,23 @@ namespace OnlineGameStore.Tests.TestProject
                         Type = "test_PlatformType_SecondGame"
                     }
                 }
+            },
+            GameGenre = new List<GameGenre>
+            {
+                new GameGenre
+                {
+                    Genre = new Genre
+                    {
+                        Name = "test_Genre_second",
+                        SubGenres = new List<Genre>
+                        {
+                            new Genre
+                            {
+                                Name = "Sub-Genre_second"
+                            }
+                        }
+                    }
+                }
             }
         };
 

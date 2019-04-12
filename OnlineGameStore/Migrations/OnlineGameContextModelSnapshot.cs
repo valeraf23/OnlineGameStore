@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineGameStore.Data.Data;
 
-namespace OnlineGameStore.Migrations
+namespace OnlineGameStore.Api.Migrations
 {
     [DbContext(typeof(OnlineGameContext))]
     partial class OnlineGameContextModelSnapshot : ModelSnapshot
@@ -295,7 +295,7 @@ namespace OnlineGameStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineGameStore.Domain.Entities.PlatformType", "PlatformType")
-                        .WithMany("GamePlatformType")
+                        .WithMany("Games")
                         .HasForeignKey("PlatformTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

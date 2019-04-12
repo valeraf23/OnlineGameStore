@@ -10,3 +10,7 @@ C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Data\obj
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Data\obj\Debug\netcoreapp2.2\OnlineGameStore.Data.csproj.CopyComplete
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Data\obj\Debug\netcoreapp2.2\OnlineGameStore.Data.dll
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Data\obj\Debug\netcoreapp2.2\OnlineGameStore.Data.pdb
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Data\bin\Debug\netcoreapp2.2\OnlineGame.DataAccess.dll
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Data\bin\Debug\netcoreapp2.2\OnlineGame.DataAccess.pdb
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Data\bin\Debug\netcoreapp2.2\OnlineGameStore.Common.dll
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Data\bin\Debug\netcoreapp2.2\OnlineGameStore.Common.pdb

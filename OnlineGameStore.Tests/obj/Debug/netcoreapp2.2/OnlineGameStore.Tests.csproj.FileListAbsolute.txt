@@ -17,3 +17,7 @@ C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Tests\ob
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Tests\obj\Debug\netcoreapp2.2\OnlineGameStore.Tests.csproj.CopyComplete
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Tests\obj\Debug\netcoreapp2.2\OnlineGameStore.Tests.dll
 C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Tests\obj\Debug\netcoreapp2.2\OnlineGameStore.Tests.pdb
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Tests\bin\Debug\netcoreapp2.2\OnlineGame.DataAccess.dll
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Tests\bin\Debug\netcoreapp2.2\OnlineGame.DataAccess.pdb
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Tests\bin\Debug\netcoreapp2.2\OnlineGameStore.Common.dll
+C:\Users\valerii_fedorenko\source\repos\OnlineGameStore\OnlineGameStore.Tests\bin\Debug\netcoreapp2.2\OnlineGameStore.Common.pdb
