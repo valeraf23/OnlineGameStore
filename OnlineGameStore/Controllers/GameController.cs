@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using OnlineGameStore.Api.Filters;
 using OnlineGameStore.Common.Either;
 using OnlineGameStore.Common.Errors;
 using OnlineGameStore.Common.Optional.Extensions;
@@ -37,10 +38,9 @@ namespace OnlineGameStore.Api.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
+        [AssignPublisherId]
         public async Task<IActionResult> CreateGame([FromBody] GameForCreation game)
         {
-//            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-//           game.PublisherId = Guid.Parse(userId);
             var gameModel = _mapper.Map<GameModel>(game);
             return (await _gameService.SaveSafe(gameModel))
                 .Map(created => (IActionResult) Ok(created))
