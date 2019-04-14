@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using OnlineGame.DataAccess;
 using OnlineGameStore.Common.Either;
 using OnlineGameStore.Common.Errors;
@@ -59,13 +60,14 @@ namespace OnlineGameStore.Data.Services
             return games.ToModel<GameModel>();
         }
 
-        public async Task<Either<Error, GameModel>> SaveSafe(GameModel obj)
+        public async Task<Either<Error, GameModel>> SaveSafe(GameForCreationModel obj)
         {
-            if (!_validator.IsValid(obj)) return new UnprocessableError();
+            var gameModel = Mapper.Map<GameModel>(obj);
+            if (!_validator.IsValid(gameModel)) return new UnprocessableError();
 
-            if (await AddAsync(obj))
+            if (await AddAsync(gameModel))
             {
-                return obj;
+                return gameModel;
             }
             return new SaveError("Creating a game failed on save.");
         }

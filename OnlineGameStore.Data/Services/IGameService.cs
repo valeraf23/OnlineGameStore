@@ -15,6 +15,6 @@ namespace OnlineGameStore.Data.Services
         Task<IEnumerable<GameModel>> GetGamesAsync();
         Task<IEnumerable<GameModel>> GetGamesByGenreAsync(Guid genreId);
         Task<IEnumerable<GameModel>> GetGamesByPlatformTypesAsync(Guid genreId);
-        Task<Either<Error, GameModel>> SaveSafe(GameModel obj);
+        Task<Either<Error, GameModel>> SaveSafe(GameForCreationModel obj);
     }
 }

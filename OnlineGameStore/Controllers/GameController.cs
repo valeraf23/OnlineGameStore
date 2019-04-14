@@ -37,17 +37,13 @@ namespace OnlineGameStore.Api.Controllers
             .Map<IActionResult>(Ok).Reduce(NotFound);
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         [AssignPublisherId]
-        public async Task<IActionResult> CreateGame([FromBody] GameForCreation game)
-        {
-            var gameModel = _mapper.Map<GameModel>(game);
-            return (await _gameService.SaveSafe(gameModel))
-                .Map(created => (IActionResult) Ok(created))
-                .Reduce(_ => UnprocessableEntityError(ModelState), error => error is UnprocessableError)
-                .Reduce(_ => UnprocessableEntityError(ModelState), error => error is SaveError)
-                .Reduce(_ => InternalServerError());
-        }
+        public async Task<IActionResult> CreateGame([FromBody] GameForCreationModel game) =>
+            (await _gameService.SaveSafe(game))
+            .Map(created => (IActionResult) Ok(created))
+            .Reduce(_ => UnprocessableEntityError(ModelState), error => error is UnprocessableError)
+            .Reduce(_ => UnprocessableEntityError(ModelState), error => error is SaveError)
+            .Reduce(_ => InternalServerError());
 
         private IActionResult InternalServerError() =>
             StatusCode(StatusCodes.Status500InternalServerError);

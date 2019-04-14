@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OnlineGameStore.Data.Dtos
 {
-    public class GameForCreation
+    public class GameForCreationModel
     {
         public string Name { get; set; }
 
@@ -11,7 +11,7 @@ namespace OnlineGameStore.Data.Dtos
 
         public Guid PublisherId { get; set; }
 
-        public virtual ICollection<Guid> GenresId { get; set; } = new List<Guid>();
+        public virtual ICollection<GenreModel> GenresId { get; set; } = new List<GenreModel>();
         public virtual ICollection<Guid> PlatformTypesId { get; set; } = new List<Guid>();
     }
 }

@@ -13,9 +13,9 @@ namespace OnlineGameStore.Api.Filters
             ActionExecutionDelegate next)
         {
             var baseController = context.Controller as ControllerBase;
-            foreach (var argument in context.ActionArguments.Values.Where(v => v is GameForCreation))
+            foreach (var argument in context.ActionArguments.Values.Where(v => v is GameForCreationModel))
             {
-                var model = (GameForCreation)argument;
+                var model = (GameForCreationModel)argument;
                 // var userId = baseController.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 model.PublisherId = Guid.NewGuid();
             }

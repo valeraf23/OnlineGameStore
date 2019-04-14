@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using OnlineGame.DataAccess;
@@ -37,8 +36,16 @@ namespace OnlineGameStore.Data.Helpers
                 cfg.CreateMap<Publisher, PublisherModel>();
                 cfg.CreateMap<PublisherModel, Publisher>();
 
-                cfg.CreateMap<GameForCreation, GameModel>();
-                
+                cfg.CreateMap<GameForCreationModel, GameModel>().ForMember(dest => dest.Publisher,
+                    opt => opt.MapFrom(src => new PublisherModel
+                    {
+                        Id = src.PublisherId
+                    })).ForMember(dest => dest.PlatformTypes,
+                    opt => opt.MapFrom(src => src.PlatformTypesId.Select(guid => new PlatformTypeModel
+                    {
+
+                        Id = guid
+                    })));
 
                 cfg.CreateMap<GenreModel, Genre>();
                 cfg.CreateMap<GenreModel, GameGenre>().ConstructUsing(dest => new GameGenre
@@ -50,7 +57,7 @@ namespace OnlineGameStore.Data.Helpers
                     opt => opt.MapFrom(src => src.Id));
 
                 cfg.CreateMap<PlatformTypeModel, GamePlatformType>().ForMember(dest => dest.PlatformType,
-                    opt => opt.MapFrom(x => new PlatformType { Type = x.Type }));
+                    opt => opt.MapFrom(x => new PlatformType {Type = x.Type}));
 
                 cfg.CreateMap<PublisherModel, Publisher>();
 
