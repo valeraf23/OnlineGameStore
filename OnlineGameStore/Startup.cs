@@ -36,6 +36,7 @@ namespace OnlineGameStore.Api
             services.AddScoped<IRepository<Game>, GameRepository>();
             services.AddScoped<IGameService, GameService>();
             services.AddScoped<IRepository<Comment>, CommentRepository>();
+            services.AddScoped<IRepository<Publisher>, PublisherRepository>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddTransient<IValidatorStrategy<GameModel>, DefaultValidatorStrategy<GameModel>>();
             services.AddAutoMapper();

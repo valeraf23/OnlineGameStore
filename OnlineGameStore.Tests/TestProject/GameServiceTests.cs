@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using ObjectsComparator.Comparator;
+using OnlineGameStore.Common.Either;
+using OnlineGameStore.Common.Errors;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Data.Services;
@@ -41,6 +43,21 @@ namespace OnlineGameStore.Tests.TestProject
                 expected.GetDistinctions(actually, "Comments",
                     "Id", "Genres[0].SubGenres[0].ParentGenre", "Genres[0].SubGenres[0].Id","Genres[0].GamesId", "PlatformTypes[0].GamesId", "Publisher.Id", "Genres[0].Id", "PlatformTypes[0].Id");
             Assert.Empty(result);
+        }
+
+        [Fact]
+        public async void Can_Create_New_Game_Safe()
+        {
+            var res = await _service.SaveSafe(new GameForCreationModel()
+            {
+
+            });
+            const string expected = "UnprocessableError";
+            var actually = res.Map(created => created.Name)
+                .Reduce(_ => expected, error => error is UnprocessableError)
+                .Reduce(_ => "InternalServerError");
+
+            Assert.Equal(expected, actually);
         }
 
         [Fact]

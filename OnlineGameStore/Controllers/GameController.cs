@@ -49,6 +49,6 @@ namespace OnlineGameStore.Api.Controllers
             StatusCode(StatusCodes.Status500InternalServerError);
 
         private IActionResult UnprocessableEntityError(ModelStateDictionary modelState) =>
-            new UnprocessableEntityObjectResult(modelState);
+            new Helpers.UnprocessableEntityObjectResult(modelState);
     }
 }
