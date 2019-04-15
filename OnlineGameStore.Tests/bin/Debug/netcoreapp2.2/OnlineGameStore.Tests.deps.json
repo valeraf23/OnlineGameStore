@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "1c597883fba80441ed031f46df8c8221b2e3251d"
+    "signature": "924955b261af3d13b02b6973efe10123e70bf121"
   },
   "compilationOptions": {},
   "targets": {
@@ -12,7 +12,7 @@
           "Microsoft.EntityFrameworkCore": "2.2.3",
           "Microsoft.EntityFrameworkCore.InMemory": "2.2.3",
           "Ninject": "3.3.4",
-          "ObjectComparator": "2.10.0",
+          "ObjectComparator": "2.11.0",
           "OnlineGameStore.Data": "1.0.0",
           "xunit": "2.4.1",
           "xunit.runner.visualstudio": "2.4.1"
@@ -545,14 +545,14 @@
           }
         }
       },
-      "ObjectComparator/2.10.0": {
+      "ObjectComparator/2.11.0": {
         "dependencies": {
           "Microsoft.CSharp": "4.5.0"
         },
         "runtime": {
           "lib/netcoreapp2.2/ObjectsComparator.dll": {
-            "assemblyVersion": "2.10.0.0",
-            "fileVersion": "2.10.0.0"
+            "assemblyVersion": "2.11.0.0",
+            "fileVersion": "2.11.0.0"
           }
         }
       },
@@ -1649,12 +1649,12 @@
       "path": "ninject/3.3.4",
       "hashPath": "ninject.3.3.4.nupkg.sha512"
     },
-    "ObjectComparator/2.10.0": {
+    "ObjectComparator/2.11.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-evsvwlVTMkvsd3o1jzehl8QwksTsX0GrcUrzI6p1QFCCidYasDTzviZkclpBLpKQb0xDQkKNmv2nSGvmbDSORQ==",
-      "path": "objectcomparator/2.10.0",
-      "hashPath": "objectcomparator.2.10.0.nupkg.sha512"
+      "sha512": "sha512-HfSFmpEjqJhrwWv+G3yPPSfX7GTsaIB1bri7DuUKubSm5Wr6WAro0iGpcaeQg4RepFH6EJHvUTms/Z4hz9Wvlg==",
+      "path": "objectcomparator/2.11.0",
+      "hashPath": "objectcomparator.2.11.0.nupkg.sha512"
     },
     "Remotion.Linq/2.2.0": {
       "type": "package",

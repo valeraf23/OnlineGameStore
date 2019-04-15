@@ -770,7 +770,7 @@
           "lib/netstandard2.0/Ninject.dll": {}
         }
       },
-      "ObjectComparator/2.10.0": {
+      "ObjectComparator/2.11.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.5.0"
@@ -3228,16 +3228,16 @@
         "ninject.nuspec"
       ]
     },
-    "ObjectComparator/2.10.0": {
-      "sha512": "evsvwlVTMkvsd3o1jzehl8QwksTsX0GrcUrzI6p1QFCCidYasDTzviZkclpBLpKQb0xDQkKNmv2nSGvmbDSORQ==",
+    "ObjectComparator/2.11.0": {
+      "sha512": "HfSFmpEjqJhrwWv+G3yPPSfX7GTsaIB1bri7DuUKubSm5Wr6WAro0iGpcaeQg4RepFH6EJHvUTms/Z4hz9Wvlg==",
       "type": "package",
-      "path": "objectcomparator/2.10.0",
+      "path": "objectcomparator/2.11.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "lib/net46/ObjectsComparator.dll",
         "lib/netcoreapp2.2/ObjectsComparator.dll",
-        "objectcomparator.2.10.0.nupkg.sha512",
+        "lib/netstandard2.0/ObjectsComparator.dll",
+        "objectcomparator.2.11.0.nupkg.sha512",
         "objectcomparator.nuspec"
       ]
     },
@@ -7181,7 +7181,7 @@
       "Microsoft.EntityFrameworkCore.InMemory >= 2.2.3",
       "Microsoft.NETCore.App >= 2.2.0",
       "Ninject >= 3.3.4",
-      "ObjectComparator >= 2.10.0",
+      "ObjectComparator >= 2.11.0",
       "OnlineGameStore.Data >= 1.0.0",
       "xunit >= 2.4.1",
       "xunit.runner.visualstudio >= 2.4.1"
@@ -7256,7 +7256,7 @@
           },
           "ObjectComparator": {
             "target": "Package",
-            "version": "[2.10.0, )"
+            "version": "[2.11.0, )"
           },
           "xunit": {
             "target": "Package",

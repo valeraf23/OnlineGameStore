@@ -20,12 +20,12 @@ namespace OnlineGameStore.Tests.TestProject
         public async Task Can_Get_Game_By_Key()
         {
             var entity = GamesTestData.FirstGame;
-          
+
             var expected = entity.ToModel<GameModel>();
             var actually = await _service.GetGameByIdAsync(entity.Id);
 
-            var result = expected.GetDistinctions(actually, "Comments",
-                "Id", "Genres[0].SubGenres[0].ParentGenre", "Genres[0].SubGenres[0].Id", "Genres[0].GamesId", "PlatformTypes[0].GamesId", "Publisher.Id", "Genres[0].Id", "PlatformTypes[0].Id");
+            var result = expected.GetDistinctions(actually,
+                pr => pr.Equals("Comments") || pr.EndsWith("Id") || pr.EndsWith("ParentGenre"));
             Assert.Empty(result);
         }
 
@@ -39,9 +39,8 @@ namespace OnlineGameStore.Tests.TestProject
                 (await _service.GetGamesAsync()).FirstOrDefault(x =>
                     x.Description == GamesTestData.SecondGame.Description);
 
-            var result =
-                expected.GetDistinctions(actually, "Comments",
-                    "Id", "Genres[0].SubGenres[0].ParentGenre", "Genres[0].SubGenres[0].Id","Genres[0].GamesId", "PlatformTypes[0].GamesId", "Publisher.Id", "Genres[0].Id", "PlatformTypes[0].Id");
+            var result = expected.GetDistinctions(actually,
+                pr => pr.Equals("Comments") || pr.EndsWith("Id") || pr.EndsWith("ParentGenre"));
             Assert.Empty(result);
         }
 
