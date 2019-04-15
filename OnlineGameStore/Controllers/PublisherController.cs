@@ -4,7 +4,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using OnlineGame.DataAccess;
-using OnlineGameStore.Api.Filters;
 using OnlineGameStore.Common.Optional.Extensions;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Domain.Entities;
@@ -35,7 +34,6 @@ namespace OnlineGameStore.Api.Controllers
             .Map<IActionResult>(Ok).Reduce(NotFound);
 
         [HttpPost]
-        [AssignPublisherId]
         public async Task<IActionResult> AddPublisher([FromBody] PublisherForCreateModel publisher) =>
             (await _publisherRepository.SaveAsync(_mapper.Map<Publisher>(publisher))).When(true)
             .Map(created => (IActionResult) Ok(created))
