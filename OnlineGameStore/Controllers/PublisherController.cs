@@ -37,7 +37,7 @@ namespace OnlineGameStore.Api.Controllers
         [HttpPost]
         [AssignPublisherId]
         public async Task<IActionResult> AddPublisher([FromBody] PublisherForCreateModel publisher) =>
-            (await _publisherRepository.SaveAsync(Mapper.Map<Publisher>(publisher))).When(true)
+            (await _publisherRepository.SaveAsync(_mapper.Map<Publisher>(publisher))).When(true)
             .Map(created => (IActionResult) Ok(created))
             .Reduce(UnprocessableEntityError(ModelState));
      

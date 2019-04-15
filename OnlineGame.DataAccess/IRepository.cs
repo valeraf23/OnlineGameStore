@@ -11,6 +11,5 @@ namespace OnlineGame.DataAccess
         Task<IEnumerable<T>> GetAllAsync();
         void Delete(T entity);
         Task<bool> SaveAsync(T entity);
-        Task<bool> SaveChangesAsync();
     }
 }
