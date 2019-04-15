@@ -34,10 +34,13 @@ namespace OnlineGameStore.Api.Controllers
             .Map<IActionResult>(Ok).Reduce(NotFound);
 
         [HttpPost]
-        public async Task<IActionResult> AddPublisher([FromBody] PublisherForCreateModel publisher) =>
-            (await _publisherRepository.SaveAsync(_mapper.Map<Publisher>(publisher))).When(true)
-            .Map(created => (IActionResult) Ok(created))
-            .Reduce(UnprocessableEntityError(ModelState));
+        public async Task<IActionResult> AddPublisher([FromBody] PublisherForCreateModel publisher)
+        {
+           return (await _publisherRepository.SaveAsync(_mapper.Map<Publisher>(publisher))).When(true)
+                .Map(created => (IActionResult)Ok(created))
+                .Reduce(UnprocessableEntityError(ModelState));
+        }
+     
      
         private IActionResult UnprocessableEntityError(ModelStateDictionary modelState) =>
             new UnprocessableEntityObjectResult(modelState);

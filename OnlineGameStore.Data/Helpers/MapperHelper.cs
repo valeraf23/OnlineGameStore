@@ -60,6 +60,9 @@ namespace OnlineGameStore.Data.Helpers
                     opt => opt.MapFrom(x => new PlatformType {Type = x.Type}));
 
                 cfg.CreateMap<PublisherModel, Publisher>();
+                cfg.CreateMap<PublisherForCreateModel, Publisher>().ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => src.Name));
+
 
             });
         }

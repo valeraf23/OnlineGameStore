@@ -11,7 +11,7 @@ namespace OnlineGameStore.Data.Dtos
 
         public Guid PublisherId { get; set; }
 
-        public virtual ICollection<GenreModel> GenresId { get; set; } = new List<GenreModel>();
+        public virtual ICollection<GenreModel> Genres { get; set; } = new List<GenreModel>();
         public virtual ICollection<Guid> PlatformTypesId { get; set; } = new List<Guid>();
     }
 }
