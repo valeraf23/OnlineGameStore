@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using OnlineGameStore.Common.Either;
+using OnlineGameStore.Common.Errors;
 
 namespace OnlineGame.DataAccess
 {
@@ -47,14 +49,16 @@ namespace OnlineGame.DataAccess
         public virtual async Task<IEnumerable<TEntity>> GetAsync(Func<TEntity, bool> predicate) =>
             await EntityDbSet.Where(e => predicate(e)).ToListAsync();
 
-        public async Task<bool> SaveAsync(TEntity saveThis)
+        public async Task<Either<Error, TEntity>> SaveAsync(TEntity saveThis)
         {
             if (saveThis == null)
-                throw new ArgumentNullException("saveThis", "saveThis is null.");
+                return new ArgumentNullError("saveThis is null.");
 
             VerifyItemIsAddedOrAttachedToDbSet(
                 EntityDbSet, saveThis);
-            return await SaveChangesAsync();
-        }      
+            if (await SaveChangesAsync())
+                return saveThis;
+            return new SaveError();
+        }
     }
 }

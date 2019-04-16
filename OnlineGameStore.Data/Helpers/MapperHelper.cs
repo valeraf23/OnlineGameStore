@@ -31,7 +31,9 @@ namespace OnlineGameStore.Data.Helpers
                     opt => opt.MapFrom(src => src.GameGenre.Select(g => g.GameId).ToList()));
 
                 cfg.CreateMap<PlatformType, PlatformTypeModel>().ForMember(dest => dest.GamesId,
-                    opt => opt.MapFrom(src => src.Games.Select(g => g.GameId).ToList()));
+                    opt => opt.MapFrom(src => src.Games.Select(g => g.GameId).ToList())).ForMember(dest => dest.Type,
+                    opt => opt.MapFrom(src => src.Type)).ForMember(dest => dest.Id,
+                    opt => opt.MapFrom(src => src.Id));
 
                 cfg.CreateMap<Publisher, PublisherModel>();
                 cfg.CreateMap<PublisherModel, Publisher>();
@@ -43,7 +45,6 @@ namespace OnlineGameStore.Data.Helpers
                     })).ForMember(dest => dest.PlatformTypes,
                     opt => opt.MapFrom(src => src.PlatformTypesId.Select(guid => new PlatformTypeModel
                     {
-
                         Id = guid
                     })));
 

@@ -8,7 +8,6 @@ namespace OnlineGameStore.Data.Services
 {
     public interface IGameService : ISaveSafe<GameModel, GameForCreationModel>
     {
-        Task<bool> AddAsync(GameModel saveThis);
         void DeleteGameById(Guid id);
         Task<GameModel> GetGameByIdAsync(Guid id);
         Task<IEnumerable<GameModel>> GetGamesAsync();

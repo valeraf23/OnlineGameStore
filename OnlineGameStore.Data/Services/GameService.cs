@@ -26,21 +26,13 @@ namespace OnlineGameStore.Data.Services
             _validator = validator;
         }
 
-        public async Task<bool> AddAsync(GameModel saveThis)
-        {
-           return await _repository.SaveAsync(saveThis.ToEntity<Game>());
-        }
-
         public void DeleteGameById(Guid id)
         {
             var game = _repository.GetAsync(id).GetAwaiter().GetResult();
             _repository.Delete(game);
         }
 
-        public async Task<GameModel> GetGameByIdAsync(Guid id)
-        {
-            return (await _repository.GetAsync(id)).ToModel<GameModel>();
-        }
+        public async Task<GameModel> GetGameByIdAsync(Guid id) => (await _repository.GetAsync(id)).ToModel<GameModel>();
 
         public async Task<IEnumerable<GameModel>> GetGamesAsync()
         {
@@ -63,13 +55,9 @@ namespace OnlineGameStore.Data.Services
         public async Task<Either<Error, GameModel>> SaveSafe(GameForCreationModel obj)
         {
             var gameModel = Mapper.Map<GameModel>(obj);
-            if (!_validator.IsValid(gameModel)) return new UnprocessableError();
-
-            if (await AddAsync(gameModel))
-            {
-                return gameModel;
-            }
-            return new SaveError("Creating a game failed on save.");
+            return !_validator.IsValid(gameModel)
+                ? new UnprocessableError()
+                : (await _repository.SaveAsync(gameModel.ToEntity<Game>())).Map(e => e.ToModel<GameModel>());
         }
     }
 }

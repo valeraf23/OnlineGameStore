@@ -45,8 +45,10 @@ namespace OnlineGameStore.Tests.TestProject
                 MapperHelper.InitMapperConf();
                 using (var context = new OnlineGameContext(_options))
                 {
+                    context.Database.EnsureCreated();
                     context.Games.AddRange(GamesTestData.FirstGame, GamesTestData.ThirdGame,
                         GamesTestData.FourthGame);
+                   
                     context.SaveChanges();
                 }
 

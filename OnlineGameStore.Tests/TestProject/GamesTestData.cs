@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Domain.Entities;
@@ -63,10 +62,7 @@ namespace OnlineGameStore.Tests.TestProject
             {
                 new GamePlatformType
                 {
-                    PlatformType = new PlatformType
-                    {
-                        Type = "test_PlatformType_SecondGame"
-                    }
+                    PlatformTypeId = PlatformTypeManager.Mobile.Id
                 }
             },
             GameGenre = new List<GameGenre>
@@ -97,18 +93,18 @@ namespace OnlineGameStore.Tests.TestProject
             {
                 new GameGenre
                 {
-                    GameId = GuidsManager.Get[1],
+                    GameId = GuidsManager.Get[30],
                     Genre = new Genre
                     {
-                        Id = GuidsManager.Get[3],
+                        Id = GuidsManager.Get[31],
                         Name = "test_Genre",
                         SubGenres = new List<Genre>
                         {
                             new Genre
                             {
-                                Id = GuidsManager.Get[4],
+                                Id = GuidsManager.Get[32],
                                 Name = "Sub-Genre",
-                                ParentId = GuidsManager.Get[3]
+                                ParentId = GuidsManager.Get[33]
                             }
                         }
                     }
@@ -124,7 +120,7 @@ namespace OnlineGameStore.Tests.TestProject
                 {
                     PlatformType = new PlatformType
                     {
-                        Id =  GuidsManager.Get[1],
+                        Id =  GuidsManager.Get[35],
                         Type = "test_PlatformType"
                     }
                 }

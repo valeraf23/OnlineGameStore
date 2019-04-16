@@ -29,25 +29,34 @@ namespace OnlineGameStore.Tests.TestProject
             Assert.Empty(result);
         }
 
-        [Fact]
-        public async void Can_Create_New_Game()
-        {
-            var expected = GamesTestData.SecondGame.ToModel<GameModel>();
-            await _service.AddAsync(expected);
-
-            var actually =
-                (await _service.GetGamesAsync()).FirstOrDefault(x =>
-                    x.Description == GamesTestData.SecondGame.Description);
-
-            var result = expected.GetDistinctions(actually,
-                pr => pr.Equals("Comments") || pr.EndsWith("Id") || pr.EndsWith("ParentGenre"));
-            Assert.Empty(result);
-        }
+//        [Fact]
+//        public async void Can_Create_New_Game()
+//        {
+//            var entity = GamesTestData.SecondGame;
+//            var expected = new GameForCreationModel
+//            {
+//                Name = entity.Name,
+//                Description = entity.Description,
+//                PlatformTypesId = entity.GamePlatformType.Select(x => x.PlatformTypeId).ToArray(),
+//                Genres = entity.GameGenre.Select(x => x.Genre.ToModel<GenreModel>()).ToArray(),
+//                PublisherId = Guid.NewGuid()
+//
+//            };
+//            await _service.SaveSafe(expected);
+//
+//            var actually =
+//                (await _service.GetGamesAsync()).FirstOrDefault(x =>
+//                    x.Description == GamesTestData.SecondGame.Description);
+//
+//            var result = GamesTestData.SecondGame.ToModel<GameModel>().GetDistinctions(actually,
+//                pr => pr.Equals("Comments") || pr.EndsWith("Id") || pr.EndsWith("ParentGenre"));
+//            Assert.Empty(result);
+//        }
 
         [Fact]
         public async void Can_Create_New_Game_Safe()
         {
-            var res = await _service.SaveSafe(new GameForCreationModel()
+            var res = await _service.SaveSafe(new GameForCreationModel
             {
 
             });

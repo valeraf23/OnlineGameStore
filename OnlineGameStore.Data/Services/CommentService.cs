@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using OnlineGame.DataAccess;
+using OnlineGameStore.Common.Either;
+using OnlineGameStore.Common.Errors;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Domain.Entities;
@@ -27,18 +29,18 @@ namespace OnlineGameStore.Data.Services
             return Mapper.Map<IEnumerable<CommentModel>>(comments);
         }
 
-        public async Task<bool> AddCommentToGame(Guid gameId, CommentModel comment)
+        public async Task<Either<Error, CommentModel>> AddCommentToGame(Guid gameId, CommentModel comment)
         {
             var entity = comment.ToEntity<Comment>();
             entity.GameId = gameId;
-            return await _repository.SaveAsync(entity);
+            return (await _repository.SaveAsync(entity)).Map(e => e.ToModel<CommentModel>());
         }
 
-        public async Task<bool> AddAnswerToComment(Guid commentId, CommentModel comment)
+        public async Task<Either<Error, CommentModel>> AddAnswerToComment(Guid commentId, CommentModel comment)
         {
             var entity = comment.ToEntity<Comment>();
             entity.ParentId = commentId;
-            return await _repository.SaveAsync(entity);
+            return (await _repository.SaveAsync(entity)).Map(e => e.ToModel<CommentModel>());
         }
 
         public async Task<IEnumerable<CommentModel>> GetCommentsForGame(Guid gameId,
