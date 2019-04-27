@@ -56,6 +56,7 @@ namespace OnlineGameStore.Tests.TestProject
             Description = "SecondGame_Description",
             Publisher = new Publisher
             {
+                Id = GuidsManager.Get[20],
                 Name = "VF1"
             },
             GamePlatformType = new List<GamePlatformType>
@@ -71,14 +72,7 @@ namespace OnlineGameStore.Tests.TestProject
                 {
                     Genre = new Genre
                     {
-                        Name = "test_Genre_second",
-                        SubGenres = new List<Genre>
-                        {
-                            new Genre
-                            {
-                                Name = "Sub-Genre_second"
-                            }
-                        }
+                        Id = DefaultGenresManager.Action.Id,
                     }
                 }
             }

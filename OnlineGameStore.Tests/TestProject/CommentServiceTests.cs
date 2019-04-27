@@ -1,6 +1,7 @@
 using System.Linq;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Services;
+using OnlineGameStore.Data.Services.Interfaces;
 using Xunit;
 
 namespace OnlineGameStore.Tests.TestProject

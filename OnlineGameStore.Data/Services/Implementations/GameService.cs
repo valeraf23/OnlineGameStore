@@ -8,9 +8,10 @@ using OnlineGameStore.Common.Either;
 using OnlineGameStore.Common.Errors;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
+using OnlineGameStore.Data.Services.Interfaces;
 using OnlineGameStore.Domain.Entities;
 
-namespace OnlineGameStore.Data.Services
+namespace OnlineGameStore.Data.Services.Implementations
 {
 
     public class GameService : IGameService
@@ -52,12 +53,9 @@ namespace OnlineGameStore.Data.Services
             return games.ToModel<GameModel>();
         }
 
-        public async Task<Either<Error, GameModel>> SaveSafe(GameForCreationModel obj)
-        {
-            var gameModel = Mapper.Map<GameModel>(obj);
-            return !_validator.IsValid(gameModel)
+        public async Task<Either<Error, GameModel>> SaveSafe(GameModel gameModel) =>
+            !_validator.IsValid(gameModel)
                 ? new UnprocessableError()
-                : (await _repository.SaveAsync(gameModel.ToEntity<Game>())).Map(e => e.ToModel<GameModel>());
-        }
+                : (await _repository.SaveAsync(gameModel.ToEntity<Game>())).Map(e =>e.ToModel<GameModel>());
     }
 }

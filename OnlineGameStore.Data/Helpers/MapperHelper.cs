@@ -18,20 +18,20 @@ namespace OnlineGameStore.Data.Helpers
                     .ForMember(dest => dest.Genres, opt => opt.MapFrom(src =>
                         src.GameGenre.Select(x => x.Genre).ToList()))
                     .ForMember(dest => dest.PlatformTypes, opt => opt.MapFrom(src =>
-                        src.GamePlatformType.Select(x => x.PlatformType).ToList()));
+                        src.GamePlatformType.Select(x => x.PlatformType).ToList()))
+                    .ForMember(dest => dest.Publisher, opt => opt.MapFrom(src => src.Publisher));
+
                 cfg.CreateMap<Comment, CommentModel>();
                 cfg.CreateMap<CommentModel, Comment>();
 
                 cfg.CreateMap<GameModel, Game>().ForMember(dest => dest.GameGenre, opt => opt.MapFrom(src =>
                         src.Genres))
-                    .ForMember(dest => dest.GamePlatformType, opt => opt.MapFrom(src => src.PlatformTypes));
+                    .ForMember(dest => dest.GamePlatformType, opt => opt.MapFrom(src => src.PlatformTypes))
+                    .ForMember(dest => dest.Publisher, opt => opt.Ignore());
 
+                cfg.CreateMap<Genre, GenreModel>();
 
-                cfg.CreateMap<Genre, GenreModel>().ForMember(dest => dest.GamesId,
-                    opt => opt.MapFrom(src => src.GameGenre.Select(g => g.GameId).ToList()));
-
-                cfg.CreateMap<PlatformType, PlatformTypeModel>().ForMember(dest => dest.GamesId,
-                    opt => opt.MapFrom(src => src.Games.Select(g => g.GameId).ToList())).ForMember(dest => dest.Type,
+                cfg.CreateMap<PlatformType, PlatformTypeModel>().ForMember(dest => dest.Type,
                     opt => opt.MapFrom(src => src.Type)).ForMember(dest => dest.Id,
                     opt => opt.MapFrom(src => src.Id));
 
@@ -39,32 +39,32 @@ namespace OnlineGameStore.Data.Helpers
                 cfg.CreateMap<PublisherModel, Publisher>();
 
                 cfg.CreateMap<GameForCreationModel, GameModel>().ForMember(dest => dest.Publisher,
-                    opt => opt.MapFrom(src => new PublisherModel
-                    {
-                        Id = src.PublisherId
-                    })).ForMember(dest => dest.PlatformTypes,
-                    opt => opt.MapFrom(src => src.PlatformTypesId.Select(guid => new PlatformTypeModel
-                    {
-                        Id = guid
-                    })));
+                        opt => opt.MapFrom(src => new PublisherModel
+                        {
+                            Id = src.PublisherId
+                        })).ForMember(dest => dest.PlatformTypes,
+                        opt => opt.MapFrom(src => src.PlatformTypesId.Select(guid => new PlatformTypeModel
+                        {
+                            Id = guid
+                        })))
+                    .ForMember(dest => dest.Genres,
+                        opt => opt.MapFrom(src => src.GenresId.Select(x => new GenreModel
+                        {
+                            Id = x
+                        })));
 
                 cfg.CreateMap<GenreModel, Genre>();
-                cfg.CreateMap<GenreModel, GameGenre>().ConstructUsing(dest => new GameGenre
-                {
-                    Genre = Mapper.Map<Genre>(dest)
-                });
+                cfg.CreateMap<GenreModel, GameGenre>().ForMember(dest => dest.GenreId,
+                    opt => opt.MapFrom(src => src.Id));
 
                 cfg.CreateMap<PlatformTypeModel, PlatformType>().ForMember(dest => dest.Id,
                     opt => opt.MapFrom(src => src.Id));
 
-                cfg.CreateMap<PlatformTypeModel, GamePlatformType>().ForMember(dest => dest.PlatformType,
-                    opt => opt.MapFrom(x => new PlatformType {Type = x.Type}));
+                cfg.CreateMap<PlatformTypeModel, GamePlatformType>().ForMember(dest => dest.PlatformTypeId,
+                    opt => opt.MapFrom(x => x.Id));
 
-                cfg.CreateMap<PublisherModel, Publisher>();
                 cfg.CreateMap<PublisherForCreateModel, Publisher>().ForMember(dest => dest.Name,
                     opt => opt.MapFrom(src => src.Name));
-
-
             });
         }
 

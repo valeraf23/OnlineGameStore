@@ -12,7 +12,6 @@ namespace OnlineGameStore.Data.Dtos
         [MaxLength(50, ErrorMessage = "The Name shouldn't have more than 50 characters.")]
         public string Name { get; set; }
 
-        public virtual ICollection<Guid> GamesId { get; set; } = new List<Guid>();
         public virtual GenreModel ParentGenre { get; set; }
         public virtual ICollection<GenreModel> SubGenres { get; set; } = new List<GenreModel>();
     }

@@ -1,11 +1,14 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using ObjectsComparator.Comparator;
 using OnlineGameStore.Common.Either;
 using OnlineGameStore.Common.Errors;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Data.Services;
+using OnlineGameStore.Data.Services.Interfaces;
 using Xunit;
 
 namespace OnlineGameStore.Tests.TestProject
@@ -29,37 +32,35 @@ namespace OnlineGameStore.Tests.TestProject
             Assert.Empty(result);
         }
 
-//        [Fact]
-//        public async void Can_Create_New_Game()
-//        {
-//            var entity = GamesTestData.SecondGame;
-//            var expected = new GameForCreationModel
-//            {
-//                Name = entity.Name,
-//                Description = entity.Description,
-//                PlatformTypesId = entity.GamePlatformType.Select(x => x.PlatformTypeId).ToArray(),
-//                Genres = entity.GameGenre.Select(x => x.Genre.ToModel<GenreModel>()).ToArray(),
-//                PublisherId = Guid.NewGuid()
-//
-//            };
-//            await _service.SaveSafe(expected);
-//
-//            var actually =
-//                (await _service.GetGamesAsync()).FirstOrDefault(x =>
-//                    x.Description == GamesTestData.SecondGame.Description);
-//
-//            var result = GamesTestData.SecondGame.ToModel<GameModel>().GetDistinctions(actually,
-//                pr => pr.Equals("Comments") || pr.EndsWith("Id") || pr.EndsWith("ParentGenre"));
-//            Assert.Empty(result);
-//        }
+        [Fact]
+        public async void Can_Create_New_Game()
+        {
+            var entity = GamesTestData.SecondGame;
+            var expected = new GameForCreationModel
+            {
+                Name = entity.Name,
+                Description = entity.Description,
+                PlatformTypesId = entity.GamePlatformType.Select(x => x.PlatformTypeId).ToArray(),
+                GenresId = entity.GameGenre.Select(x => x.Genre.Id).ToArray(),
+                PublisherId = Guid.NewGuid()
+            };
+
+            var ee = Mapper.Map<GameModel>(expected);
+            await _service.SaveSafe(ee);
+
+            var actually =
+                (await _service.GetGamesAsync()).FirstOrDefault(x =>
+                    x.Description == GamesTestData.SecondGame.Description);
+
+            var result = GamesTestData.SecondGame.ToModel<GameModel>().GetDistinctions(actually,
+                pr => pr.Equals("Comments") || pr.StartsWith("PlatformTypes") || pr.Equals("Publisher.Name") || pr.EndsWith("Id") || pr.EndsWith("ParentGenre"));
+            Assert.Empty(result);
+        }
 
         [Fact]
         public async void Can_Create_New_Game_Safe()
         {
-            var res = await _service.SaveSafe(new GameForCreationModel
-            {
-
-            });
+            var res = await _service.SaveSafe(Mapper.Map<GameModel>(new GameForCreationModel()));
             const string expected = "UnprocessableError";
             var actually = res.Map(created => created.Name)
                 .Reduce(_ => expected, error => error is UnprocessableError)

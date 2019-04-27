@@ -5,7 +5,7 @@ using OnlineGameStore.Common.Either;
 using OnlineGameStore.Common.Errors;
 using OnlineGameStore.Data.Dtos;
 
-namespace OnlineGameStore.Data.Services
+namespace OnlineGameStore.Data.Services.Interfaces
 {
     public interface ICommentService
     {

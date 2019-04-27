@@ -10,7 +10,7 @@ using OnlineGameStore.Domain.Entities;
 
 namespace OnlineGameStore.Data.Repository
 {
-    public class GameRepository : OnlineGameRepositoryBase<Domain.Entities.Game, OnlineGameContext>
+    public class GameRepository : OnlineGameRepositoryBase<Game, OnlineGameContext>
     {
         public GameRepository(OnlineGameContext context) : base(context)
         {

@@ -1,16 +1,21 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using OnlineGame.DataAccess;
 using OnlineGameStore.Data.Data;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Data.Repository;
-using OnlineGameStore.Data.Services;
+using OnlineGameStore.Data.Services.Implementations;
+using OnlineGameStore.Data.Services.Interfaces;
 using OnlineGameStore.Domain.Entities;
 
 namespace OnlineGameStore.Api
@@ -32,7 +37,10 @@ namespace OnlineGameStore.Api
                 options.UseSqlServer(Configuration.GetConnectionString("Local"),
                     b => b.MigrationsAssembly("OnlineGameStore.Api")));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
+            {
+                options.SerializerSettings.Formatting = Formatting.Indented;
+            });
             services.AddScoped<IRepository<Game>, GameRepository>();
             services.AddScoped<IGameService, GameService>();
             services.AddScoped<IRepository<Comment>, CommentRepository>();
@@ -45,7 +53,8 @@ namespace OnlineGameStore.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, OnlineGameContext onlineGameContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            OnlineGameContext onlineGameContext)
         {
             if (env.IsDevelopment())
             {
@@ -53,7 +62,24 @@ namespace OnlineGameStore.Api
             }
             else
             {
-                app.UseHsts();
+                app.UseExceptionHandler(appBuilder =>
+                {
+                    appBuilder.Run(async context =>
+                    {
+                        var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+                        if (exceptionHandlerFeature != null)
+                        {
+                            var logger = loggerFactory.CreateLogger("Global exception logger");
+                            logger.LogError(500,
+                                exceptionHandlerFeature.Error,
+                                exceptionHandlerFeature.Error.Message);
+                        }
+
+                        context.Response.StatusCode = 500;
+                        await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
+
+                    });
+                });
             }
 
             MapperHelper.InitMapperConf();

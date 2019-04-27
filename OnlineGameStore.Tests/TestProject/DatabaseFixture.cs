@@ -6,6 +6,8 @@ using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Data.Repository;
 using OnlineGameStore.Data.Services;
+using OnlineGameStore.Data.Services.Implementations;
+using OnlineGameStore.Data.Services.Interfaces;
 
 namespace OnlineGameStore.Tests.TestProject
 {

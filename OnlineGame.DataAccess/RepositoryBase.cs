@@ -33,6 +33,8 @@ namespace OnlineGame.DataAccess
             {
                 if (Context != null)
                 {
+
+
                     Context.Dispose();
                     Context = null;
                 }
@@ -51,20 +53,23 @@ namespace OnlineGame.DataAccess
             if (item.Id == Guid.Empty)
             {
                 item.Id = Guid.NewGuid();
-                dbSet.Add(item);
             }
-            else
-            {
-                var entry = Context.Entry(item);
 
-                if (entry.State == EntityState.Detached) dbSet.Attach(item);
-
-                entry.State = EntityState.Modified;
-            }
+            dbSet.Add(item);
         }
+
         public async Task<bool> SaveChangesAsync()
         {
-            return await Context.SaveChangesAsync() > 0;
+            try
+            {
+                return await Context.SaveChangesAsync() > 0;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+          
         }
     }
 }

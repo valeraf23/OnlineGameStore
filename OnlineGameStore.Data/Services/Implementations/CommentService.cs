@@ -8,9 +8,10 @@ using OnlineGameStore.Common.Either;
 using OnlineGameStore.Common.Errors;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
+using OnlineGameStore.Data.Services.Interfaces;
 using OnlineGameStore.Domain.Entities;
 
-namespace OnlineGameStore.Data.Services
+namespace OnlineGameStore.Data.Services.Implementations
 {
     public class CommentService : ICommentService
     {
