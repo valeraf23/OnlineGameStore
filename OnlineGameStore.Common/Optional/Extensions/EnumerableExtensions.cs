@@ -6,19 +6,25 @@ namespace OnlineGameStore.Common.Optional.Extensions
 {
     public static class EnumerableExtensions
     {
-        public static Option<T> FirstOrNone<T>(this IEnumerable<T> sequence) =>
-            sequence.Select(x => (Option<T>)new Some<T>(x))
+        public static Option<T> FirstOrNone<T>(this IEnumerable<T> sequence)
+        {
+            return sequence.Select(x => (Option<T>) new Some<T>(x))
                 .DefaultIfEmpty(None.Value)
                 .First();
+        }
 
         public static Option<T> FirstOrNone<T>(
-            this IEnumerable<T> sequence, Func<T, bool> predicate) =>
-            sequence.Where(predicate).FirstOrNone();
+            this IEnumerable<T> sequence, Func<T, bool> predicate)
+        {
+            return sequence.Where(predicate).FirstOrNone();
+        }
 
         public static IEnumerable<TResult> SelectOptional<T, TResult>(
-            this IEnumerable<T> sequence, Func<T, Option<TResult>> map) =>
-            sequence.Select(map)
+            this IEnumerable<T> sequence, Func<T, Option<TResult>> map)
+        {
+            return sequence.Select(map)
                 .OfType<Some<TResult>>()
                 .Select(some => some.Content);
+        }
     }
 }

@@ -29,17 +29,14 @@ namespace OnlineGameStore.Data.Repository
         public override async Task<IEnumerable<Game>> GetAsync(Func<Game, bool> predicate)
         {
             var allGames =
-                Context.Games
+                await Context.Games
                     .Include(game => game.Publisher)
                     .Include(game => game.GameGenre)
                     .ThenInclude(gameGenre => gameGenre.Genre)
                     .ThenInclude(genre => genre.SubGenres)
                     .Include(game => game.GamePlatformType)
                     .ThenInclude(gamePlatformType => gamePlatformType.PlatformType).ToListAsync();
-
-            //  foreach (var game in allGames) game.Comments = (await GetAllCommentsForGame(game.Id)).ToList();
-
-            return (await allGames).Where(predicate);
+            return allGames.Where(predicate);
         }
     }
 }

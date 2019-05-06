@@ -50,6 +50,12 @@ namespace OnlineGameStore.Api
             services.AddAutoMapper();
 
             services.AddHttpClient();
+            services.AddTransient<ITypeHelperService, TypeHelperService>();
+            services.AddHttpCacheHeaders(
+                expirationModelOptions => expirationModelOptions.MaxAge = 600,
+                validationModelOptions => validationModelOptions.MustRevalidate = true);
+
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,7 +89,7 @@ namespace OnlineGameStore.Api
             }
 
             MapperHelper.InitMapperConf();
-
+         //  app.UseHttpCacheHeaders();
             app.UseHttpsRedirection();
             app.UseMvc();
         }

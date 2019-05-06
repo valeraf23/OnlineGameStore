@@ -6,12 +6,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Routing;
 using OnlineGameStore.Api.Filters;
+using OnlineGameStore.Api.Helpers;
 using OnlineGameStore.Common.Either;
 using OnlineGameStore.Common.Errors;
+using OnlineGameStore.Common.Optional;
 using OnlineGameStore.Common.Optional.Extensions;
 using OnlineGameStore.Data.Dtos;
+using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Data.Services.Interfaces;
+using UnprocessableEntityObjectResult = OnlineGameStore.Api.Helpers.UnprocessableEntityObjectResult;
 
 namespace OnlineGameStore.Api.Controllers
 {
@@ -19,59 +24,81 @@ namespace OnlineGameStore.Api.Controllers
     [ApiController]
     public class GameController : ControllerBase
     {
-        private readonly IGameService _gameService;
         private readonly ICommentService _commentService;
-        private readonly IMapper _mapper;
 
-        public GameController(IGameService gameService, ICommentService commentService, IMapper mapper)
+        private readonly IGameService _gameService;
+        private readonly GameControllerHelper _gameControllerHelper;
+        private readonly IMapper _mapper;
+        private readonly ITypeHelperService _typeHelperService;
+
+        public GameController(IGameService gameService, ICommentService commentService,
+            ITypeHelperService typeHelperService, IMapper mapper, LinkGenerator linkGenerator)
         {
             _gameService = gameService
                            ?? throw new ArgumentNullException(nameof(gameService));
             _commentService = commentService
                               ?? throw new ArgumentNullException(nameof(commentService));
+            _typeHelperService = typeHelperService
+                                 ?? throw new ArgumentNullException(nameof(typeHelperService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _gameControllerHelper = new GameControllerHelper(linkGenerator);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetGames()
+        [HttpGet(Name = "GetGames")]
+        public async Task<IActionResult> GetGames([FromQuery] GameResourceParameters gameResourceParameters)
         {
+            if (!_typeHelperService.TypeHasProperties<GameModel>
+                (gameResourceParameters.Fields))
+                return BadRequest();
+
             var games = await _gameService.GetGamesAsync();
-            var gamesWithComments = games.Select(g => GetGame(g.Id)).ToList();
+            var gamesWithComments = games.Select(g => GetGameById(g.Id)).ToList();
             var results = await Task.WhenAll(gamesWithComments);
-            return Ok(results);
+            var gameModels = results.SelectOptional(option => option).AsQueryable()
+                .ApplySort(gameResourceParameters.OrderBy).ToList();
+            var filteredModels = _gameControllerHelper.ApplyFilters(gameModels, gameResourceParameters).ToList();
+            var paginationMetadata =
+                _gameControllerHelper.GetPaginationMetadata(filteredModels, gameResourceParameters, HttpContext);
+            Response.Headers.Add("X-Pagination", paginationMetadata);
+
+            return Ok(filteredModels.ShapeData(gameResourceParameters.Fields));
         }
 
         [HttpGet]
         [Route("{id}", Name = "GetGame")]
         public async Task<IActionResult> GetGame(Guid id)
         {
-            var comments = await _commentService.GetAllCommentsForGame(id);
+            return (await GetGameById(id)).NoneIfNull()
+                .Map<IActionResult>(Ok).Reduce(NotFound);
+        }
+
+        private async Task<Option<GameModel>> GetGameById(Guid id)
+        {
             return (await _gameService.GetGameByIdAsync(id)).NoneIfNull()
-                .Map<IActionResult>(g =>
+                .Map(g =>
                 {
-                    g.Comments = comments.ToArray();
-                    return Ok(g);
-                }).Reduce(NotFound);
+                    g.Comments = _commentService.GetAllCommentsForGame(id).GetAwaiter().GetResult().ToArray();
+                    return g;
+                });
         }
 
         [HttpPost]
         [AssignPublisherId]
-        public async Task<IActionResult> CreateGame(GameForCreationModel game) =>
-            (await _gameService.SaveSafe(Mapper.Map<GameModel>(game)))
-            .Map(created => GetRoute(created))
-            .Reduce(_ => UnprocessableEntityError(ModelState), error => error is UnprocessableError)
-            .Reduce(_ => UnprocessableEntityError(ModelState), error => error is SaveError)
-            .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-            .Reduce(_ => InternalServerError());
+        public async Task<IActionResult> CreateGame(GameForCreationModel game)
+        {
+            return (await _gameService.SaveSafe(Mapper.Map<GameModel>(game)))
+                .Map(GetRoute)
+                .Reduce(_ => UnprocessableEntityError(ModelState), error => error is UnprocessableError)
+                .Reduce(_ => UnprocessableEntityError(ModelState), error => error is SaveError)
+                .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
+                .Reduce(_ => InternalServerError());
+        }
 
         [HttpPut("{id}")]
         public IActionResult UpdateGame(Guid id, GameForCreationModel game)
         {
             var existGame = _gameService.GetGameByIdAsync(id).GetAwaiter().GetResult();
-            if (existGame == null)
-            {
-                return NotFound();
-            }
+            if (existGame == null) return NotFound();
 
             Mapper.Map(game, existGame);
             return _gameService.SaveSafe(existGame).GetAwaiter().GetResult()
@@ -86,10 +113,7 @@ namespace OnlineGameStore.Api.Controllers
         public IActionResult PartiallyUpdatePublisher(Guid id, JsonPatchDocument<PublisherForCreateModel> publisher)
         {
             var existPublisher = _gameService.GetGameByIdAsync(id).GetAwaiter().GetResult();
-            if (existPublisher == null)
-            {
-                return NotFound();
-            }
+            if (existPublisher == null) return NotFound();
 
             var publisherPatch = Mapper.Map<PublisherForCreateModel>(existPublisher);
             publisher.ApplyTo(publisherPatch);
@@ -102,12 +126,19 @@ namespace OnlineGameStore.Api.Controllers
                 .Reduce(_ => InternalServerError());
         }
 
-        private IActionResult InternalServerError() =>
-            StatusCode(StatusCodes.Status500InternalServerError);
+        private IActionResult InternalServerError()
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
 
-        private IActionResult UnprocessableEntityError(ModelStateDictionary modelState) =>
-            new Helpers.UnprocessableEntityObjectResult(modelState);
+        private IActionResult UnprocessableEntityError(ModelStateDictionary modelState)
+        {
+            return new UnprocessableEntityObjectResult(modelState);
+        }
 
-        private IActionResult GetRoute(IModel model) => CreatedAtRoute("GetGame", new {model.Id}, null);
+        private IActionResult GetRoute(IModel model)
+        {
+            return CreatedAtRoute("GetGame", new {model.Id}, null);
+        }
     }
 }

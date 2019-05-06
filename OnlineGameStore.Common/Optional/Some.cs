@@ -5,42 +5,56 @@ namespace OnlineGameStore.Common.Optional
 {
     public sealed class Some<T> : Option<T>, IEquatable<Some<T>>
     {
-        public T Content { get; }
-
         public Some(T value)
         {
-            this.Content = value;
+            Content = value;
         }
 
-        public static implicit operator T(Some<T> some) =>
-            some.Content;
-
-        public static implicit operator Some<T>(T value) =>
-            new Some<T>(value);
-
-        public override Option<TResult> Map<TResult>(Func<T, TResult> map) =>
-            map(this.Content);
-
-        public override Option<TResult> MapOptional<TResult>(Func<T, Option<TResult>> map) =>
-            map(this.Content);
-
-        public override T Reduce(T whenNone) =>
-            this.Content;
-
-        public override T Reduce(Func<T> whenNone) =>
-            this.Content;
-
-        public override string ToString() =>
-            $"Some({this.ContentToString})";
+        public T Content { get; }
 
         private string ContentToString =>
-            this.Content?.ToString() ?? "<null>";
+            Content?.ToString() ?? "<null>";
 
         public bool Equals(Some<T> other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return EqualityComparer<T>.Default.Equals(Content, other.Content);
+        }
+
+        public static implicit operator T(Some<T> some)
+        {
+            return some.Content;
+        }
+
+        public static implicit operator Some<T>(T value)
+        {
+            return new Some<T>(value);
+        }
+
+        public override Option<TResult> Map<TResult>(Func<T, TResult> map)
+        {
+            return map(Content);
+        }
+
+        public override Option<TResult> MapOptional<TResult>(Func<T, Option<TResult>> map)
+        {
+            return map(Content);
+        }
+
+        public override T Reduce(T whenNone)
+        {
+            return Content;
+        }
+
+        public override T Reduce(Func<T> whenNone)
+        {
+            return Content;
+        }
+
+        public override string ToString()
+        {
+            return $"Some({ContentToString})";
         }
 
         public override bool Equals(object obj)
@@ -55,10 +69,15 @@ namespace OnlineGameStore.Common.Optional
             return EqualityComparer<T>.Default.GetHashCode(Content);
         }
 
-        public static bool operator ==(Some<T> a, Some<T> b) =>
-            (a is null && b is null) ||
-            (!(a is null) && a.Equals(b));
+        public static bool operator ==(Some<T> a, Some<T> b)
+        {
+            return a is null && b is null ||
+                   !(a is null) && a.Equals(b);
+        }
 
-        public static bool operator !=(Some<T> a, Some<T> b) => !(a == b);
+        public static bool operator !=(Some<T> a, Some<T> b)
+        {
+            return !(a == b);
+        }
     }
 }

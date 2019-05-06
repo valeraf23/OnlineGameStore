@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "924955b261af3d13b02b6973efe10123e70bf121"
+    "signature": "ae6078331afcda690974da5657556fe63cd5fa09"
   },
   "compilationOptions": {},
   "targets": {
@@ -890,6 +890,14 @@
           "System.Runtime.Extensions": "4.1.0"
         }
       },
+      "System.Linq.Dynamic.Core/1.0.13": {
+        "runtime": {
+          "lib/netcoreapp2.1/System.Linq.Dynamic.Core.dll": {
+            "assemblyVersion": "1.0.13.0",
+            "fileVersion": "1.0.13.0"
+          }
+        }
+      },
       "System.Linq.Expressions/4.1.0": {
         "dependencies": {
           "System.Collections": "4.0.11",
@@ -1443,7 +1451,8 @@
           "AutoMapper": "8.0.0",
           "OnlineGame.DataAccess": "1.0.0",
           "OnlineGameStore.Common": "1.0.0",
-          "OnlineGameStore.Domain": "1.0.0"
+          "OnlineGameStore.Domain": "1.0.0",
+          "System.Linq.Dynamic.Core": "1.0.13"
         },
         "runtime": {
           "OnlineGameStore.Data.dll": {}
@@ -1886,6 +1895,13 @@
       "sha512": "sha512-bQ0iYFOQI0nuTnt+NQADns6ucV4DUvMdwN6CbkB1yj8i7arTGiTN5eok1kQwdnnNWSDZfIUySQY+J3d5KjWn0g==",
       "path": "system.linq/4.1.0",
       "hashPath": "system.linq.4.1.0.nupkg.sha512"
+    },
+    "System.Linq.Dynamic.Core/1.0.13": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QCv/KZNeGd60LwdZSzDj5rTWHcfZdfqj9+n0VB+GrpC4y24A0vpM76ovuaU6OWgZx+OjuNBBUq0b5MV/dqZklQ==",
+      "path": "system.linq.dynamic.core/1.0.13",
+      "hashPath": "system.linq.dynamic.core.1.0.13.nupkg.sha512"
     },
     "System.Linq.Expressions/4.1.0": {
       "type": "package",
