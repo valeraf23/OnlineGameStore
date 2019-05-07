@@ -47,7 +47,7 @@ namespace OnlineGame.DataAccess
             }
         }
 
-        protected void VerifyItemIsAddedOrAttachedToDbSet(DbSet<TEntity> dbSet, TEntity item)
+        protected void AddToDbSet(DbSet<TEntity> dbSet, TEntity item)
         {
             if (item == null) return;
             if (item.Id == Guid.Empty)

@@ -1,40 +1,41 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentAssertions;
+using NUnit.Framework;
 using ObjectsComparator.Comparator;
 using OnlineGameStore.Common.Either;
 using OnlineGameStore.Common.Errors;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
-using OnlineGameStore.Data.Services;
+using OnlineGameStore.Data.Repository;
 using OnlineGameStore.Data.Services.Interfaces;
-using Xunit;
 
 namespace OnlineGameStore.Tests.TestProject
 {
-    public class GameServiceTests : IClassFixture<DatabaseFixture>
+    [TestFixture]
+    public class GameServiceTests
     {
-        public GameServiceTests(DatabaseFixture fixture) => _service = fixture.GameService;
+        private readonly IGameService _gameService = DataBaseFixture.Instance.GameService;
+        private readonly PublisherRepository _publisherRepository = DataBaseFixture.Instance.PublisherRepository;
 
-        private readonly IGameService _service;
-
-        [Fact]
+        [Test]
         public async Task Can_Get_Game_By_Key()
         {
             var entity = GamesTestData.FirstGame;
 
             var expected = entity.ToModel<GameModel>();
-            var actually = await _service.GetGameByIdAsync(entity.Id);
+            var actually = await _gameService.GetGameByIdAsync(entity.Id);
 
             var result = expected.GetDistinctions(actually,
                 pr => pr.Equals("Comments") || pr.EndsWith("Id") || pr.EndsWith("ParentGenre"));
-            Assert.Empty(result);
+            result.Should().BeEmpty();
         }
 
-        [Fact]
-        public async void Can_Create_New_Game()
+        [Test]
+        public async Task Can_Create_New_Game()
         {
+            var publisherId = _publisherRepository.GetAllAsync().GetAwaiter().GetResult().First().Id;
             var entity = GamesTestData.SecondGame;
             var expected = new GameForCreationModel
             {
@@ -42,63 +43,65 @@ namespace OnlineGameStore.Tests.TestProject
                 Description = entity.Description,
                 PlatformTypesId = entity.GamePlatformType.Select(x => x.PlatformTypeId).ToArray(),
                 GenresId = entity.GameGenre.Select(x => x.Genre.Id).ToArray(),
-                PublisherId = Guid.NewGuid()
+                PublisherId = publisherId
             };
 
             var ee = Mapper.Map<GameModel>(expected);
-            await _service.SaveSafe(ee);
+            var res = await _gameService.SaveSafe(ee);
+            res.Should().BeOfType<Right<Error, GameModel>>();
 
             var actually =
-                (await _service.GetGamesAsync()).FirstOrDefault(x =>
+                (await _gameService.GetGamesAsync()).FirstOrDefault(x =>
                     x.Description == GamesTestData.SecondGame.Description);
 
             var result = GamesTestData.SecondGame.ToModel<GameModel>().GetDistinctions(actually,
-                pr => pr.Equals("Comments") || pr.StartsWith("PlatformTypes") || pr.Equals("Publisher.Name") || pr.EndsWith("Id") || pr.EndsWith("ParentGenre"));
-            Assert.Empty(result);
+                pr => pr.Equals("Comments") || pr.StartsWith("Genres") || pr.StartsWith("PlatformTypes") ||
+                      pr.Equals("Publisher.Name") || pr.EndsWith("Id") || pr.EndsWith("ParentGenre"));
+            result.Should().BeEmpty();
         }
 
-        [Fact]
-        public async void Can_Create_New_Game_Safe()
+        [Test]
+        public async Task Can_Create_New_Game_Safe()
         {
-            var res = await _service.SaveSafe(Mapper.Map<GameModel>(new GameForCreationModel()));
+            var res = await _gameService.SaveSafe(Mapper.Map<GameModel>(new GameForCreationModel()));
             const string expected = "UnprocessableError";
             var actually = res.Map(created => created.Name)
                 .Reduce(_ => expected, error => error is UnprocessableError)
                 .Reduce(_ => "InternalServerError");
-
-            Assert.Equal(expected, actually);
+            actually.Should().Be(expected);
         }
 
-        [Fact]
-        public async void Can_Get_All_Games()
+        [Test]
+        public async Task Can_Get_All_Games()
         {
-            var games = await _service.GetGamesAsync();
+            var games = await _gameService.GetGamesAsync();
             Assert.True(games.Count() > 1);
         }
 
-        [Fact]
-        public async void Can_Delete_Game()
+        [Test]
+        public async Task Can_Delete_Game()
         {
-            _service.DeleteGameById(GamesTestData.FourthGame.Id);
-            var games = await _service.GetGamesAsync();
+            _gameService.DeleteGameById(GamesTestData.FourthGame.Id);
+            var games = await _gameService.GetGamesAsync();
             var isGameExist = games.Any(x => x.Name == GamesTestData.FourthGame.Name);
             Assert.False(isGameExist, "Game was not deleted");
         }
 
-        [Fact]
-        public async void Get_Games_By_Genre()
+        [Test]
+        public async Task Get_Games_By_Genre()
         {
-            var expected = GuidsManager.Get[3];
-            var actually = await _service.GetGamesByGenreAsync(expected);
-            Assert.Equal(GamesTestData.FirstGame.Name, actually.First().Name);
+            var expected = GuidsManager.Get[31];
+            var actually = await _gameService.GetGamesByGenreAsync(expected);
+            GamesTestData.FirstGame.Name.Should().BeEquivalentTo(actually.First().Name);
         }
 
-        [Fact]
-        public async void Get_Games_By_PlatformTypes()
+        [Test]
+        public async Task Get_Games_By_PlatformTypes()
         {
-            var expected = GuidsManager.Get[1];
-            var actually = await _service.GetGamesByPlatformTypesAsync(expected);
-            Assert.Equal(GamesTestData.FirstGame.Name, actually.First().Name);
+            var expected = GuidsManager.Get[35];
+            var actually = await _gameService.GetGamesByPlatformTypesAsync(expected);
+            GamesTestData.FirstGame.Name.Should().BeEquivalentTo(actually.First().Name);
         }
+
     }
 }

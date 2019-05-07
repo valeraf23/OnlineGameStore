@@ -1,28 +1,28 @@
 using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using NUnit.Framework;
 using OnlineGameStore.Data.Dtos;
-using OnlineGameStore.Data.Services;
 using OnlineGameStore.Data.Services.Interfaces;
-using Xunit;
 
 namespace OnlineGameStore.Tests.TestProject
 {
-    public class CommentServiceTests : IClassFixture<DatabaseFixture>
+    [TestFixture]
+    public class CommentServiceTests
     {
-        public CommentServiceTests(DatabaseFixture fixture) => _service = fixture.CommentService;
+        private readonly ICommentService _commentService = DataBaseFixture.Instance.CommentService;
 
-        private readonly ICommentService _service;
-
-        [Fact]
-        public async void Get_All_Comments_By_Game_Key()
+        [Test]
+        public async Task Get_All_Comments_By_Game_Key()
         {
-            var actually = (await _service.GetAllCommentsForGame(GamesTestData.FirstGame.Id)).Count();
+            var actually = (await _commentService.GetAllCommentsForGame(GamesTestData.FirstGame.Id)).Count();
             var expected = GamesTestData.FirstGame.Comments.Count;
-            Assert.Equal(expected, actually);
+            expected.Should().Be(actually);
         }
 
 
-        [Fact]
-        public async void Add_Comment_To_Game()
+        [Test]
+        public async Task Add_Comment_To_Game()
         {
             var expected = new CommentModel
             {
@@ -30,13 +30,14 @@ namespace OnlineGameStore.Tests.TestProject
                 Body = "Some_body"
             };
 
-             await _service.AddCommentToGame(GamesTestData.ThirdGame.Id, expected);
+            await _commentService.AddCommentToGame(GamesTestData.ThirdGame.Id, expected);
 
-            var actual = (await _service.GetCommentsForGame(GamesTestData.ThirdGame.Id, x => x.Name == expected.Name))
+            var actual =
+                (await _commentService.GetCommentsForGame(GamesTestData.ThirdGame.Id, x => x.Name == expected.Name))
                 .FirstOrDefault();
             Assert.NotNull(actual);
-            Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.Body, actual.Body);
+            expected.Name.Should().BeEquivalentTo(actual.Name);
+            expected.Body.Should().BeEquivalentTo(actual.Body);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace OnlineGameStore.Data.Repository
         public override async Task<IEnumerable<Game>> GetAsync(Func<Game, bool> predicate)
         {
             var allGames =
-                await Context.Games
+                await EntityDbSet
                     .Include(game => game.Publisher)
                     .Include(game => game.GameGenre)
                     .ThenInclude(gameGenre => gameGenre.Genre)
