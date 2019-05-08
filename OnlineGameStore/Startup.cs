@@ -39,6 +39,8 @@ namespace OnlineGameStore.Api
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
             {
+                options.SerializerSettings.ReferenceLoopHandling =
+                    ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.Formatting = Formatting.Indented;
             });
             services.AddScoped<IRepository<Game>, GameRepository>();
@@ -52,10 +54,11 @@ namespace OnlineGameStore.Api
             services.AddHttpClient();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
             services.AddHttpCacheHeaders(
-                expirationModelOptions => expirationModelOptions.MaxAge = 600,
+                expirationModelOptions => expirationModelOptions.MaxAge = 60,
                 validationModelOptions => validationModelOptions.MustRevalidate = true);
 
             services.AddMemoryCache();
+            services.AddResponseCaching();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,7 +92,8 @@ namespace OnlineGameStore.Api
             }
 
             MapperHelper.InitMapperConf();
-         //  app.UseHttpCacheHeaders();
+            app.UseResponseCaching();
+            app.UseHttpCacheHeaders();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
