@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using OnlineGame.DataAccess;
+using OnlineGame.DataAccess.Interfaces;
 
 namespace OnlineGameStore.Domain.Entities
 {

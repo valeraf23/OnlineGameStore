@@ -28,11 +28,10 @@ namespace OnlineGameStore.Api.Controllers
 
         private readonly IGameService _gameService;
         private readonly GameControllerHelper _gameControllerHelper;
-        private readonly IMapper _mapper;
         private readonly ITypeHelperService _typeHelperService;
 
         public GameController(IGameService gameService, ICommentService commentService,
-            ITypeHelperService typeHelperService, IMapper mapper, LinkGenerator linkGenerator)
+            ITypeHelperService typeHelperService, LinkGenerator linkGenerator)
         {
             _gameService = gameService
                            ?? throw new ArgumentNullException(nameof(gameService));
@@ -40,8 +39,7 @@ namespace OnlineGameStore.Api.Controllers
                               ?? throw new ArgumentNullException(nameof(commentService));
             _typeHelperService = typeHelperService
                                  ?? throw new ArgumentNullException(nameof(typeHelperService));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _gameControllerHelper = new GameControllerHelper(linkGenerator);
+         _gameControllerHelper = new GameControllerHelper(linkGenerator);
         }
 
         [HttpGet(Name = "GetGames")]

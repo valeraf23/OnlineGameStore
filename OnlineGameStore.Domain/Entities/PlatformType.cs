@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using OnlineGame.DataAccess;
+using OnlineGame.DataAccess.Interfaces;
 
 namespace OnlineGameStore.Domain.Entities
 {

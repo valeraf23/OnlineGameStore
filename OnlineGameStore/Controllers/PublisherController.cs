@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using OnlineGame.DataAccess;
+using OnlineGame.DataAccess.Interfaces;
 using OnlineGameStore.Common.Either;
 using OnlineGameStore.Common.Optional.Extensions;
 using OnlineGameStore.Data.Dtos;
@@ -18,13 +18,11 @@ namespace OnlineGameStore.Api.Controllers
     public class PublisherController : ControllerBase
     {
         private readonly IRepository<Publisher> _publisherRepository;
-        private readonly IMapper _mapper;
 
         public PublisherController(IRepository<Publisher> publisherRepository, IMapper mapper)
         {
             _publisherRepository = publisherRepository
                                    ?? throw new ArgumentNullException(nameof(publisherRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]

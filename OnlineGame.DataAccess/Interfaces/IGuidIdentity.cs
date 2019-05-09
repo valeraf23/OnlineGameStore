@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OnlineGame.DataAccess
+namespace OnlineGame.DataAccess.Interfaces
 {
     public interface IGuidIdentity
     {

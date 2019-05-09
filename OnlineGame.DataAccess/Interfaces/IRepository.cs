@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using OnlineGameStore.Common.Either;
 using OnlineGameStore.Common.Errors;
 
-namespace OnlineGame.DataAccess
+namespace OnlineGame.DataAccess.Interfaces
 {
     public interface IRepository<T> where T : IGuidIdentity
     {

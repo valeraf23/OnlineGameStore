@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using OnlineGame.DataAccess;
+using OnlineGame.DataAccess.Interfaces;
 using OnlineGameStore.Data.Data;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
@@ -49,7 +48,6 @@ namespace OnlineGameStore.Api
             services.AddScoped<IRepository<Publisher>, PublisherRepository>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddTransient<IValidatorStrategy<GameModel>, DefaultValidatorStrategy<GameModel>>();
-            services.AddAutoMapper();
 
             services.AddHttpClient();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
