@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
 using OnlineGameStore.Api.Filters;
 using OnlineGameStore.Api.Helpers;
@@ -16,7 +15,6 @@ using OnlineGameStore.Common.Optional.Extensions;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Data.Services.Interfaces;
-using UnprocessableEntityObjectResult = OnlineGameStore.Api.Helpers.UnprocessableEntityObjectResult;
 
 namespace OnlineGameStore.Api.Controllers
 {
@@ -25,7 +23,6 @@ namespace OnlineGameStore.Api.Controllers
     public class GameController : ControllerBase
     {
         private readonly ICommentService _commentService;
-
         private readonly IGameService _gameService;
         private readonly GameControllerHelper _gameControllerHelper;
         private readonly ITypeHelperService _typeHelperService;
@@ -39,7 +36,7 @@ namespace OnlineGameStore.Api.Controllers
                               ?? throw new ArgumentNullException(nameof(commentService));
             _typeHelperService = typeHelperService
                                  ?? throw new ArgumentNullException(nameof(typeHelperService));
-         _gameControllerHelper = new GameControllerHelper(linkGenerator);
+            _gameControllerHelper = new GameControllerHelper(linkGenerator);
         }
 
         [HttpGet(Name = "GetGames")]
@@ -49,12 +46,7 @@ namespace OnlineGameStore.Api.Controllers
                 (gameResourceParameters.Fields))
                 return BadRequest();
 
-            var games = await _gameService.GetGamesAsync();
-            var gamesWithComments = games.Select(g => GetGameById(g.Id)).ToList();
-            var results = await Task.WhenAll(gamesWithComments);
-            var gameModels = results.SelectOptional(option => option).AsQueryable()
-                .ApplySort(gameResourceParameters.OrderBy).ToList();
-            var filteredModels = _gameControllerHelper.ApplyFilters(gameModels, gameResourceParameters).ToList();
+            var filteredModels = await GetGameModels(gameResourceParameters);
             var paginationMetadata =
                 _gameControllerHelper.GetPaginationMetadata(filteredModels, gameResourceParameters, HttpContext);
             Response.Headers.Add("X-Pagination", paginationMetadata);
@@ -64,33 +56,26 @@ namespace OnlineGameStore.Api.Controllers
 
         [HttpGet]
         [Route("{id}", Name = "GetGame")]
-        public async Task<IActionResult> GetGame(Guid id)
-        {
-            return (await GetGameById(id)).NoneIfNull()
-                .Map<IActionResult>(Ok).Reduce(NotFound);
-        }
+        public async Task<IActionResult> GetGame(Guid id) =>
+            (await GetGameById(id)).NoneIfNull()
+            .Map<IActionResult>(Ok).Reduce(NotFound);
 
-        private async Task<Option<GameModel>> GetGameById(Guid id)
-        {
-            return (await _gameService.GetGameByIdAsync(id)).NoneIfNull()
-                .Map(g =>
-                {
-                    g.Comments = _commentService.GetAllCommentsForGame(id).GetAwaiter().GetResult().ToArray();
-                    return g;
-                });
-        }
+        private async Task<Option<GameModel>> GetGameById(Guid id) =>
+            (await _gameService.GetGameByIdAsync(id)).NoneIfNull()
+            .Map(g =>
+            {
+                g.Comments = _commentService.GetAllCommentsForGame(id).GetAwaiter().GetResult().ToArray();
+                return g;
+            });
 
         [HttpPost]
         [AssignPublisherId]
-        public async Task<IActionResult> CreateGame(GameForCreationModel game)
-        {
-            return (await _gameService.SaveSafe(Mapper.Map<GameModel>(game)))
-                .Map(GetRoute)
-                .Reduce(_ => UnprocessableEntityError(ModelState), error => error is UnprocessableError)
-                .Reduce(_ => UnprocessableEntityError(ModelState), error => error is SaveError)
-                .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-                .Reduce(_ => InternalServerError());
-        }
+        public async Task<IActionResult> CreateGame(GameForCreationModel game) =>
+            (await _gameService.SaveSafe(Mapper.Map<GameModel>(game)))
+            .Map(GetRoute)
+            .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
+            .Reduce(error => error.ToObjectResult(), error => error != null)
+            .Reduce(_ => ModelState.ToObjectResult());
 
         [HttpPut("{id}")]
         public IActionResult UpdateGame(Guid id, GameForCreationModel game)
@@ -101,10 +86,9 @@ namespace OnlineGameStore.Api.Controllers
             Mapper.Map(game, existGame);
             return _gameService.SaveSafe(existGame).GetAwaiter().GetResult()
                 .Map(x => (IActionResult) NoContent())
-                .Reduce(_ => UnprocessableEntityError(ModelState), error => error is UnprocessableError)
-                .Reduce(_ => UnprocessableEntityError(ModelState), error => error is SaveError)
                 .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-                .Reduce(_ => InternalServerError());
+                .Reduce(error => error.ToObjectResult(), error => error != null)
+                .Reduce(_ => ModelState.ToObjectResult());
         }
 
         [HttpPatch("{id}")]
@@ -118,25 +102,24 @@ namespace OnlineGameStore.Api.Controllers
             Mapper.Map(publisherPatch, existPublisher);
             return _gameService.SaveSafe(existPublisher).GetAwaiter().GetResult()
                 .Map(x => (IActionResult) NoContent())
-                .Reduce(_ => UnprocessableEntityError(ModelState), error => error is UnprocessableError)
-                .Reduce(_ => UnprocessableEntityError(ModelState), error => error is SaveError)
                 .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-                .Reduce(_ => InternalServerError());
-        }
-
-        private IActionResult InternalServerError()
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError);
-        }
-
-        private IActionResult UnprocessableEntityError(ModelStateDictionary modelState)
-        {
-            return new UnprocessableEntityObjectResult(modelState);
+                .Reduce(error => error.ToObjectResult(), error => error != null)
+                .Reduce(_ => ModelState.ToObjectResult());
         }
 
         private IActionResult GetRoute(IModel model)
         {
             return CreatedAtRoute("GetGame", new {model.Id}, null);
+        }
+
+        private async Task<IList<GameModel>> GetGameModels(GameResourceParameters gameResourceParameters)
+        {
+            var games = await _gameService.GetGamesAsync();
+            var gamesWithComments = games.Select(g => GetGameById(g.Id)).ToList();
+            var results = await Task.WhenAll(gamesWithComments);
+            var gameModels = results.SelectOptional(option => option).AsQueryable()
+                .ApplySort(gameResourceParameters.OrderBy).ToList();
+            return _gameControllerHelper.ApplyFilters(gameModels, gameResourceParameters).ToList();
         }
     }
 }

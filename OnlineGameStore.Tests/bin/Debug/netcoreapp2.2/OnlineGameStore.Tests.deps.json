@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "4fcecd8b8f27bdf276643f8371d1ad5a2daa2093"
+    "signature": "cdf4da79c02b7b2a41b399d23f16d63ccfccf78b"
   },
   "compilationOptions": {},
   "targets": {
@@ -42,6 +42,17 @@
           "lib/netcoreapp2.0/FluentAssertions.dll": {
             "assemblyVersion": "5.6.0.0",
             "fileVersion": "5.6.0.0"
+          }
+        }
+      },
+      "FluentValidation/8.3.0": {
+        "dependencies": {
+          "System.ComponentModel.Annotations": "4.5.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/FluentValidation.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.3.0.0"
           }
         }
       },
@@ -1434,6 +1445,7 @@
       "OnlineGameStore.Data/1.0.0": {
         "dependencies": {
           "AutoMapper": "8.0.0",
+          "FluentValidation": "8.3.0",
           "OnlineGame.DataAccess": "1.0.0",
           "OnlineGameStore.Common": "1.0.0",
           "OnlineGameStore.Domain": "1.0.0",
@@ -1474,6 +1486,13 @@
       "sha512": "sha512-WM7ueKkwUmxMsOE7fm3h7zc8XuWivq3hkqTRTo8XFYMbt91KuTIdY1ADTVUz/fZrc9DaYiyK7eDUyZKkyhXp5Q==",
       "path": "fluentassertions/5.6.0",
       "hashPath": "fluentassertions.5.6.0.nupkg.sha512"
+    },
+    "FluentValidation/8.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tQULydqVfFi68qjEw4Y+P3wM1Xp7kppLpUqPVKI6u8NDwlPVTm6V96qnLWCTO4khn7WtQ1p3ysnrNTl98fdJpA==",
+      "path": "fluentvalidation/8.3.0",
+      "hashPath": "fluentvalidation.8.3.0.nupkg.sha512"
     },
     "Microsoft.CodeCoverage/16.0.1": {
       "type": "package",

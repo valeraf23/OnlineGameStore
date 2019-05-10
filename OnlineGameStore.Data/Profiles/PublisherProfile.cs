@@ -8,10 +8,8 @@ namespace OnlineGameStore.Data.Profiles
     {
         public PublisherProfile()
         {
-            CreateMap<PublisherForCreateModel, Publisher>().ForMember(dest => dest.Name,
-                opt => opt.MapFrom(src => src.Name));
-
-
+            CreateMap<PublisherForCreateModel, PublisherModel>();
+            CreateMap<PublisherModel, Publisher>();
         }
     }
 }

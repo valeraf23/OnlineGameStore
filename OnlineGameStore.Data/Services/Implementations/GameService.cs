@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using OnlineGame.DataAccess.Interfaces;
-using OnlineGameStore.Common.Either;
-using OnlineGameStore.Common.Errors;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Data.Services.Interfaces;
@@ -13,48 +11,37 @@ using OnlineGameStore.Domain.Entities;
 namespace OnlineGameStore.Data.Services.Implementations
 {
 
-    public class GameService : IGameService
+    public class GameService : BaseService<GameModel, Game>, IGameService
     {
-        private readonly IRepository<Game> _repository;
-        private readonly IValidatorStrategy<GameModel> _validator;
-
         public GameService(IRepository<Game> repositoryInstance, IValidatorStrategy<GameModel> validator)
+            : base(repositoryInstance, validator)
         {
-            _repository = repositoryInstance ??
-                          throw new ArgumentNullException(nameof(repositoryInstance),
-                              "personRepositoryInstance is null.");
-            _validator = validator;
         }
 
         public void DeleteGameById(Guid id)
         {
-            var game = _repository.GetAsync(id).GetAwaiter().GetResult();
-            _repository.Delete(game);
+            var game = Repository.GetAsync(id).GetAwaiter().GetResult();
+            Repository.Delete(game);
         }
 
-        public async Task<GameModel> GetGameByIdAsync(Guid id) => (await _repository.GetAsync(id)).ToModel<GameModel>();
+        public async Task<GameModel> GetGameByIdAsync(Guid id) => (await Repository.GetAsync(id)).ToModel<GameModel>();
 
         public async Task<IEnumerable<GameModel>> GetGamesAsync()
         {
-            var games = await _repository.GetAllAsync();
+            var games = await Repository.GetAllAsync();
             return games.ToModel<GameModel>();
         }
 
         public async Task<IEnumerable<GameModel>> GetGamesByGenreAsync(Guid genreId)
         {
-            var games = await _repository.GetAsync(x => x.GameGenre.Any(g => g.GenreId == genreId));
+            var games = await Repository.GetAsync(x => x.GameGenre.Any(g => g.GenreId == genreId));
             return games.ToModel<GameModel>();
         }
 
         public async Task<IEnumerable<GameModel>> GetGamesByPlatformTypesAsync(Guid genreId)
         {
-            var games = await _repository.GetAsync(x => x.GamePlatformType.Any(g => g.PlatformTypeId == genreId));
+            var games = await Repository.GetAsync(x => x.GamePlatformType.Any(g => g.PlatformTypeId == genreId));
             return games.ToModel<GameModel>();
         }
-
-        public async Task<Either<Error, GameModel>> SaveSafe(GameModel gameModel) =>
-            !_validator.IsValid(gameModel)
-                ? new UnprocessableError()
-                : (await _repository.SaveAsync(gameModel.ToEntity<Game>())).Map(e =>e.ToModel<GameModel>());
     }
 }

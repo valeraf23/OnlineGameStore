@@ -16,6 +16,9 @@ using OnlineGameStore.Data.Repository;
 using OnlineGameStore.Data.Services.Implementations;
 using OnlineGameStore.Data.Services.Interfaces;
 using OnlineGameStore.Domain.Entities;
+using FluentValidation.AspNetCore;
+using OnlineGameStore.Api.Filters;
+using OnlineGameStore.Data.ValidationRules;
 
 namespace OnlineGameStore.Api
 {
@@ -36,18 +39,23 @@ namespace OnlineGameStore.Api
                 options.UseSqlServer(Configuration.GetConnectionString("Local"),
                     b => b.MigrationsAssembly("OnlineGameStore.Api")));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
-            {
-                options.SerializerSettings.ReferenceLoopHandling =
-                    ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.Formatting = Formatting.Indented;
-            });
+            services.AddMvc(
+                    opt => { opt.Filters.Add(typeof(ValidatorActionFilter)); })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling =
+                        ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.Formatting = Formatting.Indented;
+                }).AddFluentValidation(fv => { fv.RegisterValidatorsFromAssemblyContaining<GameModelValidator>(); });
+
             services.AddScoped<IRepository<Game>, GameRepository>();
-            services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IGameService, GameService>();                     
             services.AddScoped<IRepository<Comment>, CommentRepository>();
             services.AddScoped<IRepository<Publisher>, PublisherRepository>();
             services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IPublisherService, PublisherService>();
             services.AddTransient<IValidatorStrategy<GameModel>, DefaultValidatorStrategy<GameModel>>();
+            services.AddTransient<IValidatorStrategy<PublisherModel>, DefaultValidatorStrategy<PublisherModel>>();
 
             services.AddHttpClient();
             services.AddTransient<ITypeHelperService, TypeHelperService>();

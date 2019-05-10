@@ -1,7 +1,11 @@
-﻿namespace OnlineGameStore.Data.Dtos
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using OnlineGameStore.Common.Optional;
+
+namespace OnlineGameStore.Data.Dtos
 {
-    public interface IValidatorStrategy<T>
+    public interface IValidatorStrategy<in T>
     {
-        bool IsValid(T validateThis);
+        Option<List<ValidationResult>> GetResults(T model);
     }
 }

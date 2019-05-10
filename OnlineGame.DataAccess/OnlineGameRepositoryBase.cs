@@ -58,7 +58,7 @@ namespace OnlineGame.DataAccess
             AddToDbSet(EntityDbSet, saveThis);
             if (await SaveChangesAsync())
                 return saveThis;
-            return new SaveError();
+            return new SaveError("Cannot save entity");
         }
     }
 }
