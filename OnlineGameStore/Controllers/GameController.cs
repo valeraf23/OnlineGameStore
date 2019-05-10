@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -60,13 +61,21 @@ namespace OnlineGameStore.Api.Controllers
             (await GetGameById(id)).NoneIfNull()
             .Map<IActionResult>(Ok).Reduce(NotFound);
 
-        private async Task<Option<GameModel>> GetGameById(Guid id) =>
-            (await _gameService.GetGameByIdAsync(id)).NoneIfNull()
-            .Map(g =>
+        [HttpGet]
+        [Route("{id}/download")]
+        public async Task<IActionResult> DownloadGame(Guid id)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","StaticFiles", "e.PDF");
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
             {
-                g.Comments = _commentService.GetAllCommentsForGame(id).GetAwaiter().GetResult().ToArray();
-                return g;
-            });
+                await stream.CopyToAsync(memory);
+            }
+
+            memory.Position = 0;
+            return File(memory, GetContentType(path), Path.GetFileName(path));
+        }
 
         [HttpPost]
         [AssignPublisherId]
@@ -107,6 +116,14 @@ namespace OnlineGameStore.Api.Controllers
                 .Reduce(_ => ModelState.ToObjectResult());
         }
 
+        private async Task<Option<GameModel>> GetGameById(Guid id) =>
+            (await _gameService.GetGameByIdAsync(id)).NoneIfNull()
+            .Map(g =>
+            {
+                g.Comments = _commentService.GetAllCommentsForGame(id).GetAwaiter().GetResult().ToArray();
+                return g;
+            });
+
         private IActionResult GetRoute(IModel model)
         {
             return CreatedAtRoute("GetGame", new {model.Id}, null);
@@ -120,6 +137,24 @@ namespace OnlineGameStore.Api.Controllers
             var gameModels = results.SelectOptional(option => option).AsQueryable()
                 .ApplySort(gameResourceParameters.OrderBy).ToList();
             return _gameControllerHelper.ApplyFilters(gameModels, gameResourceParameters).ToList();
+        }
+
+        private static Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+
+            };
+        }
+
+        private static string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
         }
     }
 }
