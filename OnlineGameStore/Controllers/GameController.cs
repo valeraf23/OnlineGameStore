@@ -61,22 +61,6 @@ namespace OnlineGameStore.Api.Controllers
             (await GetGameById(id)).NoneIfNull()
             .Map<IActionResult>(Ok).Reduce(NotFound);
 
-        [HttpGet]
-        [Route("{id}/download")]
-        public async Task<IActionResult> DownloadGame(Guid id)
-        {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","StaticFiles", "e.PDF");
-
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-
-            memory.Position = 0;
-            return File(memory, GetContentType(path), Path.GetFileName(path));
-        }
-
         [HttpPost]
         [AssignPublisherId]
         public async Task<IActionResult> CreateGame(GameForCreationModel game) =>
@@ -114,6 +98,51 @@ namespace OnlineGameStore.Api.Controllers
                 .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
                 .Reduce(error => error.ToObjectResult(), error => error != null)
                 .Reduce(_ => ModelState.ToObjectResult());
+        }
+
+        [HttpPost("{id}/comments")]
+        public async Task<IActionResult> AddCommentToGame(Guid id, [FromBody] CommentModel model) =>
+            (await _commentService.AddCommentToGame(id, model))
+            .Map(GetRoute)
+            .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
+            .Reduce(error => error.ToObjectResult(), error => error != null)
+            .Reduce(_ => ModelState.ToObjectResult());
+
+        [HttpPost("{id}/comments/{commentId}")]
+        public async Task<IActionResult> AddAnswerToComment(Guid id, Guid commentId, [FromBody] CommentModel model) =>
+            (await _commentService.AddAnswerToComment(id, commentId, model))
+            .Map(x => (IActionResult) Ok(x))
+            .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
+            .Reduce(error => error.ToObjectResult(), error => error != null)
+            .Reduce(_ => ModelState.ToObjectResult());
+
+        [HttpGet]
+        [Route("{id}/download")]
+        public async Task<IActionResult> DownloadGame(Guid id)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "StaticFiles", "e.PDF");
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+
+            memory.Position = 0;
+            return File(memory, GetContentType(path), Path.GetFileName(path));
+        }
+
+        [HttpGet("{id}/comments")]
+        public async Task<IActionResult> GetComments(Guid id, [FromQuery] string searchQuery)
+        {
+            Func<CommentModel, bool> func = c => true;
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                func = c => IsCommentContainsSearchQuery(c, searchQuery);
+            }
+
+            var result = await _commentService.GetCommentsForGame(id, func);
+            return Ok(result);
         }
 
         private async Task<Option<GameModel>> GetGameById(Guid id) =>
@@ -155,6 +184,16 @@ namespace OnlineGameStore.Api.Controllers
             var types = GetMimeTypes();
             var ext = Path.GetExtension(path).ToLowerInvariant();
             return types[ext];
+        }
+
+        private static bool IsCommentContainsSearchQuery(CommentModel model, string query)
+        {
+            if (model.Body.Contains(query))
+            {
+                return true;
+            }
+
+            return model.Answers.Any() && model.Answers.Any(a => IsCommentContainsSearchQuery(a, query));
         }
     }
 }

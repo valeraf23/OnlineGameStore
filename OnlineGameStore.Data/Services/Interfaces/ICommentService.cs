@@ -13,7 +13,7 @@ namespace OnlineGameStore.Data.Services.Interfaces
 
         Task<Either<Error, CommentModel>> AddCommentToGame(Guid gameId, CommentModel comment);
 
-        Task<Either<Error, CommentModel>> AddAnswerToComment(Guid commentId, CommentModel comment);
+        Task<Either<Error, CommentModel>> AddAnswerToComment(Guid id, Guid idComment, CommentModel comment);
 
         Task<IEnumerable<CommentModel>> GetCommentsForGame(Guid gameId, Func<CommentModel, bool> predicate);
     }

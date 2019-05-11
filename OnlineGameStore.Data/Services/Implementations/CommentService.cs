@@ -37,10 +37,12 @@ namespace OnlineGameStore.Data.Services.Implementations
             return (await _repository.SaveAsync(entity)).Map(e => e.ToModel<CommentModel>());
         }
 
-        public async Task<Either<Error, CommentModel>> AddAnswerToComment(Guid commentId, CommentModel comment)
+        public async Task<Either<Error, CommentModel>> AddAnswerToComment(Guid gameId, Guid commentId,
+            CommentModel comment)
         {
             var entity = comment.ToEntity<Comment>();
             entity.ParentId = commentId;
+            entity.GameId = gameId;
             return (await _repository.SaveAsync(entity)).Map(e => e.ToModel<CommentModel>());
         }
 
