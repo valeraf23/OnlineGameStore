@@ -153,10 +153,7 @@ namespace OnlineGameStore.Api.Controllers
                 return g;
             });
 
-        private IActionResult GetRoute(IModel model)
-        {
-            return CreatedAtRoute("GetGame", new {model.Id}, null);
-        }
+        private IActionResult GetRoute(IModel model) => CreatedAtRoute("GetGame", new {model.Id}, null);
 
         private async Task<IList<GameModel>> GetGameModels(GameResourceParameters gameResourceParameters)
         {
