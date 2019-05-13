@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace OnlineGameStore.Api.Helpers
@@ -18,44 +17,25 @@ namespace OnlineGameStore.Api.Helpers
                 throw new ArgumentNullException(nameof(source));
             }
 
-            var expandoObjectList = new List<ExpandoObject>();
-
             var propertyInfoList = new List<PropertyInfo>();
 
-            if (string.IsNullOrWhiteSpace(fields))
-            {
-                var propertyInfos = typeof(TSource)
-                    .GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            propertyInfoList.AddRange(string.IsNullOrWhiteSpace(fields)
+                ? GetAllGetPropertyInfos<TSource>()
+                : GetPropertyInfoForFields<TSource>(fields));
 
-                propertyInfoList.AddRange(propertyInfos);
-            }
-            else
-            {
-                var fieldsAfterSplit = fields.Split(',');
+            return GetDataShapedObject(source, propertyInfoList);
+        }
 
-                foreach (var field in fieldsAfterSplit)
-                {
+        private static IEnumerable<PropertyInfo> GetAllGetPropertyInfos<TSource>() => typeof(TSource)
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-                    var propertyName = field.Trim();
-
-                    var propertyInfo = typeof(TSource)
-                        .GetProperty(propertyName,
-                            BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-
-                    if (propertyInfo == null)
-                    {
-                        throw new Exception($"Property {propertyName} wasn't found on {typeof(TSource)}");
-                    }
-
-
-                    propertyInfoList.Add(propertyInfo);
-                }
-            }
-
+        private static IEnumerable<ExpandoObject> GetDataShapedObject<TSource>(IEnumerable<TSource> source,
+            IList<PropertyInfo> propertyInfoList)
+        {
+            var expandoObjectList = new List<ExpandoObject>();
             foreach (var sourceObject in source)
             {
                 var dataShapedObject = new ExpandoObject();
-
 
                 foreach (var propertyInfo in propertyInfoList)
                 {
@@ -68,6 +48,30 @@ namespace OnlineGameStore.Api.Helpers
             }
 
             return expandoObjectList;
+        }
+
+        private static IEnumerable<PropertyInfo> GetPropertyInfoForFields<TSource>(string fields)
+        {
+            var fieldsAfterSplit = fields.Split(',');
+
+            var propertyInfoList = new List<PropertyInfo>();
+            foreach (var field in fieldsAfterSplit)
+            {
+                var propertyName = field.Trim();
+
+                var propertyInfo = typeof(TSource)
+                    .GetProperty(propertyName,
+                        BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+                if (propertyInfo == null)
+                {
+                    throw new Exception($"Property {propertyName} wasn't found on {typeof(TSource)}");
+                }
+
+                propertyInfoList.Add(propertyInfo);
+            }
+
+            return propertyInfoList;
         }
     }
 }

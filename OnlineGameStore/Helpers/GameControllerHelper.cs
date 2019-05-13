@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
+using OnlineGameStore.Api.Helpers.GameFilterStrategies;
+using OnlineGameStore.Api.Helpers.GameFilterStrategies.Abstractions;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
 
@@ -21,38 +22,12 @@ namespace OnlineGameStore.Api.Helpers
         public IEnumerable<GameModel> ApplyFilters(IEnumerable<GameModel> models,
             GameResourceParameters gameResourceParameters)
         {
-            if (!string.IsNullOrEmpty(gameResourceParameters.SearchQuery))
+            var filters = new BaseFilterStrategy[]
             {
-                var searchQueryForWhereClause = gameResourceParameters.SearchQuery
-                    .Trim().ToLowerInvariant();
-
-                models = models
-                    .Where(a => a.Description.ToLowerInvariant().Contains(searchQueryForWhereClause)
-                                || a.Name.ToLowerInvariant().Contains(searchQueryForWhereClause)
-                                || a.PlatformTypes.Any(x =>
-                                    x.Type.ToLowerInvariant().Contains(searchQueryForWhereClause))
-                                || a.Publisher.Name.ToLowerInvariant().Contains(searchQueryForWhereClause));
-            }
-
-
-            if (string.IsNullOrEmpty(gameResourceParameters.Genre)) return models;
-            {
-                var genreForWhereClause = gameResourceParameters.Genre
-                    .Trim().ToLowerInvariant();
-
-                models = models.Where(m => m.Genres.SelectMany(GetGenresName).Any(x =>
-                    x.Equals(genreForWhereClause, StringComparison.CurrentCultureIgnoreCase))).ToList();
-            }
-
-            return models;
-        }
-
-        private static IList<string> GetGenresName(GenreModel models)
-        {
-            var list = new List<string> {models.Name.ToLowerInvariant()};
-            foreach (var m in models.SubGenres) list.AddRange(GetGenresName(m));
-
-            return list;
+                new GenreFilterStrategy(gameResourceParameters), new PlatformTypeFilterStrategy(gameResourceParameters),
+                new PublisherFilterStrategy(gameResourceParameters), new SearchFilterStrategy(gameResourceParameters)
+            };
+            return filters.Aggregate(models, (current, filter) => filter.ApplyFilter(current));
         }
 
         public string GetPaginationMetadata(IEnumerable<GameModel> gameModels,
