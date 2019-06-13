@@ -18,23 +18,24 @@
     <div class='table-responsive'>
       <table class='table' *ngIf='games && games.length'>
         <thead>
-          <tr>
-            <th>Game</th>
-            <th>Description</th>
-            <th>Publisher</th>
-            <th>Genres</th>
-          </tr>
+        <tr>
+          <th>Game</th>
+          <th>Description</th>
+          <th>Publisher</th>
+          <th>Genres</th>
+        </tr>
         </thead>
         <tbody>
-        <tr *ngFor='let game of filteredGames'>        
-          <td>{{ game.name }}</td>
+        <tr *ngFor='let game of filteredGames'>
+          <td> <a [routerLink]="['/games', game.id]">{{ game.name }}</a></td>
           <td>{{ game.description}}</td>
           <td>{{ game.publisher.name}}</td>
-          <td>{{ game.genres | joinStr: ', '}}</td>
+          <td><genres [genres]='game.genres' [subGenres]='getSubGenres(game.genres)'></genres></td>
         </tr>
-        </tbody>
+        </tbody>   
       </table>
+      <ngbd-pagination-advanced></ngbd-pagination-advanced>
     </div>
   </div>
 
-</div>
+ </div>

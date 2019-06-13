@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { IGame } from './gameModel';
 import { GameService } from './game.service';
+import { IGenre } from './gameModel';
 
 @Component({
   selector: 'app-games',
@@ -34,6 +35,10 @@ export class GameListComponent implements OnInit {
       g.name.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
+  getSubGenres(genres: IGenre[]): string {
+    return genres.map(x => `${x.subGenres.map(e => e.name)}`).join(';');
+  }
+
   ngOnInit(): void {
     this.gameService.getGames().subscribe(
       games => {
@@ -44,5 +49,6 @@ export class GameListComponent implements OnInit {
     );
   }
 }
+
 
 

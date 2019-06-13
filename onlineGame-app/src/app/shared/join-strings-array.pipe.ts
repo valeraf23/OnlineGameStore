@@ -8,6 +8,6 @@ import { IGenre } from '../games/gameModel';
 export class JoinStringArrayPipe implements PipeTransform {
 
   transform(value: IGenre[], character: string): string {
-    return value.map(x => `${x.name} - ${x.subGenres.map(e => e.name).join(character)}`).join(character);
+    return value.map(x => `${x.name}`).join(character);
   }
 }

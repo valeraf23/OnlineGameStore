@@ -32,7 +32,7 @@ export interface IPlatformType {
   id: Guid;
   type: string;
 }
-module System {
+export module System {
   export class Guid {
     constructor(public guid: string) {
       this._guid = guid;

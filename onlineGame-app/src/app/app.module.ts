@@ -2,22 +2,35 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import { RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { GameListComponent } from './games/game-list.component';
 import { JoinStringArrayPipe } from './shared/join-strings-array.pipe';
-
+import { GameDetailComponent } from './games/gamesDetails/game-detail.component';
+import { GenreDetailComponent } from './games/ganresDetails/genre-detail.component';
+import { NgbdPaginationAdvanced } from './shared/pagination/pagination-advanced';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameListComponent,
-  JoinStringArrayPipe
+    JoinStringArrayPipe,
+    GameDetailComponent,
+    GenreDetailComponent,
+    NgbdPaginationAdvanced
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot([
+      { path: 'games', component: GameListComponent },
+      { path: 'games/:id', component: GameDetailComponent },
+      { path: '', redirectTo: 'games', pathMatch: 'full' },
+      { path: '**', redirectTo: 'games', pathMatch: 'full' }
+    ]),
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
