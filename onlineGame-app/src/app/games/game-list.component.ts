@@ -2,6 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IGame } from './gameModel';
 import { GameService } from './game.service';
 import { IGenre } from './gameModel';
+import {SortColumnService} from "./sortColumnService";
+import {ColumnSortedEvent} from "./sortService";
+import { Page} from "./gameModel";
 
 @Component({
   selector: 'app-games',
@@ -16,6 +19,7 @@ export class GameListComponent implements OnInit {
   get listFilter(): string {
     return this._listFilter;
   }
+
   set listFilter(value: string) {
     this._listFilter = value;
     this.filteredGames = this.listFilter ? this.performFilter(this.listFilter) : this.games;
@@ -23,8 +27,9 @@ export class GameListComponent implements OnInit {
 
   filteredGames: IGame[];
   games: IGame[] = [];
-
-  constructor(private gameService: GameService) {
+  page: Page = new Page();
+  pages:number=1;
+  constructor(private gameService: GameService, private service: SortColumnService) {
 
   }
 
@@ -39,14 +44,33 @@ export class GameListComponent implements OnInit {
     return genres.map(x => `${x.subGenres.map(e => e.name)}`).join(';');
   }
 
-  ngOnInit(): void {
-    this.gameService.getGames().subscribe(
+  getGames(games: IGame[], criteria: ColumnSortedEvent) {
+    console.log(criteria);
+    const g = this.service.getGames(games, criteria);
+    this.games = g;
+    this.filteredGames = g;
+  }
+
+  onSorted($event) {
+    this.getGames(this.filteredGames,$event);
+  }
+
+  getPageFromService($event) {  
+    this.getPages($event);
+  }
+
+  getPages(pageNumber: number) {
+    this.gameService.getPageGames(pageNumber).subscribe(
       games => {
-        this.games = games;
-        this.filteredGames = this.games;
+        this.page = Object.assign(new Page(), JSON.parse(games.headers.get('x-pagination')));
+        this.getGames([...games.body], { sortColumn: 'id', sortDirection: 'asc' });
       },
-      error => this.errorMessage = <any>error
+      error => this.errorMessage = error
     );
+  }
+
+  ngOnInit(): void {
+    this.getPages(1);
   }
 }
 

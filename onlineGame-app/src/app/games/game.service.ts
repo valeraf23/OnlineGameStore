@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -9,17 +9,13 @@ import { IGame } from './gameModel';
   providedIn: 'root'
 })
 export class GameService {
-  private productUrl = 'api/games';
 
   constructor(private http: HttpClient) { }
 
-  getGames(): Observable<IGame[]> {
-    return this.http.get<IGame[]>(this.productUrl).pipe(
-      tap(data => console.log('All: ' + JSON.stringify(data))),
-      catchError(this.handleError)
-    );
+  getPageGames(page: number): Observable<HttpResponse<IGame[]>> {
+    return this.http.get<IGame[]>(`api/games?pageNumber=${page}`, { observe: 'response' })
+      .pipe(tap(data => { console.log(data.headers.get('x-pagination')) }), catchError(this.handleError));
   }
-
   private handleError(err: HttpErrorResponse) {
     // in a real world app, we may send the server to some remote logging infrastructure
     // instead of just logging it to the console

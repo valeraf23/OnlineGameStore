@@ -10,6 +10,8 @@ import { JoinStringArrayPipe } from './shared/join-strings-array.pipe';
 import { GameDetailComponent } from './games/gamesDetails/game-detail.component';
 import { GenreDetailComponent } from './games/ganresDetails/genre-detail.component';
 import { NgbdPaginationAdvanced } from './shared/pagination/pagination-advanced';
+import { SortableColumnComponent} from "./games/SortTableComponent/sortable-column.component";
+import {SortableTableDirective} from "./games/SortableTableDirective";
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { NgbdPaginationAdvanced } from './shared/pagination/pagination-advanced'
     JoinStringArrayPipe,
     GameDetailComponent,
     GenreDetailComponent,
-    NgbdPaginationAdvanced
+    NgbdPaginationAdvanced,
+    SortableColumnComponent,
+    SortableTableDirective
   ],
   imports: [
     BrowserModule,

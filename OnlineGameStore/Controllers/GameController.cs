@@ -48,11 +48,13 @@ namespace OnlineGameStore.Api.Controllers
                 return BadRequest();
 
             var filteredModels = await GetGameModels(gameResourceParameters);
+            var pages = PagedList<GameModel>.Create(filteredModels.ToList(), gameResourceParameters.PageNumber,
+                gameResourceParameters.PageSize);
             var paginationMetadata =
-                _gameControllerHelper.GetPaginationMetadata(filteredModels, gameResourceParameters, HttpContext);
+                _gameControllerHelper.GetPaginationMetadata(pages, gameResourceParameters, HttpContext);
             Response.Headers.Add("X-Pagination", paginationMetadata);
 
-            return Ok(filteredModels.ShapeData(gameResourceParameters.Fields));
+            return Ok(pages.ShapeData(gameResourceParameters.Fields));
         }
 
         [HttpGet]

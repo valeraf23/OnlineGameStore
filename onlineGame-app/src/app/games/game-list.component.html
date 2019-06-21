@@ -16,25 +16,32 @@
       </div>
     </div>
     <div class='table-responsive'>
-      <table class='table' *ngIf='games && games.length'>
+      <table sortable-table (sorted)="onSorted($event)" class='table' *ngIf='games && games.length'>
         <thead>
         <tr>
-          <th>Game</th>
-          <th>Description</th>
-          <th>Publisher</th>
+          <th sortable-column="name" sort-direction="asc">Game</th>
+          <th sortable-column="description" >Description</th>
+          <th sortable-column="publisher.name">Publisher</th>
           <th>Genres</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor='let game of filteredGames'>
-          <td> <a [routerLink]="['/games', game.id]">{{ game.name }}</a></td>
+          <td><a [routerLink]="['/games', game.id]">{{ game.name }}</a></td>
           <td>{{ game.description}}</td>
           <td>{{ game.publisher.name}}</td>
           <td><genres [genres]='game.genres' [subGenres]='getSubGenres(game.genres)'></genres></td>
         </tr>
         </tbody>   
       </table>
-      <ngbd-pagination-advanced></ngbd-pagination-advanced>
+      <ngb-pagination
+        (pageChange)="getPageFromService($event)"
+        [pageSize]="10"
+        [(page)]="page.currentPage"
+        [rotate]="true"
+        [collectionSize]="page.totalCount"
+        [boundaryLinks]="true"
+      ></ngb-pagination>
     </div>
   </div>
 

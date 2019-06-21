@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {IGenre} from "../gameModel";
 
 @Component({
@@ -6,7 +6,7 @@ import {IGenre} from "../gameModel";
   templateUrl: './genre-detail.component.html',
   styleUrls: ['./genre-list.component.css']
 })
-export class GenreDetailComponent implements OnInit {
+export class GenreDetailComponent {
 
   @Input()
   genres: IGenre[]=[];
@@ -21,10 +21,6 @@ export class GenreDetailComponent implements OnInit {
   set subGenres(value: string) {
     this._subGenres = value;
   }
-  ngOnInit(): void {
-//    $(document).ready(() => {
-//      $('[data-toggle="tooltip"]').tooltip();
-//    });
-  }
+
 }
 

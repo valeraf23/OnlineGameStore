@@ -1,5 +1,13 @@
 import Guid = System.Guid;
 
+export class Page {
+  previousPageLink: string;
+  nextPageLink: string;
+  totalCount: number;
+  pageSize: number;
+  currentPage: number;
+  totalPages: number;
+}
 export interface IGame {
   id: Guid;
   name: string;
