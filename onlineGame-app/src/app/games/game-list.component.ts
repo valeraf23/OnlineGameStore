@@ -4,7 +4,8 @@ import { GameService } from './game.service';
 import { IGenre } from './gameModel';
 import {SortColumnService} from "./sortColumnService";
 import {ColumnSortedEvent} from "./sortService";
-import { Page} from "./gameModel";
+import { Page } from "./gameModel";
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-games',
@@ -29,7 +30,7 @@ export class GameListComponent implements OnInit {
   games: IGame[] = [];
   page: Page = new Page();
   pages:number=1;
-  constructor(private gameService: GameService, private service: SortColumnService) {
+  constructor(private spinner: NgxSpinnerService,private gameService: GameService, private service: SortColumnService) {
 
   }
 
@@ -60,10 +61,12 @@ export class GameListComponent implements OnInit {
   }
 
   getPages(pageNumber: number) {
+    this.spinner.show();
     this.gameService.getPageGames(pageNumber).subscribe(
       games => {
         this.page = Object.assign(new Page(), JSON.parse(games.headers.get('x-pagination')));
         this.getGames([...games.body], { sortColumn: 'id', sortDirection: 'asc' });
+        this.spinner.hide();
       },
       error => this.errorMessage = error
     );

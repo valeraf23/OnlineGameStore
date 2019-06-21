@@ -11,7 +11,8 @@ import { GameDetailComponent } from './games/gamesDetails/game-detail.component'
 import { GenreDetailComponent } from './games/ganresDetails/genre-detail.component';
 import { NgbdPaginationAdvanced } from './shared/pagination/pagination-advanced';
 import { SortableColumnComponent} from "./games/SortTableComponent/sortable-column.component";
-import {SortableTableDirective} from "./games/SortableTableDirective";
+import { SortableTableDirective } from "./games/SortableTableDirective";
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import {SortableTableDirective} from "./games/SortableTableDirective";
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    NgxSpinnerModule,
     RouterModule.forRoot([
       { path: 'games', component: GameListComponent },
       { path: 'games/:id', component: GameDetailComponent },
