@@ -17,6 +17,7 @@ using OnlineGameStore.Data.Services.Implementations;
 using OnlineGameStore.Data.Services.Interfaces;
 using OnlineGameStore.Domain.Entities;
 using FluentValidation.AspNetCore;
+using Newtonsoft.Json.Serialization;
 using OnlineGameStore.Api.Filters;
 using OnlineGameStore.Data.ValidationRules;
 
@@ -46,6 +47,8 @@ namespace OnlineGameStore.Api
                     options.SerializerSettings.ReferenceLoopHandling =
                         ReferenceLoopHandling.Ignore;
                     options.SerializerSettings.Formatting = Formatting.Indented;
+                    options.SerializerSettings.ContractResolver =
+                        new CamelCasePropertyNamesContractResolver();
                 }).AddFluentValidation(fv => { fv.RegisterValidatorsFromAssemblyContaining<GameModelValidator>(); });
 
             services.AddScoped<IRepository<Game>, GameRepository>();

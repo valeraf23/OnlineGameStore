@@ -17,7 +17,7 @@ namespace OnlineGameStore.Api.Filters
             {
                 var model = (GameForCreationModel) argument;
                 // var userId =get ClaimTypes from baseController
-                model.PublisherId = new Guid("5213789e-90f9-4098-aa5a-95e9cd69bf1c");
+                model.PublisherId = new Guid("e99d98ab-56d2-400a-93eb-65d731d9144d");
             }
 
             await next();

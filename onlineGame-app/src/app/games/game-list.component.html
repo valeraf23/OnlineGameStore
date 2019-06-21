@@ -1,0 +1,48 @@
+<div class='card'>
+  <div class='card-header'>
+    {{pageTitle}}
+  </div>
+  <div class='card-body'>
+    <div class='row'>
+      <div class='col-md-2'>Filter by:</div>
+      <div class='col-md-4'>
+        <input type='text'
+               [(ngModel)]='listFilter' />
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-md-6'>
+        <h4>Filtered by: {{listFilter}}</h4>
+      </div>
+    </div>
+    <div class='table-responsive'>
+      <table sortable-table (sorted)="onSorted($event)" class='table' *ngIf='games && games.length'>
+        <thead>
+        <tr>
+          <th sortable-column="name" sort-direction="asc">Game</th>
+          <th sortable-column="description" >Description</th>
+          <th sortable-column="publisher.name">Publisher</th>
+          <th>Genres</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor='let game of filteredGames'>
+          <td><a [routerLink]="['/games', game.id]">{{ game.name }}</a></td>
+          <td>{{ game.description}}</td>
+          <td>{{ game.publisher.name}}</td>
+          <td><genres [genres]='game.genres' [subGenres]='getSubGenres(game.genres)'></genres></td>
+        </tr>
+        </tbody>   
+      </table>
+      <ngb-pagination
+        (pageChange)="getPageFromService($event)"
+        [pageSize]="10"
+        [(page)]="page.currentPage"
+        [rotate]="true"
+        [collectionSize]="page.totalCount"
+        [boundaryLinks]="true"
+      ></ngb-pagination>
+    </div>
+  </div>
+
+ </div>

@@ -30,13 +30,9 @@ namespace OnlineGameStore.Api.Helpers
             return filters.Aggregate(models, (current, filter) => filter.ApplyFilter(current));
         }
 
-        public string GetPaginationMetadata(IEnumerable<GameModel> gameModels,
+        public string GetPaginationMetadata(PagedList<GameModel> pages,
             GameResourceParameters gameResourceParameters, HttpContext httpContext)
         {
-            var pages = PagedList<GameModel>.Create(gameModels.ToList(), gameResourceParameters.PageNumber,
-                gameResourceParameters.PageSize);
-
-
             var previousPageLink = pages.HasPrevious
                 ? CreateGamesResourceUri(httpContext, gameResourceParameters,
                     ResourceUriType.PreviousPage)
