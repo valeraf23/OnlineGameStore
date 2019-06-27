@@ -61,18 +61,23 @@ export class GameListComponent implements OnInit {
   }
 
   getPages(pageNumber: number) {
+    debugger;
     this.spinner.show();
     this.gameService.getPageGames(pageNumber).subscribe(
       games => {
+        console.log(games.headers.get('x-pagination'));
         this.page = Object.assign(new Page(), JSON.parse(games.headers.get('x-pagination')));
         this.getGames([...games.body], { sortColumn: 'id', sortDirection: 'asc' });
         this.spinner.hide();
+        debugger;
       },
       error => this.errorMessage = error
     );
   }
 
   ngOnInit(): void {
+  }
+  ngAfterViewInit(): void {
     this.getPages(1);
   }
 }

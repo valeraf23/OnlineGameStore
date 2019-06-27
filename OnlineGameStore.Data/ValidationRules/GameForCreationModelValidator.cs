@@ -9,6 +9,8 @@ namespace OnlineGameStore.Data.ValidationRules
         {
             RuleFor(x => x.Name).Length(0, 50);
             RuleFor(x => x.Description).Length(3, 500);
+            RuleFor(x => x.GenresId).NotEmpty();
+            RuleFor(x => x.PlatformTypesId).NotEmpty();
         }
     }
 }

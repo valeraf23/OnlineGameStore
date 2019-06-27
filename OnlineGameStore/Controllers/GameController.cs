@@ -60,7 +60,7 @@ namespace OnlineGameStore.Api.Controllers
         [HttpGet]
         [Route("{id}", Name = "GetGame")]
         public async Task<IActionResult> GetGame(Guid id) =>
-            (await GetGameById(id)).NoneIfNull()
+            (await GetGameById(id))
             .Map<IActionResult>(Ok).Reduce(NotFound);
 
         [HttpPost]

@@ -7,12 +7,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { GameListComponent } from './games/game-list.component';
 import { JoinStringArrayPipe } from './shared/join-strings-array.pipe';
-import { GameDetailComponent } from './games/gamesDetails/game-detail.component';
-import { GenreDetailComponent } from './games/ganresDetails/genre-detail.component';
+import { GameDetailComponent } from './games/games-details/game-detail.component';
+import { GenreDetailComponent } from './games/ganres-details/genre-detail.component';
 import { NgbdPaginationAdvanced } from './shared/pagination/pagination-advanced';
 import { SortableColumnComponent} from "./games/SortTableComponent/sortable-column.component";
 import { SortableTableDirective } from "./games/SortableTableDirective";
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { GameEditComponent} from "./games/games-details/edit-detail.component";
 
 @NgModule({
   declarations: [
@@ -23,16 +26,20 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     GenreDetailComponent,
     NgbdPaginationAdvanced,
     SortableColumnComponent,
-    SortableTableDirective
+    SortableTableDirective,
+    GameEditComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     NgxSpinnerModule,
+    ReactiveFormsModule,
+    NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot([
       { path: 'games', component: GameListComponent },
-      { path: 'games/:id', component: GameDetailComponent },
+      { path: 'new-games', component: GameDetailComponent },
+      { path: 'games/:id', component: GameEditComponent },
       { path: '', redirectTo: 'games', pathMatch: 'full' },
       { path: '**', redirectTo: 'games', pathMatch: 'full' }
     ]),
