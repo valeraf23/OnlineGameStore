@@ -3,18 +3,20 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'pm-root',
   template: `
-    <nav class='navbar navbar-expand navbar-light bg-light'>
-      <a class='navbar-brand'>{{pageTitle}}</a>
-      <ul class='nav nav-pills'>
-        <li><a class='nav-link' [routerLink]="['/games']">Games</a></li>
-        <li><a class='nav-link' [routerLink]="['/new-games']">Create</a></li>
+    <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
+      <a class='navbar-brand' href="#">{{pageTitle}}</a>
+      <ul class='navbar-nav mr-auto'>
+        <li class="nav-item"><a class='nav-link' routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/games']">Games</a></li>
+        <li class="nav-item"><a class='nav-link' routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/new-games']">Create</a></li>
       </ul>
     </nav>
     <div class='container'>
+      <ngx-spinner [fullScreen]="false" type="timer" size="medium"><p style="color: white" > Loading... </p>
+      </ngx-spinner>
       <router-outlet></router-outlet>
     </div>
 `
 })
 export class AppComponent {
-  pageTitle: string = 'Online Game Store';
+  pageTitle: string = 'OGS';
 }

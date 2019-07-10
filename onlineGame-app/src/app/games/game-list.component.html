@@ -4,18 +4,12 @@
   </div>
   <div class='card-body'>
     <div class='row'>
-      <div class='col-md-2'>Filter by:</div>
+      <div class='col-md-2' class="input-group-text">Filter by:</div>
       <div class='col-md-4'>
-        <input type='text'
+        <input type='text' class="form-control" aria-label="Default"
                [(ngModel)]='listFilter' />
       </div>
-    </div>
-    <div class='row'>
-      <div class='col-md-6'>
-        <h4>Filtered by: {{listFilter}}</h4>
-      </div>
-    </div>
-    <ngx-spinner></ngx-spinner>
+    </div>  
     <div class='table-responsive'>
       <table sortable-table (sorted)="onSorted($event)" class='table' *ngIf='games && games.length'>
         <thead>
@@ -25,6 +19,7 @@
             <th sortable-column="publisher.name">Publisher</th>
             <th>Platform types</th>
             <th>Genres</th>
+            <th>Download</th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +29,7 @@
             <td>{{ game.publisher.name}}</td>
             <td>{{ game.platformTypes | joinStr:'type':', ' }}</td>
             <td><genres [genres]='game.genres' [subGenres]='getSubGenres(game.genres)'></genres></td>
+            <td><a href="api/games/{{game.id}}/download">Download</a></td>
           </tr>
         </tbody>
       </table>

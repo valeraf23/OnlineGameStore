@@ -16,6 +16,8 @@ namespace OnlineGameStore.Api.Helpers
             {
                 case UnprocessableError e:
                     return new UnprocessableEntityObjectResult(e.Res);
+                case NotFoundError e:
+                    return new NotFoundObjectResult(e.Msg);
                 case SaveError e:
                     return new UnprocessableEntityObjectResult(e.ErrorMsg);
                 default:

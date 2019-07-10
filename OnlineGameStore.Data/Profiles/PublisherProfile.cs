@@ -10,6 +10,7 @@ namespace OnlineGameStore.Data.Profiles
         {
             CreateMap<PublisherForCreateModel, PublisherModel>();
             CreateMap<PublisherModel, Publisher>();
+            CreateMap<Publisher, PublisherModel>();
         }
     }
 }

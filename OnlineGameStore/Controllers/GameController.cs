@@ -73,18 +73,13 @@ namespace OnlineGameStore.Api.Controllers
             .Reduce(_ => ModelState.ToObjectResult());
 
         [HttpPut("{id}")]
-        public IActionResult UpdateGame(Guid id, GameForCreationModel game)
-        {
-            var existGame = _gameService.GetGameByIdAsync(id).GetAwaiter().GetResult();
-            if (existGame == null) return NotFound();
-
-            Mapper.Map(game, existGame);
-            return _gameService.SaveSafe(existGame).GetAwaiter().GetResult()
+        [AssignPublisherId]
+        public IActionResult UpdateGame(Guid id, GameForCreationModel game) =>
+            _gameService.UpdateSafe(id, Mapper.Map<GameModel>(game)).GetAwaiter().GetResult()
                 .Map(x => (IActionResult) NoContent())
                 .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
                 .Reduce(error => error.ToObjectResult(), error => error != null)
                 .Reduce(_ => ModelState.ToObjectResult());
-        }
 
         [HttpPatch("{id}")]
         public IActionResult PartiallyUpdatePublisher(Guid id, JsonPatchDocument<PublisherForCreateModel> publisher)
@@ -94,8 +89,7 @@ namespace OnlineGameStore.Api.Controllers
 
             var publisherPatch = Mapper.Map<PublisherForCreateModel>(existPublisher);
             publisher.ApplyTo(publisherPatch);
-            Mapper.Map(publisherPatch, existPublisher);
-            return _gameService.SaveSafe(existPublisher).GetAwaiter().GetResult()
+            return _gameService.UpdateSafe(id, Mapper.Map<GameModel>(publisherPatch)).GetAwaiter().GetResult()
                 .Map(x => (IActionResult) NoContent())
                 .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
                 .Reduce(error => error.ToObjectResult(), error => error != null)
@@ -167,16 +161,14 @@ namespace OnlineGameStore.Api.Controllers
             return _gameControllerHelper.ApplyFilters(gameModels, gameResourceParameters).ToList();
         }
 
-        private static Dictionary<string, string> GetMimeTypes()
-        {
-            return new Dictionary<string, string>
+        private static Dictionary<string, string> GetMimeTypes() =>
+            new Dictionary<string, string>
             {
                 {".txt", "text/plain"},
                 {".pdf", "application/pdf"},
                 {".doc", "application/vnd.ms-word"},
 
             };
-        }
 
         private static string GetContentType(string path)
         {

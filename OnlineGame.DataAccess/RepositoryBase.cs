@@ -54,8 +54,8 @@ namespace OnlineGame.DataAccess
             if (item.Id == Guid.Empty)
             {
                 item.Id = Guid.NewGuid();
-                dbSet.Add(item);
             }
+
             dbSet.Attach(item);
         }
 

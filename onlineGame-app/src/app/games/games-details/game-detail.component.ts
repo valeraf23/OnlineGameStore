@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { Component } from '@angular/core';
 import { GameService } from "../game.service";
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
+import { BaseGameFormComponent } from './game-form.component';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ActivatedRoute } from "@angular/router";
+import { forkJoin } from 'rxjs';
 
 @Component({
   templateUrl: './game-detail.component.html',
@@ -19,93 +22,48 @@ import { Router } from '@angular/router'
 
 })
 
-export class GameDetailComponent implements OnInit {
-  newGameForm: FormGroup;
-  name: FormControl;
-  platformTypes: FormControl;
-  genres: FormControl;
-  description: FormControl;
-  dropdownList = [];
-  dropdownListGenres = [];
-  constructor(private gameService: GameService, private router: Router) { }
+export class GameDetailComponent extends BaseGameFormComponent {
 
-  selectedItems = new Set();
-  selectedItemsGenre = new Set();
-  onItemSelect(item: any) {
-    this.selectedItems.add(item);
+  constructor(protected spinner: NgxSpinnerService,
+    protected route: ActivatedRoute,
+    protected gameService: GameService,
+    protected router: Router) {
+    super(spinner, route, gameService, router);
   }
-  onSelectAll(items: any) {
-    this.selectedItems.add(items);
-  }
+ 
+  fillExistInfo(): void {
 
-  onItemSelectGenre(item: any) {       
-      this.selectedItemsGenre.add(item);
-  }
-  onSelectAllGenre(items: any) {
-    items.map(x => this.onItemSelectGenre(x));
-  }
+    forkJoin(this.gameService.getPlatformTypes(), this.gameService.getGenres())
+      .subscribe(
+        pt => {
 
-  dropdownSettings = {
-    singleSelection: false,
-    idField: 'item_id',
-    textField: 'item_text',
-    selectAllText: 'Select All',
-    unSelectAllText: 'UnSelect All',
-    itemsShowLimit: 3,
-    allowSearchFilter: true
-  };
+          this.dropdownList = pt[0].map((x) => ({
+            item_id: x.id,
+            item_text: x.type
 
-  ngOnInit() {
-    this.gameService.getPlatformTypes().subscribe(
-      pt => {
-        debugger;
-        this.dropdownList = pt.map((x) => ({
-          item_id: x.id,
-          item_text: x.type 
-
-        }));      
-      }
+          }));
+          this.dropdownListGenres = pt[1].filter(y => y.parentGenre === null).map((x) => ({
+            item_id: x.id,
+            item_text: x.name
+          }));
+          this.spinner.hide();
+        }
     );
-    this.gameService.getGenres().subscribe(
-      pt => {
-        debugger;
-        this.dropdownListGenres = pt.filter(y=>y.parentGenre===null).map((x) => ({
-          item_id: x.id,
-          item_text: x.name
-        }));
-      }
-    );
-    this.name = new FormControl('', Validators.required);
-    this.platformTypes = new FormControl('', Validators.required);
-    this.genres = new FormControl('', Validators.required);
-    this.description =
-      new FormControl('', [Validators.required, Validators.maxLength(400)]);
-
-    this.newGameForm = new FormGroup({
-      name: this.name,
-      platformTypes: this.platformTypes,
-      genres: this.genres,
-      description: this.description
-    });
   }
 
   saveGame(formValues) {
-    let session = {
+    const session = {
       name: formValues.name,
       description: formValues.description,
       publisherId: undefined,
-      genresId: [...this.selectedItemsGenre].map(x => (x.item_id)),
-      platformTypesId: [...this.selectedItems].map(x => (x.item_id))
-    }
-    debugger;
-    if (this.newGameForm.valid) {
+      genresId: this.selectedItemsGenre.map(x => (x.item_id)),
+      platformTypesId: this.selectedItems.map(x => (x.item_id))
+    };
+     
+    if (this.gameForm.valid) {
       this.gameService.postGame(JSON.stringify(session)).subscribe();
       this.router.navigate(['/games']);
     }
-  
-  }
 
-  cancel() {
-    this.router.navigate(['/games']);
   }
 }

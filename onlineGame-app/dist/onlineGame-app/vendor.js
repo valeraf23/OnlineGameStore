@@ -35218,7 +35218,7 @@ function assertNgModuleType(actual, msg) {
 }
 function throwError(msg) {
     // tslint:disable-next-line
-    debugger; // Left intentionally for better debugger experience.
+     // Left intentionally for better debugger experience.
     throw new Error("ASSERTION ERROR: " + msg);
 }
 function assertDomNode(node) {
@@ -42935,7 +42935,7 @@ var NullInjector = /** @class */ (function () {
             // Intentionally left behind: With dev tools open the debugger will stop here. There is no
             // reason why correctly written application should cause this exception.
             // TODO(misko): uncomment the next line once `ngDevMode` works with closure.
-            // if(ngDevMode) debugger;
+            // if(ngDevMode) 
             throw new Error("NullInjectorError: No provider for " + stringify(token) + "!");
         }
         return notFoundValue;
