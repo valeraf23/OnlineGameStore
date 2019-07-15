@@ -8,7 +8,6 @@ import { Page } from "./gameModel";
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
-//  selector: 'app-games',
   templateUrl: './game-list.component.html',
   styleUrls: ['./game-list.component.css']
 })
@@ -52,7 +51,7 @@ export class GameListComponent implements OnInit {
     this.filteredGames = g;
   }
 
-  onSorted($event) {
+  onSorted($event:ColumnSortedEvent) {
     this.getGames(this.filteredGames,$event);
   }
 
