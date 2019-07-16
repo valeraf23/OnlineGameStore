@@ -4,8 +4,11 @@ import { GameService } from "../game.service";
 import { Router } from '@angular/router';
 import { ActivatedRoute } from "@angular/router";
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-dialog.service';
+import { CanComponentDeactivate} from "../../shared/can-deactivate-component.interface";
 
-export abstract class BaseGameFormComponent implements OnInit, AfterViewInit {
+
+export abstract class BaseGameFormComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
 
   abstract fillExistInfo(): void;
 
@@ -22,7 +25,8 @@ export abstract class BaseGameFormComponent implements OnInit, AfterViewInit {
   constructor(protected spinner: NgxSpinnerService,
     protected route: ActivatedRoute,
     protected gameService: GameService,
-    protected router: Router) {
+    protected router: Router,
+    protected confirmationDialogService: ConfirmationDialogService) {
   }
 
   selectedItems = [];
@@ -41,6 +45,7 @@ export abstract class BaseGameFormComponent implements OnInit, AfterViewInit {
     this.selectedItemsGenre = event;
     this.onItemSelectGenreIsTriggered = true;
   }
+
   dropdownSettings = {
     singleSelection: false,
     idField: 'item_id',
@@ -71,13 +76,39 @@ export abstract class BaseGameFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  validateForm() {
-    return !this.gameForm.invalid && (this.description.dirty || this.name.dirty || this.onSelectAllIsTriggered || this.onItemSelectGenreIsTriggered);
+  validateForm() {    
+    return this.description.dirty || this.name.dirty || this.onSelectAllIsTriggered || this.onItemSelectGenreIsTriggered;
+  }
+
+  protected markAsPristine() :void {
+    this.gameForm.markAsPristine();
+    this.onSelectAllIsTriggered = false;
+    this.onItemSelectGenreIsTriggered = false;
   }
 
   cancel() {
     this.router.navigate(['/games']);
   }
 
+  async canDeactivate(): Promise<boolean> {
+    debugger;
+    if (this.validateForm())
+      return await this.openConfirmationDialog();
 
+    return true;
+  }
+
+  protected async openConfirmationDialog(): Promise<boolean> {
+    try {
+      const confirmed = await this.confirmationDialogService.confirm('Please confirm..',
+        'Leaving this page will lose your changes. Are you sure want to leave this page ?');
+      if (confirmed) {
+      }
+      return confirmed;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+
+  }
 }

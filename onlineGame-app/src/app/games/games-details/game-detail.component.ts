@@ -5,6 +5,7 @@ import { BaseGameFormComponent } from './game-form.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute } from "@angular/router";
 import { forkJoin } from 'rxjs';
+import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-dialog.service';
 
 @Component({
   templateUrl: './game-detail.component.html',
@@ -27,9 +28,9 @@ export class GameDetailComponent extends BaseGameFormComponent {
   constructor(protected spinner: NgxSpinnerService,
     protected route: ActivatedRoute,
     protected gameService: GameService,
-    protected router: Router) {
-    super(spinner, route, gameService, router);
-  }
+    protected router: Router, protected confirmationDialogService: ConfirmationDialogService) {
+      super(spinner, route, gameService, router,confirmationDialogService);
+    }
  
   fillExistInfo(): void {
 
@@ -59,8 +60,9 @@ export class GameDetailComponent extends BaseGameFormComponent {
       genresId: this.selectedItemsGenre.map(x => (x.item_id)),
       platformTypesId: this.selectedItems.map(x => (x.item_id))
     };
-     
+    debugger;
     if (this.gameForm.valid) {
+      this.markAsPristine();
       this.gameService.postGame(JSON.stringify(session)).subscribe();
       this.router.navigate(['/games']);
     }

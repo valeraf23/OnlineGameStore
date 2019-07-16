@@ -6,6 +6,7 @@ import { IGame } from "../gameModel";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { forkJoin } from 'rxjs';
 import { BaseGameFormComponent } from './game-form.component';
+import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-dialog.service';
 
 @Component({
   selector: 'edit-games',
@@ -32,8 +33,8 @@ export class GameEditComponent extends BaseGameFormComponent {
   constructor(protected spinner: NgxSpinnerService,
     protected route: ActivatedRoute,
     protected gameService: GameService,
-    protected router: Router) {
-    super(spinner, route, gameService, router);
+    protected router: Router, protected confirmationDialogService: ConfirmationDialogService) {
+    super(spinner, route, gameService, router,confirmationDialogService);
   }
 
   fillExistInfo(): void {
@@ -69,6 +70,11 @@ export class GameEditComponent extends BaseGameFormComponent {
       );
   }
 
+  validateForm() {
+    return this.gameForm.valid &&
+      (this.description.dirty || this.name.dirty || this.onSelectAllIsTriggered || this.onItemSelectGenreIsTriggered);
+  }
+
   saveGame(formValues) {
     const session = {
       name: formValues.name,
@@ -79,6 +85,8 @@ export class GameEditComponent extends BaseGameFormComponent {
     };
 
     if (this.gameForm.valid) {
+      this.markAsPristine();
+
       this.gameService.putGame(this.id, JSON.stringify(session)).subscribe();
       this.router.navigate(['/games']);
     }

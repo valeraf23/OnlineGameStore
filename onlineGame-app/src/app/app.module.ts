@@ -16,6 +16,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { GameEditComponent} from "./games/games-details/edit-detail.component";
+import { ConfirmationDialogService } from './games/confirmation-dialog/confirmation-dialog.service';
+import { ConfirmationDialogComponent } from './games/confirmation-dialog/confirmation-dialog.component';
+import { CanDeactivateGuard } from "./shared/canDeactivateGuard.service";
 
 @NgModule({
   declarations: [
@@ -27,7 +30,8 @@ import { GameEditComponent} from "./games/games-details/edit-detail.component";
     NgbdPaginationAdvanced,
     SortableColumnComponent,
     SortableTableDirective,
-    GameEditComponent
+    GameEditComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -38,14 +42,15 @@ import { GameEditComponent} from "./games/games-details/edit-detail.component";
     NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot([
       { path: 'games', component: GameListComponent },
-      { path: 'new-games', component: GameDetailComponent },
-      { path: 'games/:id', component: GameEditComponent },
+      { path: 'new-games', component: GameDetailComponent, canDeactivate: [CanDeactivateGuard] },
+      { path: 'games/:id', component: GameEditComponent, canDeactivate: [CanDeactivateGuard]},
       { path: '', redirectTo: 'games', pathMatch: 'full' },
       { path: '**', redirectTo: 'games', pathMatch: 'full' }
     ]),
-    NgbModule
+    NgbModule.forRoot()
   ],
-  providers: [],
+  providers: [ConfirmationDialogService, CanDeactivateGuard ],
+  entryComponents: [ConfirmationDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
