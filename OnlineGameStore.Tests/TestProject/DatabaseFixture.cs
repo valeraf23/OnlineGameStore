@@ -30,8 +30,8 @@ namespace OnlineGameStore.Tests.TestProject
         public void Database()
         {
 
-//            _options = new DbContextOptionsBuilder<OnlineGameContext>()
-//                .UseInMemoryDatabase().Options;
+            _options = new DbContextOptionsBuilder<OnlineGameContext>()
+                .UseInMemoryDatabase().Options;
 
             SeedInMemoryStore();
             var context = new OnlineGameContext(_options);
