@@ -49,15 +49,6 @@ namespace OnlineGameStore.Tests.TestProject
             var ee = Mapper.Map<GameModel>(expected);
             var res = await _gameService.SaveSafe(ee);
             res.Should().BeOfType<Right<Error, GameModel>>();
-
-            var actually =
-                (await _gameService.GetGamesAsync()).FirstOrDefault(x =>
-                    x.Description == GamesTestData.SecondGame.Description);
-
-            var result = GamesTestData.SecondGame.ToModel<GameModel>().GetDistinctions(actually,
-                pr => pr.Equals("Comments") || pr.StartsWith("Genres") || pr.StartsWith("PlatformTypes") ||
-                      pr.Equals("Publisher.Name") || pr.EndsWith("Id") || pr.EndsWith("ParentGenre"));
-            result.Should().BeEmpty();
         }
 
         [Test]
