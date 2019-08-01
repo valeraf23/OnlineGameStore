@@ -98,7 +98,7 @@ namespace OnlineGameStore.Api.Controllers
 
         [HttpPost("{id}/comments")]
         public async Task<IActionResult> AddCommentToGame(Guid id, [FromBody] CommentModel model) =>
-            (await _commentService.AddCommentToGame(id, model))
+            (await _commentService.AddCommentToGameAsync(id, model))
             .Map(GetRoute)
             .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
             .Reduce(error => error.ToObjectResult(), error => error != null)
@@ -106,7 +106,7 @@ namespace OnlineGameStore.Api.Controllers
 
         [HttpPost("{id}/comments/{commentId}")]
         public async Task<IActionResult> AddAnswerToComment(Guid id, Guid commentId, [FromBody] CommentModel model) =>
-            (await _commentService.AddAnswerToComment(id, commentId, model))
+            (await _commentService.AddAnswerToCommentAsync(id, commentId, model))
             .Map(x => (IActionResult) Ok(x))
             .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
             .Reduce(error => error.ToObjectResult(), error => error != null)
@@ -137,7 +137,7 @@ namespace OnlineGameStore.Api.Controllers
                 func = c => IsCommentContainsSearchQuery(c, searchQuery);
             }
 
-            var result = await _commentService.GetCommentsForGame(id, func);
+            var result = await _commentService.GetCommentsForGameAsync(id, func);
             return Ok(result);
         }
 

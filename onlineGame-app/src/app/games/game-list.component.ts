@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IGame } from './gameModel';
+import { IGame, IComment } from './gameModel';
 import { GameService } from './game.service';
 import { IGenre } from './gameModel';
 import {SortColumnService} from "./sortColumnService";
@@ -28,9 +28,24 @@ export class GameListComponent implements OnInit {
   filteredGames: IGame[];
   games: IGame[] = [];
   page: Page = new Page();
-  pages:number=1;
-  constructor(private spinner: NgxSpinnerService ,private gameService: GameService, private service: SortColumnService) {
+  pages: number = 1;
+  commentsIndex: number = -1;
 
+  constructor(private spinner: NgxSpinnerService,
+    private gameService: GameService,
+    private service: SortColumnService) {
+  }
+
+visibleComments(value: number) {
+    if (this.commentsIndex === value) {
+      this.commentsIndex = -1;
+    } else {
+      this.commentsIndex = value;
+    }
+  }
+
+  isPopUpVisible(i: number): boolean {
+    return this.commentsIndex === i;
   }
 
   performFilter(filterBy: string): IGame[] {
@@ -45,7 +60,6 @@ export class GameListComponent implements OnInit {
   }
 
   getGames(games: IGame[], criteria: ColumnSortedEvent) {
-    console.log(criteria);
     const g = this.service.getGames(games, criteria);
     this.games = g;
     this.filteredGames = g;

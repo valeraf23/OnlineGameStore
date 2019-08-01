@@ -19,6 +19,8 @@ import { GameEditComponent} from "./games/games-details/edit-detail.component";
 import { ConfirmationDialogService } from './games/confirmation-dialog/confirmation-dialog.service';
 import { ConfirmationDialogComponent } from './games/confirmation-dialog/confirmation-dialog.component';
 import { CanDeactivateGuard } from "./shared/canDeactivateGuard.service";
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { CommentsPopup } from "./comment/comments.popup.component";
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { CanDeactivateGuard } from "./shared/canDeactivateGuard.service";
     SortableColumnComponent,
     SortableTableDirective,
     GameEditComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    CommentsPopup
   ],
   imports: [
     BrowserModule,
@@ -39,6 +42,7 @@ import { CanDeactivateGuard } from "./shared/canDeactivateGuard.service";
     HttpClientModule,
     NgxSpinnerModule,
     ReactiveFormsModule,
+    VirtualScrollerModule,
     NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot([
       { path: 'games', component: GameListComponent },
@@ -49,7 +53,7 @@ import { CanDeactivateGuard } from "./shared/canDeactivateGuard.service";
     ]),
     NgbModule.forRoot()
   ],
-  providers: [ConfirmationDialogService, CanDeactivateGuard ],
+  providers: [ConfirmationDialogService, CanDeactivateGuard],
   entryComponents: [ConfirmationDialogComponent],
   bootstrap: [AppComponent]
 })

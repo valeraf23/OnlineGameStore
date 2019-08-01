@@ -26,6 +26,7 @@
     "jquery": "^3.4.1",
     "ng-multiselect-dropdown": "^0.2.3",
     "ngx-spinner": "^7.1.4",
+    "ngx-virtual-scroller": "^3.0.2",
     "popper.js": "^1.15.0",
     "rxjs": "^6.5.2",
     "rxjs-compat": "^6.5.2",

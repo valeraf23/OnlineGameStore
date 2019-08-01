@@ -7,7 +7,6 @@ import {ColumnSortedEvent} from "./sortService";
 })
 export class SortColumnService {
 
-
   sort(a: string, b: string): number {
     if (a > b) {
       return 1;

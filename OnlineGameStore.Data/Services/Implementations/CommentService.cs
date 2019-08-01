@@ -13,40 +13,38 @@ using OnlineGameStore.Domain.Entities;
 
 namespace OnlineGameStore.Data.Services.Implementations
 {
-    public class CommentService : ICommentService
+    public class CommentService : BaseService<CommentModel, Comment>, ICommentService
     {
-        private readonly IRepository<Comment> _repository;
-
-        public CommentService(IRepository<Comment> repositoryInstance)
+        public CommentService(IRepository<Comment> repositoryInstance,
+            IValidatorStrategy<CommentModel> validator) :
+            base(repositoryInstance, validator)
         {
-            _repository = repositoryInstance ??
-                          throw new ArgumentNullException(nameof(repositoryInstance),
-                              "personRepositoryInstance is null.");
+
         }
 
         public async Task<IEnumerable<CommentModel>> GetAllCommentsForGame(Guid gameId)
         {
-            var comments = await _repository.GetAsync(comment => comment.GameId == gameId);
+            var comments = await Repository.GetAsync(comment => comment.GameId == gameId);
             return Mapper.Map<IEnumerable<CommentModel>>(comments);
         }
 
-        public async Task<Either<Error, CommentModel>> AddCommentToGame(Guid gameId, CommentModel comment)
+        public async Task<Either<Error, CommentModel>> AddCommentToGameAsync(Guid gameId, CommentModel comment)
         {
             var entity = comment.ToEntity<Comment>();
             entity.GameId = gameId;
-            return (await _repository.SaveAsync(entity)).Map(e => e.ToModel<CommentModel>());
+            return (await Repository.SaveAsync(entity)).Map(e => e.ToModel<CommentModel>());
         }
 
-        public async Task<Either<Error, CommentModel>> AddAnswerToComment(Guid gameId, Guid commentId,
+        public async Task<Either<Error, CommentModel>> AddAnswerToCommentAsync(Guid gameId, Guid commentId,
             CommentModel comment)
         {
             var entity = comment.ToEntity<Comment>();
             entity.ParentId = commentId;
             entity.GameId = gameId;
-            return (await _repository.SaveAsync(entity)).Map(e => e.ToModel<CommentModel>());
+            return (await Repository.SaveAsync(entity)).Map(e => e.ToModel<CommentModel>());
         }
 
-        public async Task<IEnumerable<CommentModel>> GetCommentsForGame(Guid gameId,
+        public async Task<IEnumerable<CommentModel>> GetCommentsForGameAsync(Guid gameId,
             Func<CommentModel, bool> predicate)
         {
             var comments = await GetAllCommentsForGame(gameId);

@@ -65,6 +65,7 @@ namespace OnlineGameStore.Api
             services.AddTransient<IValidatorStrategy<GenreModel>, DefaultValidatorStrategy<GenreModel>>();
             services.AddTransient<IValidatorStrategy<PlatformTypeModel>, DefaultValidatorStrategy<PlatformTypeModel>>();
             services.AddTransient<IValidatorStrategy<PublisherModel>, DefaultValidatorStrategy<PublisherModel>>();
+            services.AddTransient<IValidatorStrategy<CommentModel>, DefaultValidatorStrategy<CommentModel>>();
 
             services.AddHttpClient();
             services.AddTransient<ITypeHelperService, TypeHelperService>();

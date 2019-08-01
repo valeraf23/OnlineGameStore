@@ -11,7 +11,7 @@
       </div>
     </div>  
     <div class='table-responsive'>
-      <table sortable-table (sorted)="onSorted($event)" class='table' *ngIf='games && games.length'>
+      <table sortable-table (sorted)="onSorted($event)" class='table' *ngIf='games && games.length' >
         <thead>
           <tr>
             <th sortable-column="name" sort-direction="asc">Game</th>
@@ -19,16 +19,35 @@
             <th sortable-column="publisher.name">Publisher</th>
             <th>Platform types</th>
             <th>Genres</th>
+            <th>Comments</th>
             <th>Download</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor='let game of filteredGames'>
+          <tr *ngFor='let game of filteredGames; let gameIndex = index;'>
             <td><a [routerLink]="['/games', game.id]">{{ game.name }}</a></td>
             <td>{{ game.description}}</td>
             <td>{{ game.publisher.name}}</td>
             <td>{{ game.platformTypes | joinStr:'type':', ' }}</td>
             <td><genres [genres]='game.genres' [subGenres]='getSubGenres(game.genres)'></genres></td>
+            <td>
+              <div >
+                <button type="button" class="btn btn-link" [disabled]=" game.comments.length === 0 " (click)="visibleComments(gameIndex)">
+                  <span *ngIf="!isPopUpVisible(gameIndex);else unset"><i>{{game.comments.length}}</i> comments</span>
+                  <ng-template #unset>  
+                    <span>Hide</span>  
+                  </ng-template> 
+                </button>
+                <div [ngStyle]="{'visibility':isPopUpVisible(gameIndex) ? 'visible' : 'hidden'}">
+                  <span>Add New Comment</span>
+                  <virtual-scroller #scroll [items]="game.comments" [enableUnequalChildrenSizes]="true">
+                    <comments-popup [comment]="item" *ngFor="let item of scroll.viewPortItems;">
+                    </comments-popup>
+                  </virtual-scroller>
+                </div>
+               
+              </div>
+            </td>
             <td><a href="api/games/{{game.id}}/download">Download</a></td>
           </tr>
         </tbody>

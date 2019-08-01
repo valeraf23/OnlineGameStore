@@ -11,11 +11,8 @@ export class SortService {
   columnSorted$ = this.columnSortedSource.asObservable();
 
   columnSorted(event: ColumnSortedEvent) {
-    console.log("SortSe");
-    console.log(event);
     this.columnSortedSource.next(event);
   }
-
 }
 
 export interface ColumnSortedEvent {

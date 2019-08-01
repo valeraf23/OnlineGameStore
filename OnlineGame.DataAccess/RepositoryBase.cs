@@ -56,7 +56,7 @@ namespace OnlineGame.DataAccess
                 item.Id = Guid.NewGuid();
             }
 
-            dbSet.Attach(item);
+            dbSet.Add(item);
         }
 
         public async Task<bool> SaveChangesAsync()
