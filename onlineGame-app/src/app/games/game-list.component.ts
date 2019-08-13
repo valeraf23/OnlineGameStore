@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { IGame, IComment } from './gameModel';
+import { Component, OnInit } from '@angular/core';
+import { IGame } from './gameModel';
 import { GameService } from './game.service';
 import { IGenre } from './gameModel';
 import {SortColumnService} from "./sortColumnService";

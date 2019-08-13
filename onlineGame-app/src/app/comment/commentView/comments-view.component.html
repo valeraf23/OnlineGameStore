@@ -1,0 +1,13 @@
+<div class="item-content" *ngFor="let comment of comments let commentIndex = index;" >
+  <ul>
+    <li>
+      <div class="name">{{comment.name}}</div>
+      <div>
+        <span class="badge">{{comment.body}}</span>
+      </div>
+      <span [ngClass]="isDisplayed[commentIndex]? 'fa fa-angle-double-down': 'fa fa-angle-double-right'" (click)="display(commentIndex)" *ngIf="comment.answers.length>0">
+        <comments [hidden]="!isDisplayed[commentIndex]" [comments]="comment.answers"></comments>
+      </span>
+    </li>
+  </ul>
+</div>

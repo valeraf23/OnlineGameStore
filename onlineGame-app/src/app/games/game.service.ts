@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
-import { IGame, IPlatformType, IGenre, System } from './gameModel';
+import { IGame, IPlatformType, IGenre, IComment } from './gameModel';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +12,14 @@ import { IGame, IPlatformType, IGenre, System } from './gameModel';
 export class GameService {
   postGame(stringify: string) {
     console.log(stringify);
-    let options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.http.post('api/games', stringify, options)
       .pipe(catchError(this.handleError));
   }
 
   putGame(id: string,stringify: string) {
     console.log(stringify);
-    let options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.http.put(`api/games/${id}`, stringify, options)
       .pipe(catchError(this.handleError));
   }
@@ -31,6 +32,12 @@ export class GameService {
 
   getGame(id: string): Observable<IGame>{
     return this.http.get<IGame>(`api/games/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  getComment(id: string, commentsId: string): Observable<IComment> {
+    debugger;
+    return this.http.get<IComment>(`api/games/${id}/comments/${commentsId}`)
       .pipe(catchError(this.handleError));
   }
   getPlatformTypes(): Observable<IPlatformType[]> {

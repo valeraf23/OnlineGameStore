@@ -26,7 +26,7 @@
         <tbody>
           <tr *ngFor='let game of filteredGames; let gameIndex = index;'>
             <td><a [routerLink]="['/games', game.id]">{{ game.name }}</a></td>
-            <td>{{ game.description}}</td>
+            <td><a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/description',game.id]">{{ game.description}}</a></td>
             <td>{{ game.publisher.name}}</td>
             <td>{{ game.platformTypes | joinStr:'type':', ' }}</td>
             <td><genres [genres]='game.genres' [subGenres]='getSubGenres(game.genres)'></genres></td>
@@ -39,13 +39,11 @@
                   </ng-template> 
                 </button>
                 <div [ngStyle]="{'visibility':isPopUpVisible(gameIndex) ? 'visible' : 'hidden'}">
-                  <span>Add New Comment</span>
                   <virtual-scroller #scroll [items]="game.comments" [enableUnequalChildrenSizes]="true">
-                    <comments-popup [comment]="item" *ngFor="let item of scroll.viewPortItems;">
+                    <comments-popup [gameId]="game.id" [comment]="item" *ngFor="let item of scroll.viewPortItems;">
                     </comments-popup>
                   </virtual-scroller>
                 </div>
-               
               </div>
             </td>
             <td><a href="api/games/{{game.id}}/download">Download</a></td>

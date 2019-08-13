@@ -28,7 +28,7 @@ export class SortableColumnComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.columnSortedSubscription = this.sortService.columnSorted$.subscribe(event => {
-      if (this.columnName != event.sortColumn) {
+      if (this.columnName !== event.sortColumn) {
         this.sortDirection = '';
       }
     });

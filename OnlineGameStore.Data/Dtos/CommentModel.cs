@@ -16,9 +16,6 @@ namespace OnlineGameStore.Data.Dtos
         [MaxLength(100, ErrorMessage = "The title shouldn't have more than 100 characters.")]
         public string Body { get; set; }
 
-        public Guid GameId { get; set; }
-
-        public CommentModel ParentComment { get; set; }
         public virtual ICollection<CommentModel> Answers { get; set; } = new List<CommentModel>();
     }
 }

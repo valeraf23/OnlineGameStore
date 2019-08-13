@@ -1,0 +1,27 @@
+<div *ngIf="game">
+  <div>Name:
+    <div>
+      {{game.name}}
+    </div>
+  </div>
+  <div>
+    PlatformTypes:
+    <div>
+    </div>
+  </div>
+  <div>
+    Genres:
+    <div>
+
+    </div>
+  </div>
+  <div>
+    Description:
+    <div>
+      {{game.description}}
+    </div>
+  </div>
+  <div>Comments:
+    <comments [comments]="game.comments"></comments>
+  </div>
+</div>
