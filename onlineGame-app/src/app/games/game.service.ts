@@ -25,9 +25,9 @@ export class GameService {
   }
   constructor(private http: HttpClient) { }
 
-  getPageGames(page: number): Observable<HttpResponse<IGame[]>> {
-    return this.http.get<IGame[]>(`api/games?pageNumber=${page}`, { observe: 'response' })
-      .pipe(tap(data => { console.log(`api/games?pageNumber=${page}`) }), catchError(this.handleError));
+  getPageGames(page: number, query:string): Observable<HttpResponse<IGame[]>> {
+    return this.http.get<IGame[]>(`api/games?pageNumber=${page}&searchQuery=${query}`, { observe: 'response' })
+      .pipe(tap(data => { console.log(`api/games?pageNumber=${page}&searchQuery=${query}`)}), catchError(this.handleError));
   }
 
   getGame(id: string): Observable<IGame>{

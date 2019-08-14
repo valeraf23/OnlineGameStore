@@ -11,6 +11,7 @@ export class SortService {
   columnSorted$ = this.columnSortedSource.asObservable();
 
   columnSorted(event: ColumnSortedEvent) {
+    debugger;
     this.columnSortedSource.next(event);
   }
 }

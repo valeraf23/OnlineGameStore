@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using OnlineGameStore.Data.Data;
 using OnlineGameStore.Domain.Entities;
 
 namespace OnlineGameStore.Data.Helpers

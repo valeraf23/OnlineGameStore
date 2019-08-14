@@ -28,7 +28,7 @@ export class SortColumnService {
     });
   }
 
-  getPropertyByKeyPath(targetObj, keyPath:string):string {
+  getPropertyByKeyPath(targetObj, keyPath: string): string {
     let keys = keyPath.split('.');
     if (keys.length === 0) return undefined;
     keys = keys.reverse();

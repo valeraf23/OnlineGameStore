@@ -21,12 +21,13 @@
             <th>Genres</th>
             <th>Comments</th>
             <th>Download</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor='let game of filteredGames; let gameIndex = index;'>
-            <td><a [routerLink]="['/games', game.id]">{{ game.name }}</a></td>
-            <td><a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/description',game.id]">{{ game.description}}</a></td>
+            <td><a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/description',game.id]">{{ game.name}}</a></td>
+            <td>{{ game.description}}</td>
             <td>{{ game.publisher.name}}</td>
             <td>{{ game.platformTypes | joinStr:'type':', ' }}</td>
             <td><genres [genres]='game.genres' [subGenres]='getSubGenres(game.genres)'></genres></td>
@@ -47,6 +48,7 @@
               </div>
             </td>
             <td><a href="api/games/{{game.id}}/download">Download</a></td>
+            <td><a class="btn btn-primary" [routerLink]="['/games', game.id]">Edit</a></td>
           </tr>
         </tbody>
       </table>
@@ -59,5 +61,4 @@
         </ngb-pagination>
     </div>
   </div>
-
- </div>
+</div>
