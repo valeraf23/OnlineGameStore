@@ -1,46 +1,33 @@
-/*:host {
+.messages {
+  margin-bottom: 25px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+
+  .message {
+    display: flex;
+
+    .message-text {
+      padding: 8px;
+      display: list-item;
+
+
+      span {
+        font-size: 11px;
+        opacity: 1.1;
+        font-weight: bold;
+      }
+      p {
+        font-size: 15px;
+        opacity: 0.8;
+        margin: 1px 0;
+      }
+    }
+  }
+}
+
+.ytd-button-renderer {
   display: block;
-  border-bottom: 1px solid rgb(209, 218, 223);
-  background: white;
-  font-size: 1em;
-  padding: 20px;
-  line-height: 1.2em;
   overflow: hidden;
-  height: 100px;
-
-&.inline {
-   width: 450px;
-   border-left: 1px solid rgb(209, 218, 223);
-   display: inline-block !important;
- }
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-
-.avatar {
-  width: 30px;
-  height: 15px;
-  line-height: 15px;
-  text-align: center;
-  vertical-align: top;
-  margin-top: 4px;
-  display: inline-block;
-  border-radius: 100%;
-  background: #3d4f5d;
-  color: #fff;
-}
-
-.item-content {
-  display: inline-block;
-  padding: 5px;
-  vertical-align: middle;
-div {
-  opacity: .6;
-}
-.name {
-  display: inline-block;
-  font-weight: bold;
-  opacity: 1;
-}
-.badge {
-  opacity: 1;
-}
-}*/

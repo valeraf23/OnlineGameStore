@@ -25,6 +25,8 @@ import { GameLookComponent } from "./games/games-looks-description/game-look.com
 import { CommentsView} from "./comment/commentView/comments-view.component";
 import { CommentView } from "./comment/commenView/comment-view.component";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ChatComponent} from "./comment/chat.component/chat.component";
+
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CommentsPopup,
     GameLookComponent,
     CommentsView,
-    CommentView
+    CommentView,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

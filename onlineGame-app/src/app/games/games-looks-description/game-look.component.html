@@ -28,18 +28,11 @@
           <div class='col-md-8'><genres [genres]='game.genres' [subGenres]='getSubGenres(game.genres)'></genres></div>
         </div>
       </div>
-    
-      
-    
     </div>
-    <div>Comments:</div>
+    <div class="font-weight-bold">Comments:</div>
     <div><comments [comments]="game.comments"></comments></div>
-    <!-- <div class='col-md-4'> -->
-    <!--   <div class='col-md-4'>Comments:</div> -->
-    <!-- -->
-    <!--   <div class='col-md-8'><comments [comments]="game.comments"></comments></div> -->
-    <!-- </div> -->
   </div>
+
   <div class='card-footer'>
     <button class='btn btn-outline-secondary'
             (click)='onBack()'
@@ -48,32 +41,3 @@
     </button>
   </div>
 </div>
-
-
-<!-- <div *ngIf="game"> -->
-<!--   <div>Name: -->
-<!--     <div> -->
-<!--       {{game.name}} -->
-<!--     </div> -->
-<!--   </div> -->
-<!--   <div> -->
-<!--     PlatformTypes: -->
-<!--     <div> -->
-<!--     </div> -->
-<!--   </div> -->
-<!--   <div> -->
-<!--     Genres: -->
-<!--     <div> -->
-<!-- -->
-<!--     </div> -->
-<!--   </div> -->
-<!--   <div> -->
-<!--     Description: -->
-<!--     <div> -->
-<!--       {{game.description}} -->
-<!--     </div> -->
-<!--   </div> -->
-<!--   <div>Comments: -->
-<!--     <comments [comments]="game.comments"></comments> -->
-<!--   </div> -->
-<!-- </div> -->
