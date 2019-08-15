@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterViewInit} from '@angular/core';
-import { IGame,IComment } from "../gameModel";
+import { IGame, IGenre } from "../gameModel";
 import { GameService } from "../game.service";
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   templateUrl: './game-look.component.html',
@@ -10,13 +10,14 @@ import { ActivatedRoute } from '@angular/router';
 
 export class GameLookComponent implements OnInit, AfterViewInit {
 
+  pageTitle = 'Game Details';
   id: string;
   game: IGame;
   errorMessage: string;
 
   constructor(private spinner: NgxSpinnerService,
     private gameService: GameService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute, private router: Router) {
   }
 
   ngAfterViewInit(): void {
@@ -28,6 +29,14 @@ export class GameLookComponent implements OnInit, AfterViewInit {
         },
         error => this.errorMessage = error
       );
+  }
+
+  onBack(): void {
+    this.router.navigate(['/games']);
+  }
+
+  getSubGenres(genres: IGenre[]): string {
+    return genres.map(x => `${x.subGenres.map(e => e.name)}`).join(';');
   }
 
   ngOnInit() {
