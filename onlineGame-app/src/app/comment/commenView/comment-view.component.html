@@ -6,7 +6,7 @@
         <span class="badge">{{comment.body}}</span>
       </div>
       <span [ngClass]="isDisplayed? 'fa fa-angle-double-down': 'fa fa-angle-double-right'" (click)="display()"></span>
-      <comments [ngStyle]="{'visibility':isDisplayed ? 'visible' : 'hidden'}" [comments]="comment.answers" *ngIf="comment.answers"></comments>
+      <comments [ngStyle]="{'visibility':isDisplayed ? 'visible' : 'hidden'}" [gameId]="id" [comments]="comment.answers" *ngIf="comment.answers"></comments>
     </li>
   </ul>
 </div>

@@ -38,7 +38,7 @@ export class AppComponent {
   constructor(private gameSearchService: GameSearchService) {}
 
   searchGames(searchQuery) {
-    debugger;
+    debugger 
     this.gameSearchService.sendMessage(searchQuery);
   };
 }

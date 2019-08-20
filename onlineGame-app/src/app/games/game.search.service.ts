@@ -1,4 +1,3 @@
-import { IGame } from "../games/gameModel";
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
@@ -6,6 +5,7 @@ import { Subject } from 'rxjs/Subject';
   providedIn: 'root'
 })
 export class GameSearchService {
+
   private searchQuerySource = new Subject<string>();
 
   searchQuery$ = this.searchQuerySource.asObservable();

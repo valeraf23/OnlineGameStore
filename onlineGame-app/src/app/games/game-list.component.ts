@@ -77,9 +77,7 @@ export class GameListComponent implements OnInit {
   }
 
   searchQuery() {
-    debugger;
     this.searchQueryService.searchQuery$.subscribe(query => {
-      debugger;
       this.queryString = query;
       this.getPages(1);
     });
@@ -87,7 +85,6 @@ export class GameListComponent implements OnInit {
 
   getPages(pageNumber: number) {
     this.spinner.show();
-    debugger;
     this.gameService.getPageGames(pageNumber, this.queryString).subscribe(
       games => {
         console.log(games.headers.get('x-pagination'));
@@ -100,12 +97,10 @@ export class GameListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    debugger;
     this.searchQuery();
   }
 
   ngAfterViewInit(): void {
-    debugger;
     this.getPages(1);
   }
 }

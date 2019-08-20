@@ -12,9 +12,15 @@
 
 
       span {
-        font-size: 11px;
-        opacity: 1.1;
-        font-weight: bold;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        overflow-wrap: break-word;
+        text-transform: none;
+        white-space: pre-wrap;
+        flex-direction: row;
+        display : inline;
+        opacity: 1.1;    
       }
       p {
         font-size: 15px;
@@ -25,6 +31,37 @@
   }
 }
 
+.answer {
+  color: rgb(96, 96, 96);
+  cursor: pointer;
+  display: block;
+  flex-direction: row;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 13px;
+  font-stretch: 100%;
+  font-style: normal;
+  font-variant-caps: normal;
+  font-variant-east-asian: normal;
+  font-variant-ligatures: normal;
+  font-variant-numeric: normal;
+  font-weight: 500;
+  height: 16px;
+  justify-content: normal;
+  letter-spacing: 0.007px;
+  line-height: 16px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  user-select: none;
+  white-space: nowrap;
+  width: 65.125px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  pointer-events: auto;
+  position: static;
+}
 .ytd-button-renderer {
   display: block;
   overflow: hidden;
