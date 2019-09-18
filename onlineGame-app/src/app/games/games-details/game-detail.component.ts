@@ -60,7 +60,6 @@ export class GameDetailComponent extends BaseGameFormComponent {
       genresId: this.selectedItemsGenre.map(x => (x.item_id)),
       platformTypesId: this.selectedItems.map(x => (x.item_id))
     };
-    debugger;
     if (this.gameForm.valid) {
       this.markAsPristine();
       this.gameService.postGame(JSON.stringify(session)).subscribe();

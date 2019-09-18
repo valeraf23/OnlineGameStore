@@ -53,7 +53,7 @@ namespace OnlineGame.DataAccess
         public async Task<Either<Error, TEntity>> SaveAsync(TEntity saveThis)
         {
             if (saveThis == null)
-                return new ArgumentNullError("saveThis is null.");
+                return new ArgumentNullError($"{nameof(saveThis)} is null.");
 
             AddToDbSet(EntityDbSet, saveThis);
             if (await SaveChangesAsync())

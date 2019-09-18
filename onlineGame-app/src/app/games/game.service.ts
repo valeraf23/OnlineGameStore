@@ -1,38 +1,55 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpHeaders} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
-import { IGame, IPlatformType, IGenre, System } from './gameModel';
+import { IGame, IPlatformType, IGenre, IComment } from './gameModel';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
   postGame(stringify: string) {
-    console.log(stringify);
-    let options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.http.post('api/games', stringify, options)
       .pipe(catchError(this.handleError));
   }
 
   putGame(id: string,stringify: string) {
-    console.log(stringify);
-    let options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.http.put(`api/games/${id}`, stringify, options)
       .pipe(catchError(this.handleError));
   }
   constructor(private http: HttpClient) { }
 
-  getPageGames(page: number): Observable<HttpResponse<IGame[]>> {
-    return this.http.get<IGame[]>(`api/games?pageNumber=${page}`, { observe: 'response' })
-      .pipe(tap(data => { console.log(`api/games?pageNumber=${page}`) }), catchError(this.handleError));
+  getPageGames(page: number, query:string): Observable<HttpResponse<IGame[]>> {
+    return this.http.get<IGame[]>(`api/games?pageNumber=${page}&searchQuery=${query}`, { observe: 'response' })
+      .pipe(tap(data => { console.log(`api/games?pageNumber=${page}&searchQuery=${query}`)}), catchError(this.handleError));
   }
 
   getGame(id: string): Observable<IGame>{
     return this.http.get<IGame>(`api/games/${id}`)
       .pipe(catchError(this.handleError));
   }
+
+  getComment(id: string, commentsId: string): Observable<IComment> {
+    return this.http.get<IComment>(`api/games/${id}/comments/${commentsId}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  addCommentToGame(idGame: string, comment: string): Observable<any> {
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.http.post(`api/games/${idGame}/comments`, comment, options)
+      .pipe(catchError(this.handleError));
+  }
+
+  addAnswerToComment(idGame: string, commentId: string, comment: string): Observable<any> {
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+   return this.http.post(`api/games/${idGame}/comments/${commentId}`, comment, options)
+      .pipe(catchError(this.handleError));
+  }
+
   getPlatformTypes(): Observable<IPlatformType[]> {
     return this.http.get<IPlatformType[]>(`api/platformType`)
       .pipe(catchError(this.handleError));

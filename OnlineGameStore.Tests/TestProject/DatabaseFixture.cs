@@ -39,7 +39,7 @@ namespace OnlineGameStore.Tests.TestProject
             var commentRepository = new CommentRepository(context);
             PublisherRepository = new PublisherRepository(context);
             GameService = new GameService(gameRepository, new DefaultValidatorStrategy<GameModel>());
-            CommentService = new CommentService(commentRepository);
+            CommentService = new CommentService(commentRepository, new DefaultValidatorStrategy<CommentModel>());
         }
 
         private void SeedInMemoryStore()

@@ -44,8 +44,7 @@ namespace OnlineGameStore.Api
                     opt => { opt.Filters.Add(typeof(ValidatorActionFilter)); })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
                 {
-                    options.SerializerSettings.ReferenceLoopHandling =
-                        ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     options.SerializerSettings.Formatting = Formatting.Indented;
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
@@ -65,6 +64,7 @@ namespace OnlineGameStore.Api
             services.AddTransient<IValidatorStrategy<GenreModel>, DefaultValidatorStrategy<GenreModel>>();
             services.AddTransient<IValidatorStrategy<PlatformTypeModel>, DefaultValidatorStrategy<PlatformTypeModel>>();
             services.AddTransient<IValidatorStrategy<PublisherModel>, DefaultValidatorStrategy<PublisherModel>>();
+            services.AddTransient<IValidatorStrategy<CommentModel>, DefaultValidatorStrategy<CommentModel>>();
 
             services.AddHttpClient();
             services.AddTransient<ITypeHelperService, TypeHelperService>();

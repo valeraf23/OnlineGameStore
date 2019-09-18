@@ -20,7 +20,6 @@ namespace OnlineGameStore.Domain.Entities
         public Comment ParentComment { get; set; }
         public virtual ICollection<Comment> Answers { get; set; } = new List<Comment>();
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid Id { get; set; }
     }

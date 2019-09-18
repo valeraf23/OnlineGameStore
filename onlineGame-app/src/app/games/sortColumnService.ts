@@ -7,7 +7,6 @@ import {ColumnSortedEvent} from "./sortService";
 })
 export class SortColumnService {
 
-
   sort(a: string, b: string): number {
     if (a > b) {
       return 1;
@@ -29,7 +28,7 @@ export class SortColumnService {
     });
   }
 
-  getPropertyByKeyPath(targetObj, keyPath:string):string {
+  getPropertyByKeyPath(targetObj, keyPath: string): string {
     let keys = keyPath.split('.');
     if (keys.length === 0) return undefined;
     keys = keys.reverse();

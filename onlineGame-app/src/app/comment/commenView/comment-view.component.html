@@ -1,0 +1,12 @@
+<div class="item-content">
+  <ul *ngIf="comment">
+    <li>
+      <div class="name">{{comment.name}}</div>
+      <div>
+        <span class="badge">{{comment.body}}</span>
+      </div>
+      <span [ngClass]="isDisplayed? 'fa fa-angle-double-down': 'fa fa-angle-double-right'" (click)="display()"></span>
+      <comments [ngStyle]="{'visibility':isDisplayed ? 'visible' : 'hidden'}" [gameId]="id" [comments]="comment.answers" *ngIf="comment.answers"></comments>
+    </li>
+  </ul>
+</div>

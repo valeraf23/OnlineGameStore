@@ -11,10 +11,10 @@ namespace OnlineGameStore.Data.Services.Interfaces
     {
         Task<IEnumerable<CommentModel>> GetAllCommentsForGame(Guid gameId);
 
-        Task<Either<Error, CommentModel>> AddCommentToGame(Guid gameId, CommentModel comment);
+        Task<Either<Error, CommentModel>> AddCommentToGameAsync(Guid gameId, CommentModel comment);
 
-        Task<Either<Error, CommentModel>> AddAnswerToComment(Guid id, Guid idComment, CommentModel comment);
+        Task<Either<Error, CommentModel>> AddAnswerToCommentAsync(Guid id, Guid idComment, CommentModel comment);
 
-        Task<IEnumerable<CommentModel>> GetCommentsForGame(Guid gameId, Func<CommentModel, bool> predicate);
+        Task<IEnumerable<CommentModel>> GetCommentsForGameAsync(Guid gameId, Func<CommentModel, bool> predicate);
     }
 }

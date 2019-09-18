@@ -98,7 +98,7 @@ namespace OnlineGameStore.Api.Controllers
 
         [HttpPost("{id}/comments")]
         public async Task<IActionResult> AddCommentToGame(Guid id, [FromBody] CommentModel model) =>
-            (await _commentService.AddCommentToGame(id, model))
+            (await _commentService.AddCommentToGameAsync(id, model))
             .Map(GetRoute)
             .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
             .Reduce(error => error.ToObjectResult(), error => error != null)
@@ -106,7 +106,7 @@ namespace OnlineGameStore.Api.Controllers
 
         [HttpPost("{id}/comments/{commentId}")]
         public async Task<IActionResult> AddAnswerToComment(Guid id, Guid commentId, [FromBody] CommentModel model) =>
-            (await _commentService.AddAnswerToComment(id, commentId, model))
+            (await _commentService.AddAnswerToCommentAsync(id, commentId, model))
             .Map(x => (IActionResult) Ok(x))
             .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
             .Reduce(error => error.ToObjectResult(), error => error != null)
@@ -137,10 +137,16 @@ namespace OnlineGameStore.Api.Controllers
                 func = c => IsCommentContainsSearchQuery(c, searchQuery);
             }
 
-            var result = await _commentService.GetCommentsForGame(id, func);
+            var result = await _commentService.GetCommentsForGameAsync(id, func);
             return Ok(result);
         }
-
+        [HttpGet("{id}/comments/{commentsId}")]
+        public async Task<IActionResult> GetComment(Guid id, Guid commentsId)
+        {
+            bool Func(CommentModel c) => c.Id == commentsId;
+            return (await _commentService.GetCommentsForGameAsync(id, Func))
+                .FirstOrNone().Map<IActionResult>(Ok).Reduce(NotFound);
+        }
         private async Task<Option<GameModel>> GetGameById(Guid id) =>
             (await _gameService.GetGameByIdAsync(id)).NoneIfNull()
             .Map(g =>
@@ -153,11 +159,17 @@ namespace OnlineGameStore.Api.Controllers
 
         private async Task<IList<GameModel>> GetGameModels(GameResourceParameters gameResourceParameters)
         {
-            var games = await _gameService.GetGamesAsync();
-            var gamesWithComments = games.Select(g => GetGameById(g.Id)).ToList();
-            var results = await Task.WhenAll(gamesWithComments);
-            var gameModels = results.SelectOptional(option => option).AsQueryable()
-                .ApplySort(gameResourceParameters.OrderBy).ToList();
+            var games = (await _gameService.GetGamesAsync()).ToList();
+            var gamesWithComments = games.Select(async g =>
+            {
+                var comments = await _commentService.GetAllCommentsForGame(g.Id);
+                g.Comments = comments.ToList();
+                return g;
+            }).ToList();
+
+            var results = (await Task.WhenAll(gamesWithComments)).ToList();
+            var gameModels = results.AsQueryable()
+                .ApplySort(gameResourceParameters.OrderBy);
             return _gameControllerHelper.ApplyFilters(gameModels, gameResourceParameters).ToList();
         }
 

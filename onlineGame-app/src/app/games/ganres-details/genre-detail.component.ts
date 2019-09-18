@@ -3,8 +3,7 @@ import {IGenre} from "../gameModel";
 
 @Component({
   selector: 'genres',
-  templateUrl: './genre-detail.component.html',
-  styleUrls: ['./genre-list.component.css']
+  templateUrl: './genre-detail.component.html'
 })
 export class GenreDetailComponent {
 
