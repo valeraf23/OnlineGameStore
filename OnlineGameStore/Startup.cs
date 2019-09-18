@@ -44,8 +44,7 @@ namespace OnlineGameStore.Api
                     opt => { opt.Filters.Add(typeof(ValidatorActionFilter)); })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
                 {
-                    options.SerializerSettings.ReferenceLoopHandling =
-                        ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     options.SerializerSettings.Formatting = Formatting.Indented;
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
