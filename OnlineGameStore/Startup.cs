@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,18 +11,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using OnlineGame.DataAccess.Interfaces;
+using OnlineGameStore.Api.Authorization;
+using OnlineGameStore.Api.Filters;
+using OnlineGameStore.Api.Services;
 using OnlineGameStore.Data.Data;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Data.Repository;
 using OnlineGameStore.Data.Services.Implementations;
 using OnlineGameStore.Data.Services.Interfaces;
-using OnlineGameStore.Domain.Entities;
-using FluentValidation.AspNetCore;
-using Newtonsoft.Json.Serialization;
-using OnlineGameStore.Api.Filters;
 using OnlineGameStore.Data.ValidationRules;
+using OnlineGameStore.Domain.Entities;
 
 namespace OnlineGameStore.Api
 {
@@ -66,12 +70,30 @@ namespace OnlineGameStore.Api
             services.AddTransient<IValidatorStrategy<PublisherModel>, DefaultValidatorStrategy<PublisherModel>>();
             services.AddTransient<IValidatorStrategy<CommentModel>, DefaultValidatorStrategy<CommentModel>>();
 
+            services.AddScoped<AssignPublisherIdAttribute>();
+
             services.AddHttpClient();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
+
+            services.AddScoped<IUserInfoService, UserInfoService>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://localhost:44375";
+                    options.Audience = "onlinegamestoreapi";
+                });
+            services.AddAuthorization(options => options.AddPolicy("UserMustBeCreator",
+                builder =>
+                {
+                    builder.RequireAuthenticatedUser();
+                    builder.AddRequirements(new UserMustBeRequirementRole("Administrator"));
+                }));
+
+            services.AddScoped<IAuthorizationHandler, UserMustBeRequirementHandler>();
             services.AddHttpCacheHeaders(
                 expirationModelOptions => expirationModelOptions.MaxAge = 60,
                 validationModelOptions => validationModelOptions.MustRevalidate = true);
-
             services.AddMemoryCache();
             services.AddResponseCaching();
         }
@@ -109,6 +131,7 @@ namespace OnlineGameStore.Api
             MapperHelper.InitMapperConf();
             app.UseResponseCaching();
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineGameStore.Api.Helpers;
 using OnlineGameStore.Common.Either;
@@ -12,6 +13,7 @@ namespace OnlineGameStore.Api.Controllers
 {
     [Route("api/genres")]
     [ApiController]
+    [Authorize]
     public class GenreController : ControllerBase
     {
         private readonly IGenreService _genreRepository;

@@ -92,7 +92,10 @@ export class GameListComponent implements OnInit {
         this.getGames([...games.body], { sortColumn: 'id', sortDirection: 'asc' });
         this.spinner.hide();
       },
-      error => this.errorMessage = error
+      error => {
+        this.errorMessage = error;
+        this.spinner.hide();
+      }
     );
   }
 

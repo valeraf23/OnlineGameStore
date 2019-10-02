@@ -43,5 +43,7 @@ namespace OnlineGameStore.Data.Services.Implementations
             var games = await Repository.GetAsync(x => x.GamePlatformType.Any(g => g.PlatformTypeId == genreId));
             return games.ToModel<GameModel>();
         }
+
+        public async Task<bool> IsGameOwner(Guid gameId, Guid publisherId) => (await GetGameByIdAsync(gameId)).Publisher.Id == publisherId;
     }
 }

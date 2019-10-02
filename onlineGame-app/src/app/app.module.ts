@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
@@ -26,11 +26,16 @@ import { CommentsView} from "./comment/commentView/comments-view.component";
 import { CommentView } from "./comment/commenView/comment-view.component";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ChatComponent} from "./comment/chat.component/chat.component";
+import { OpenIdConnectService} from "./shared/open-id-connect.service";
+import { AddAuthorizationHeaderInterceptor } from './shared/add-authorization-header-interceptor';
+import { HomeComponent } from './home/home.component';
+import { UnauthorizedComponent} from "./unauthorized/unauthorized.component";
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     GameListComponent,
     JoinStringArrayPipe,
     GameDetailComponent,
@@ -44,7 +49,8 @@ import { ChatComponent} from "./comment/chat.component/chat.component";
     GameLookComponent,
     CommentsView,
     CommentView,
-    ChatComponent
+    ChatComponent,
+    UnauthorizedComponent
   ],
   imports: [
     BrowserModule,
@@ -54,20 +60,26 @@ import { ChatComponent} from "./comment/chat.component/chat.component";
     ReactiveFormsModule,
     FontAwesomeModule,
     VirtualScrollerModule,
-  
     NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot([
+      { path: '', component: HomeComponent },
       { path: 'games', component: GameListComponent },
       { path: 'new-games', component: GameDetailComponent, canDeactivate: [CanDeactivateGuard] },
       { path: 'games/:id', component: GameEditComponent, canDeactivate: [CanDeactivateGuard] },
       { path: 'games/:id/comments/:commentId', component: CommentView },
       { path: 'description/:id', component: GameLookComponent },
+      { path: 'unauthorized', component: UnauthorizedComponent },
       { path: '', redirectTo: 'games', pathMatch: 'full' },
       { path: '**', redirectTo: 'games', pathMatch: 'full' },
     ]),
     NgbModule.forRoot()
   ],
-  providers: [ConfirmationDialogService, CanDeactivateGuard],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+  useClass: AddAuthorizationHeaderInterceptor,
+  multi: true
+    },
+    ConfirmationDialogService, CanDeactivateGuard, OpenIdConnectService],
   entryComponents: [ConfirmationDialogComponent],
   bootstrap: [AppComponent]
 })
