@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OpenIdConnectService } from '../shared/open-id-connect.service';
+import { OpenIdConnectService } from '../core/authentication/open-id-connect.service';
 
 @Component({
   selector: 'app-unauthorized',

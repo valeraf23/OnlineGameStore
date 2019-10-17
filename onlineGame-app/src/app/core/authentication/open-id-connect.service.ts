@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { UserManager, User, Log } from 'oidc-client'
+import { UserManager, User, Log } from 'oidc-client';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
-import { AuthContext } from "../games/AuthContext";
-import { ConfigService} from "../../environments/config.service";
-import { UserRegistration } from "../user.registration";
-import { Observable} from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthContext } from '../../shared/authContext';
+import { ConfigService } from '../../../environments/config.service';
+import { UserRegistration } from '../../shared/user.registration';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class OpenIdConnectService {
 
   private userManager: UserManager;
   private user: User;
-  private _authContext: AuthContext;
+  private AuthContext: AuthContext;
   userLoaded$ = new ReplaySubject<boolean>(1);
 
   constructor(private http: HttpClient, private configService: ConfigService) {
@@ -27,9 +27,9 @@ export class OpenIdConnectService {
         this.user = user;
         this.userLoaded$.next(true);
         this.loadSecurityContext().subscribe(context => {
-            this._authContext = context;
-            this.createNewUserIfNotExist();
-          },
+          this.AuthContext = context;
+          this.createNewUserIfNotExist();
+        },
           error => console.error(error));
       }
     });
@@ -37,7 +37,7 @@ export class OpenIdConnectService {
     this.userManager.events.addUserLoaded(user => {
       this.user = user;
       this.userLoaded$.next(true);
-      this.loadSecurityContext().subscribe(context => { this._authContext = context; }, error => console.error(error));
+      this.loadSecurityContext().subscribe(context => { this.AuthContext = context; }, error => console.error(error));
     });
 
     this.userManager.events.addUserUnloaded(() => {
@@ -55,7 +55,7 @@ export class OpenIdConnectService {
   }
 
   private createNewUserIfNotExist(): void {
-    this.http.get<boolean>(`api/publishers/available/${this._authContext.userProfile.id}`).subscribe(
+    this.http.get<boolean>(`api/publishers/available/${this.AuthContext.userProfile.id}`).subscribe(
       (result: boolean) => {
         if (result === false) {
           this.createNewUserInApplication();
@@ -64,7 +64,7 @@ export class OpenIdConnectService {
   }
 
   private createNewUserInApplication(): void {
-    const stringify = { name: this._authContext.userProfile.name, id: this._authContext.userProfile.id }
+    const stringify = { name: this.AuthContext.userProfile.name, id: this.AuthContext.userProfile.id };
     const model = JSON.stringify(stringify);
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     this.http.post(`api/publishers/create`, model, options)
@@ -92,7 +92,7 @@ export class OpenIdConnectService {
   }
 
   get authContext(): AuthContext {
-    return this._authContext;
+    return this.AuthContext;
   }
 
   register(userRegistration: UserRegistration) {

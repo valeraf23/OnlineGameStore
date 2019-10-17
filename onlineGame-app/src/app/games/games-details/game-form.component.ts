@@ -1,19 +1,14 @@
-import { OnInit, AfterViewInit } from '@angular/core'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { GameService } from "../game.service";
+import { OnInit, AfterViewInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { GameService } from '../../core/game.service';
 import { Router } from '@angular/router';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-dialog.service';
-import { CanComponentDeactivate} from "../../shared/can-deactivate-component.interface";
+import { CanComponentDeactivate } from 'src/app/core/can-deactivate-component.interface';
 
-
-export abstract class BaseGameFormComponent implements OnInit, AfterViewInit, CanComponentDeactivate {
-
-  abstract fillExistInfo(): void;
-
-  abstract saveGame(formValues): void;
-
+export abstract class BaseGameFormComponent
+  implements OnInit, AfterViewInit, CanComponentDeactivate {
   gameForm: FormGroup;
   name: FormControl;
   platformTypes: FormControl;
@@ -21,30 +16,10 @@ export abstract class BaseGameFormComponent implements OnInit, AfterViewInit, Ca
   description: FormControl;
   dropdownList = [];
   dropdownListGenres = [];
-
-  constructor(protected spinner: NgxSpinnerService,
-    protected route: ActivatedRoute,
-    protected gameService: GameService,
-    protected router: Router,
-    protected confirmationDialogService: ConfirmationDialogService) {
-  }
-
   selectedItems = [];
   selectedItemsGenre = [];
   onSelectAllIsTriggered = false;
   onItemSelectGenreIsTriggered = false;
-
-  onChangePlatformTypes(event) {
-    if (this.selectedItems === event) return;
-    this.selectedItems = event;
-    this.onSelectAllIsTriggered = true;
-  }
-
-  onChangeGenres(event) {
-    if (this.selectedItemsGenre === event) return;
-    this.selectedItemsGenre = event;
-    this.onItemSelectGenreIsTriggered = true;
-  }
 
   dropdownSettings = {
     singleSelection: false,
@@ -56,6 +31,33 @@ export abstract class BaseGameFormComponent implements OnInit, AfterViewInit, Ca
     allowSearchFilter: true
   };
 
+  abstract fillExistInfo(): void;
+  abstract saveGame(formValues: any): void;
+
+  constructor(
+    protected spinner: NgxSpinnerService,
+    protected route: ActivatedRoute,
+    protected gameService: GameService,
+    protected router: Router,
+    protected confirmationDialogService: ConfirmationDialogService
+  ) {}
+
+  onChangePlatformTypes(event: []) {
+    if (this.selectedItems === event) {
+      return;
+    }
+    this.selectedItems = event;
+    this.onSelectAllIsTriggered = true;
+  }
+
+  onChangeGenres(event) {
+    if (this.selectedItemsGenre === event) {
+      return;
+    }
+    this.selectedItemsGenre = event;
+    this.onItemSelectGenreIsTriggered = true;
+  }
+
   ngAfterViewInit(): void {
     this.fillExistInfo();
   }
@@ -65,8 +67,10 @@ export abstract class BaseGameFormComponent implements OnInit, AfterViewInit, Ca
     this.name = new FormControl(null, Validators.required);
     this.platformTypes = new FormControl(null, Validators.required);
     this.genres = new FormControl(null, Validators.required);
-    this.description =
-      new FormControl(null, [Validators.required, Validators.maxLength(400)]);
+    this.description = new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(400)
+    ]);
 
     this.gameForm = new FormGroup({
       name: this.name,
@@ -76,11 +80,16 @@ export abstract class BaseGameFormComponent implements OnInit, AfterViewInit, Ca
     });
   }
 
-  validateForm() {    
-    return this.description.dirty || this.name.dirty || this.onSelectAllIsTriggered || this.onItemSelectGenreIsTriggered;
+  validateForm() {
+    return (
+      this.description.dirty ||
+      this.name.dirty ||
+      this.onSelectAllIsTriggered ||
+      this.onItemSelectGenreIsTriggered
+    );
   }
 
-  protected markAsPristine() :void {
+  protected markAsPristine(): void {
     this.gameForm.markAsPristine();
     this.onSelectAllIsTriggered = false;
     this.onItemSelectGenreIsTriggered = false;
@@ -91,16 +100,19 @@ export abstract class BaseGameFormComponent implements OnInit, AfterViewInit, Ca
   }
 
   async canDeactivate(): Promise<boolean> {
-    if (this.validateForm())
+    if (this.validateForm()) {
       return await this.openConfirmationDialog();
+    }
 
     return true;
   }
 
   protected async openConfirmationDialog(): Promise<boolean> {
     try {
-      const confirmed = await this.confirmationDialogService.confirm('Please confirm..',
-        'Leaving this page will lose your changes. Are you sure want to leave this page ?');
+      const confirmed = await this.confirmationDialogService.confirm(
+        'Please confirm..',
+        'Leaving this page will lose your changes. Are you sure want to leave this page ?'
+      );
       if (confirmed) {
       }
       return confirmed;
@@ -108,6 +120,5 @@ export abstract class BaseGameFormComponent implements OnInit, AfterViewInit, Ca
       console.log(e);
       return false;
     }
-
   }
 }

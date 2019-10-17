@@ -1,12 +1,11 @@
-import { IComment } from "../games/gameModel";
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import { IComment } from '../models/IComment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
-
   comment: IComment;
 
   private commentsSource = new Subject<IComment>();
@@ -21,6 +20,7 @@ export class CommentService {
     this.comment = c;
   }
 
-  getComment(): IComment { return this.comment; } 
-  
+  getComment(): IComment {
+    return this.comment;
+  }
 }

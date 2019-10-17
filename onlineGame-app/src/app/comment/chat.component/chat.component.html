@@ -3,9 +3,10 @@
     <form (submit)="sendMessage()" name="messageForm" #messageForm="ngForm">
       <div>
         <input type="text" placeholder="Your name" name="name" id="name" [(ngModel)]="message.name">
-        <textarea type="text" placeholder="Your message" name="message" id="message" [(ngModel)]="message.body" rows="5"></textarea>
+        <textarea type="text" placeholder="Your message" name="message" id="message" [(ngModel)]="message.body"
+          rows="5"></textarea>
       </div>
-      <button  type="submit">
+      <button type="submit">
         <span data-feather="send"></span>
       </button>
     </form>

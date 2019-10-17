@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngbd-pagination-advanced',
+  selector: 'app-ngbd-pagination-advanced',
   templateUrl: './pagination-advanced.html'
 })
-export class NgbdPaginationAdvanced {
+export class NgbdPaginationAdvancedComponent {
   page = 1;
 }

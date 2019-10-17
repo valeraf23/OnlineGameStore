@@ -8,11 +8,11 @@
   overflow: hidden;
   height: 100px;
 
-&.inline {
-   width: 450px;
-   border-left: 1px solid rgb(209, 218, 223);
-   display: inline-block !important;
- }
+  &.inline {
+    width: 450px;
+    border-left: 1px solid rgb(209, 218, 223);
+    display: inline-block !important;
+  }
 }
 
 .avatar {
@@ -32,15 +32,15 @@
   display: inline-block;
   padding: 5px;
   vertical-align: middle;
-div {
-  opacity: .6;
-}
-.name {
-  display: inline-block;
-  font-weight: bold;
-  opacity: 1;
-}
-.badge {
-  opacity: 1;
-}
+  div {
+    opacity: 0.6;
+  }
+  .name {
+    display: inline-block;
+    font-weight: bold;
+    opacity: 1;
+  }
+  .badge {
+    opacity: 1;
+  }
 }

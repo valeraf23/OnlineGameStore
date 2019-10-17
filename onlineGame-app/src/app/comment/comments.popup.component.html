@@ -1,12 +1,12 @@
 <div class="item-content">
-  <div (click)="setComment()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/games',gameId,'comments',comment.id]">
+  <div (click)="setComment()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+    [routerLink]="['/games',gameId,'comments',comment.id]">
     <div class="name">{{comment.name}}</div>
     <div>
       <span class="badge">{{comment.body}}</span>
       <div>Answers:
         <i class="badge badge-info">{{comment.answers.length}}</i>
-        </div>
+      </div>
     </div>
   </div>
 </div>
-

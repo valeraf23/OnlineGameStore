@@ -10,8 +10,7 @@ export class RequireAuthenticatedUserRouteGuardService implements CanActivate {
   canActivate() {
     if (this.openIdConnectService.isLoggedIn()) {
       return true;
-    }
-    else {
+    } else {
       this.openIdConnectService.login();
       return false;
     }

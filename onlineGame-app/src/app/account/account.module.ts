@@ -12,11 +12,11 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     FormsModule,
-      NgxSpinnerModule,
-      RouterModule.forChild([
-        { path: 'login', component: LoginComponent },
-        { path: 'register', component: RegisterComponent }])
-    ]
+    NgxSpinnerModule,
+    RouterModule.forChild([
+      { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent }])
+  ]
 
 })
 export class AccountModule { }

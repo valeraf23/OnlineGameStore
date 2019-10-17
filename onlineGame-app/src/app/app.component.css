@@ -1,0 +1,6 @@
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: searchfield-cancel-button;
+}
+.logged {
+  margin-left: 5px;
+}

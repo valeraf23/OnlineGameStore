@@ -1,14 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IComment, System } from "../../games/gameModel";
-import Guid = System.Guid;
+import { IComment } from 'src/app/models/IComment';
+import { Guid } from 'guid-typescript';
 
 @Component({
-  selector: 'comments',
+  selector: 'app-comments-selector',
   templateUrl: './comments-view.component.html',
   styleUrls: ['./comments-view.component.scss']
 })
-export class CommentsView implements OnInit {
-
+export class CommentsViewComponent implements OnInit {
   @Input()
   comments: IComment[];
 
@@ -31,5 +30,4 @@ export class CommentsView implements OnInit {
     this.isFormDisplayed = new Map<number, boolean>();
     this.comments.forEach((c, i) => this.isFormDisplayed.set(i, false));
   }
-
 }
