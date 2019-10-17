@@ -4,8 +4,9 @@
       <div class="message-text">
         <span>{{comment.name}}</span>
         <p>{{comment.body}}</p>
-        <div [ngClass]="isDisplayed[commentIndex]? 'fa fa-angle-double-down': 'fa fa-angle-double-right'" (click)="display(commentIndex)" *ngIf="comment.answers.length>0">
-          <comments [hidden]="!isDisplayed[commentIndex]" [comments]="comment.answers"></comments>
+        <div [ngClass]="isDisplayed[commentIndex]? 'fa fa-angle-double-down': 'fa fa-angle-double-right'"
+          (click)="display(commentIndex)" *ngIf="comment.answers.length>0">
+          <app-comments-selector [hidden]="!isDisplayed[commentIndex]" [comments]="comment.answers"></app-comments-selector>
         </div>
       </div>
       <div>
@@ -16,4 +17,3 @@
   </div>
   <app-chat [gameId]="gameId"></app-chat>
 </div>
-

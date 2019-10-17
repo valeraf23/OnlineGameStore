@@ -16,5 +16,6 @@ namespace OnlineGameStore.Data.Services.Interfaces
         Task<IEnumerable<GameModel>> GetGamesByPlatformTypesAsync(Guid genreId);
         Task<Either<Error, GameModel>> SaveSafe(GameModel obj);
         Task<Either<Error, GameModel>> UpdateSafe(Guid id,GameModel obj);
+        Task<bool> IsGameOwner(Guid gameId, Guid publisherId);
     }
 }

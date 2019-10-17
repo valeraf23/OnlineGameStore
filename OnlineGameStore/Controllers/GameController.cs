@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -21,6 +22,7 @@ namespace OnlineGameStore.Api.Controllers
 {
     [Route("api/games")]
     [ApiController]
+    [Authorize]
     public class GameController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -57,6 +59,14 @@ namespace OnlineGameStore.Api.Controllers
             return Ok(pages.ShapeData(gameResourceParameters.Fields));
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult DeleteGame(Guid id)
+        {
+            _gameService.DeleteGameById(id);
+            return NoContent();
+        }
+
         [HttpGet]
         [Route("{id}", Name = "GetGame")]
         public async Task<IActionResult> GetGame(Guid id) =>
@@ -64,7 +74,7 @@ namespace OnlineGameStore.Api.Controllers
             .Map<IActionResult>(Ok).Reduce(NotFound);
 
         [HttpPost]
-        [AssignPublisherId]
+        [ServiceFilter(typeof(AssignPublisherIdForGameModelAttribute))]
         public async Task<IActionResult> CreateGame(GameForCreationModel game) =>
             (await _gameService.SaveSafe(Mapper.Map<GameModel>(game)))
             .Map(GetRoute)
@@ -73,7 +83,7 @@ namespace OnlineGameStore.Api.Controllers
             .Reduce(_ => ModelState.ToObjectResult());
 
         [HttpPut("{id}")]
-        [AssignPublisherId]
+        [Authorize(Policy = "UserMustBeCreator")]
         public IActionResult UpdateGame(Guid id, GameForCreationModel game) =>
             _gameService.UpdateSafe(id, Mapper.Map<GameModel>(game)).GetAwaiter().GetResult()
                 .Map(x => (IActionResult) NoContent())

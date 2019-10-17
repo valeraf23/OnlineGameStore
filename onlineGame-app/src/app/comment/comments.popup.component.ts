@@ -1,15 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IComment, System } from "../games/gameModel";
-import Guid = System.Guid;
-import { CommentService } from '../games/comment.service';
+import { CommentService } from './comment.service';
+import { IComment } from '../models/IComment';
+import { Guid } from 'guid-typescript';
 
 @Component({
-  selector: 'comments-popup',
+  selector: 'app-comments-popup-selector',
   templateUrl: './comments.popup.component.html',
   styleUrls: ['./comments.popup.component.scss']
 })
-export class CommentsPopup implements OnInit {
-  constructor(private commentService: CommentService) { }
+export class CommentsPopupComponent implements OnInit {
+  constructor(private commentService: CommentService) {}
 
   @Input()
   comment: IComment;
@@ -21,6 +21,5 @@ export class CommentsPopup implements OnInit {
     this.commentService.setComment(this.comment);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

@@ -7,33 +7,27 @@
       <label for="gameName">Name:</label>
       <em *ngIf="name.invalid && name.dirty">Required</em>
       <input formControlName="name" id="gameName" type="text" class="form-control" placeholder="game name..." />
-    </div>   
+    </div>
     <div class="form-group">
-      <label for="platformTypes">PlatformTypes:</label>      
-      <ng-multiselect-dropdown  (ngModelChange)="onChangePlatformTypes($event)" formControlName="platformTypes"
-        [placeholder]="'platform Types...'"
-        [data]="dropdownList"
-        [(ngModel)]="selectedItems"
-        [settings]="dropdownSettings"
-      >
+      <label for="platformTypes">PlatformTypes:</label>
+      <ng-multiselect-dropdown (ngModelChange)="onChangePlatformTypes($event)" formControlName="platformTypes"
+        [placeholder]="'platform Types...'" [data]="dropdownList" [(ngModel)]="selectedItems"
+        [settings]="dropdownSettings">
       </ng-multiselect-dropdown>
     </div>
-   
+
     <div class="form-group">
-      <label for="genres">Genres:</label>   
+      <label for="genres">Genres:</label>
       <ng-multiselect-dropdown (ngModelChange)="onChangeGenres($event)" formControlName="genres"
-                               [placeholder]="'select genres...'"
-                               [data]="dropdownListGenres"
-                               [(ngModel)]="selectedItemsGenre"
-                               [settings]="dropdownSettings">
+        [placeholder]="'select genres...'" [data]="dropdownListGenres" [(ngModel)]="selectedItemsGenre"
+        [settings]="dropdownSettings">
 
       </ng-multiselect-dropdown>
     </div>
     <div class="form-group" [ngClass]="{'error': description.invalid && description.dirty }">
       <label for="description">Description:</label>
-      <em *ngIf="description.invalid && description.dirty && description?.errors.required">Required</em>
-      <em *ngIf="description.invalid && description.dirty && description?.errors.maxLength">Cannot exceed 400 characters</em>
-      <textarea formControlName="description" id="description" rows=3 class="form-control" placeholder="description..."></textarea>
+      <textarea formControlName="description" id="description" rows=3 class="form-control"
+        placeholder="description..."></textarea>
     </div>
     <button type="submit" [disabled]="gameForm.invalid" class="btn btn-primary">Save</button>
     <button type="button" class="btn btn-primary" (click)="cancel()">Cancel</button>

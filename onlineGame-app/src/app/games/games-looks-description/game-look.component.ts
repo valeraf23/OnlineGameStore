@@ -1,9 +1,10 @@
 import { Component, OnInit, AfterViewInit} from '@angular/core';
-import { IGame, IGenre } from "../gameModel";
-import { GameService } from "../game.service";
+import { GameService } from '../../core/game.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommentService} from "../comment.service";
+import { CommentService} from '../../comment/comment.service';
+import { IGame } from 'src/app/models/IGame';
+import { IGenre } from 'src/app/models/IGenre';
 
 
 @Component({
@@ -18,8 +19,8 @@ export class GameLookComponent implements OnInit, AfterViewInit {
   errorMessage: string;
 
   constructor(private spinner: NgxSpinnerService,
-    private gameService: GameService,
-    private route: ActivatedRoute, private router: Router, private commentService: CommentService) {
+              private gameService: GameService,
+              private route: ActivatedRoute, private router: Router, private commentService: CommentService) {
   }
 
   ngAfterViewInit(): void {
@@ -45,7 +46,7 @@ export class GameLookComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.commentService.commentsQuery$.subscribe(() => this.ngAfterViewInit()
   );
-    this.id = this.route.snapshot.paramMap.get("id");
+    this.id = this.route.snapshot.paramMap.get('id');
   }
 
 }

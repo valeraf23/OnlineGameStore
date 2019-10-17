@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using OnlineGame.DataAccess.Interfaces;
+using OnlineGameStore.Common.Either;
+using OnlineGameStore.Common.Errors;
 using OnlineGameStore.Data.Dtos;
 using OnlineGameStore.Data.Helpers;
 using OnlineGameStore.Data.Services.Interfaces;
@@ -42,6 +45,20 @@ namespace OnlineGameStore.Data.Services.Implementations
         {
             var games = await Repository.GetAsync(x => x.GamePlatformType.Any(g => g.PlatformTypeId == genreId));
             return games.ToModel<GameModel>();
+        }
+
+        public async Task<bool> IsGameOwner(Guid gameId, Guid publisherId) =>
+            (await GetGameByIdAsync(gameId)).Publisher.Id == publisherId;
+
+        public override async Task<Either<Error, GameModel>> UpdateSafe(Guid id, GameModel gameModel)
+        {
+            var existEntity = Repository.GetAsync(id).GetAwaiter().GetResult();
+            if (existEntity == null) return new NotFoundError(id);
+            var publisherId = existEntity.PublisherId;
+            Mapper.Map(gameModel, existEntity);
+            existEntity.Id = id;
+            existEntity.PublisherId = publisherId;
+            return (await Repository.SaveAsync(existEntity)).Map(e => e.ToModel<GameModel>());
         }
     }
 }

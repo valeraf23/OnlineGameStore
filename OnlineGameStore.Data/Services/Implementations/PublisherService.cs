@@ -30,6 +30,5 @@ namespace OnlineGameStore.Data.Services.Implementations
 
         public async Task<IEnumerable<PublisherModel>> GetAllAsync() =>
             (await Repository.GetAllAsync()).ToModel<PublisherModel>();
-
     }
 }
