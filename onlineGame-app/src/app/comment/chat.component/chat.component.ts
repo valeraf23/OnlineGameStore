@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { IComment } from "../../games/gameModel";
 import { GameService} from "../../games/game.service";
 import { CommentService} from "../../games/comment.service";
 

@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { forkJoin } from 'rxjs';
 import { BaseGameFormComponent } from './game-form.component';
 import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-dialog.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'edit-games',
@@ -42,6 +43,9 @@ export class GameEditComponent extends BaseGameFormComponent {
     forkJoin(this.gameService.getPlatformTypes(),
         this.gameService.getGenres(),
         this.gameService.getGame(this.id))
+      .pipe(finalize(() => {
+        this.spinner.hide();
+      }))
       .subscribe(
         pt => {
 
@@ -65,7 +69,6 @@ export class GameEditComponent extends BaseGameFormComponent {
           }));
           this.name.setValue(this.game.name);
           this.description.setValue(this.game.description);
-          this.spinner.hide();
         }
       );
   }

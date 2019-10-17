@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute } from "@angular/router";
 import { forkJoin } from 'rxjs';
 import { ConfirmationDialogService } from '../confirmation-dialog/confirmation-dialog.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   templateUrl: './game-detail.component.html',
@@ -34,7 +35,10 @@ export class GameDetailComponent extends BaseGameFormComponent {
  
   fillExistInfo(): void {
 
-    forkJoin(this.gameService.getPlatformTypes(), this.gameService.getGenres())
+      forkJoin(this.gameService.getPlatformTypes(), this.gameService.getGenres())
+        .pipe(finalize(() => {
+          this.spinner.hide();
+        }))
       .subscribe(
         pt => {
 
@@ -47,7 +51,6 @@ export class GameDetailComponent extends BaseGameFormComponent {
             item_id: x.id,
             item_text: x.name
           }));
-          this.spinner.hide();
         }
     );
   }

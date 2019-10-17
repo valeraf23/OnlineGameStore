@@ -22,6 +22,7 @@
             <th>Comments</th>
             <th>Download</th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -48,7 +49,8 @@
               </div>
             </td>
             <td><a href="api/games/{{game.id}}/download">Download</a></td>
-            <td><a class="btn btn-primary" [routerLink]="['/games', game.id]">Edit</a></td>
+            <td><button [disabled]="!canEditProject(game.publisher.id)" class="btn btn-primary" [routerLink]="['/games', game.id]">Edit</button></td>
+            <td><button [disabled]="!canEditProject(game.publisher.id)" class="btn btn-primary" (click)="deleteGame(game.id)">Delete</button></td>
           </tr>
         </tbody>
       </table>

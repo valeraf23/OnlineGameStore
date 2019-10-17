@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using OnlineGameStore.Api.Authorization.AccessRights;
 using OnlineGameStore.Api.Services;
 using OnlineGameStore.Common.Either;
+using OnlineGameStore.Common.Roles;
 using OnlineGameStore.Data.Services.Interfaces;
 
 namespace OnlineGameStore.Api.Authorization
@@ -22,7 +24,7 @@ namespace OnlineGameStore.Api.Authorization
 
         private Either<NotAllowed, Allowed> IfAdmin(UserMustBeRequirementRole requirement)
         {
-            if (_userInfoService.Role != requirement.Role) return new NotAllowed();
+            if (_userInfoService.Roles.All(y => y != UserRoles.Admin)) return new NotAllowed();
 
             return new Allowed();
         }

@@ -14,8 +14,7 @@ namespace OnlineGameStore.Data.Dtos
 
             var context = new ValidationContext(model);
 
-            Validator.TryValidateObject(
-                model, context, results, true);
+            Validator.TryValidateObject(model, context, results, true);
 
             return results.When(x => x.Any());
         }

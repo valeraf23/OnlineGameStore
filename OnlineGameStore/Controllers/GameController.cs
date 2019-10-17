@@ -59,6 +59,14 @@ namespace OnlineGameStore.Api.Controllers
             return Ok(pages.ShapeData(gameResourceParameters.Fields));
         }
 
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult DeleteGame(Guid id)
+        {
+            _gameService.DeleteGameById(id);
+            return NoContent();
+        }
+
         [HttpGet]
         [Route("{id}", Name = "GetGame")]
         public async Task<IActionResult> GetGame(Guid id) =>
@@ -66,7 +74,7 @@ namespace OnlineGameStore.Api.Controllers
             .Map<IActionResult>(Ok).Reduce(NotFound);
 
         [HttpPost]
-        [ServiceFilter(typeof(AssignPublisherIdAttribute))]
+        [ServiceFilter(typeof(AssignPublisherIdForGameModelAttribute))]
         public async Task<IActionResult> CreateGame(GameForCreationModel game) =>
             (await _gameService.SaveSafe(Mapper.Map<GameModel>(game)))
             .Map(GetRoute)
@@ -76,7 +84,6 @@ namespace OnlineGameStore.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Policy = "UserMustBeCreator")]
-        [ServiceFilter(typeof(AssignPublisherIdAttribute))]
         public IActionResult UpdateGame(Guid id, GameForCreationModel game) =>
             _gameService.UpdateSafe(id, Mapper.Map<GameModel>(game)).GetAwaiter().GetResult()
                 .Map(x => (IActionResult) NoContent())

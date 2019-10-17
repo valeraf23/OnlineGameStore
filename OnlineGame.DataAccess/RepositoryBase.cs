@@ -51,12 +51,19 @@ namespace OnlineGame.DataAccess
         protected void AddToDbSet(DbSet<TEntity> dbSet, TEntity item)
         {
             if (item == null) return;
-            if (item.Id == Guid.Empty)
+            if (Context.Entry(item).State == EntityState.Modified)
             {
-                item.Id = Guid.NewGuid();
+                dbSet.Update(item);
             }
+            else
+            {
+                if (item.Id == Guid.Empty)
+                {
+                    item.Id = Guid.NewGuid();
+                }
 
-            dbSet.Add(item);
+                dbSet.Add(item);
+            }
         }
 
         public async Task<bool> SaveChangesAsync()

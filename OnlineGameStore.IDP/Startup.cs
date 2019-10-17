@@ -35,7 +35,7 @@ namespace OnlineGameStore.IDP
 
             services.AddCors();
 
-          //  services.AddTransient<IProfileService, CustomProfileService>();
+            services.AddTransient<IProfileService, CustomProfileService>();
 
             services.AddMvc();
 
@@ -47,12 +47,18 @@ namespace OnlineGameStore.IDP
                     options.Events.RaiseSuccessEvents = true;
                 })
                 .AddDeveloperSigningCredential()
-                .AddTestUsers(Config.GetUsers())
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = builder =>
+                        builder.UseSqlServer(Configuration.GetConnectionString("Local"));
+                    options.EnableTokenCleanup = true;
+                    options.TokenCleanupInterval = 30;
+                })
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryClients(Config.GetClients());
-//                .AddAspNetIdentity<AppUser>()
-//                .AddProfileService<CustomProfileService>();
+                .AddInMemoryClients(Config.GetClients(Configuration.GetSection("UiClient").Value))
+                .AddAspNetIdentity<AppUser>()
+                .AddProfileService<CustomProfileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,7 +69,7 @@ namespace OnlineGameStore.IDP
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
-
+          
             app.UseExceptionHandler(builder =>
             {
                 builder.Run(async context =>

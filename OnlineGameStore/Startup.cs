@@ -44,8 +44,9 @@ namespace OnlineGameStore.Api
                 options.UseSqlServer(Configuration.GetConnectionString("Local"),
                     b => b.MigrationsAssembly("OnlineGameStore.Api")));
 
-            services.AddMvc(
-                    opt => { opt.Filters.Add(typeof(ValidatorActionFilter)); })
+            services.AddCors();
+
+            services.AddMvc(opt => { opt.Filters.Add(typeof(ValidatorActionFilter)); })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -71,6 +72,7 @@ namespace OnlineGameStore.Api
             services.AddTransient<IValidatorStrategy<CommentModel>, DefaultValidatorStrategy<CommentModel>>();
 
             services.AddScoped<AssignPublisherIdAttribute>();
+            services.AddScoped<AssignPublisherIdForGameModelAttribute>();
 
             services.AddHttpClient();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
@@ -80,7 +82,7 @@ namespace OnlineGameStore.Api
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = "https://localhost:44375";
+                    options.Authority = Configuration.GetSection("Authority").Value;
                     options.Audience = "onlinegamestoreapi";
                 });
             services.AddAuthorization(options => options.AddPolicy("UserMustBeCreator",
@@ -128,6 +130,7 @@ namespace OnlineGameStore.Api
                 });
             }
 
+            app.UseCors(c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             MapperHelper.InitMapperConf();
             app.UseResponseCaching();
             app.UseHttpsRedirection();

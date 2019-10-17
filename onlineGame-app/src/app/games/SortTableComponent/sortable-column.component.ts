@@ -22,7 +22,6 @@ export class SortableColumnComponent implements OnInit, OnDestroy {
 
   @HostListener('click')
   sort() {
-    debugger;
     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     this.sortService.columnSorted({ sortColumn: this.columnName, sortDirection: this.sortDirection });
   }

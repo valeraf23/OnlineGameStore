@@ -91,7 +91,6 @@ export abstract class BaseGameFormComponent implements OnInit, AfterViewInit, Ca
   }
 
   async canDeactivate(): Promise<boolean> {
-    debugger;
     if (this.validateForm())
       return await this.openConfirmationDialog();
 

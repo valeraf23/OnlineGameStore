@@ -6,6 +6,7 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
+using OnlineGameStore.Common.Roles;
 using OnlineGameStore.IDP.Data.Identity;
 
 namespace OnlineGameStore.IDP.Services
@@ -31,7 +32,7 @@ namespace OnlineGameStore.IDP.Services
 
             if (user.Email == "admin@vf.com")
             {
-                claims.Add(new Claim(JwtClaimTypes.Role, "Admin"));
+                claims.Add(new Claim(JwtClaimTypes.Role, UserRoles.Admin));
             }
             context.IssuedClaims = claims;
         }

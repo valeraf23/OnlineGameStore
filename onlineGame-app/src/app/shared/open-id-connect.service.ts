@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { UserManager, User, Log } from 'oidc-client'
-import { environment } from '../../environments/environment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { AuthContext } from "../games/AuthContext";
+import { ConfigService} from "../../environments/config.service";
+import { UserRegistration } from "../user.registration";
+import { Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +14,30 @@ export class OpenIdConnectService {
 
   private userManager: UserManager;
   private user: User;
+  private _authContext: AuthContext;
   userLoaded$ = new ReplaySubject<boolean>(1);
 
-  constructor() {
- 
+  constructor(private http: HttpClient, private configService: ConfigService) {
+
     Log.logger = console;
-    this.userManager = new UserManager(environment.openIdConnectSettings);
+    this.userManager = new UserManager(configService.openIdConnectSettings);
     this.userManager.clearStaleState();
     this.userManager.getUser().then(user => {
       if (user && !user.expired) {
         this.user = user;
         this.userLoaded$.next(true);
+        this.loadSecurityContext().subscribe(context => {
+            this._authContext = context;
+            this.createNewUserIfNotExist();
+          },
+          error => console.error(error));
       }
     });
+
     this.userManager.events.addUserLoaded(user => {
-      this.userManager.getUser().then(user => {
-        this.user = user;
-        this.userLoaded$.next(true);
-      });
+      this.user = user;
+      this.userLoaded$.next(true);
+      this.loadSecurityContext().subscribe(context => { this._authContext = context; }, error => console.error(error));
     });
 
     this.userManager.events.addUserUnloaded(() => {
@@ -36,12 +46,29 @@ export class OpenIdConnectService {
     });
   }
 
-  handleCallback():void {
+  handleCallback(): void {
     this.userManager.signinRedirectCallback();
   }
 
   login(): Promise<any> {
     return this.userManager.signinRedirect();
+  }
+
+  private createNewUserIfNotExist(): void {
+    this.http.get<boolean>(`api/publishers/available/${this._authContext.userProfile.id}`).subscribe(
+      (result: boolean) => {
+        if (result === false) {
+          this.createNewUserInApplication();
+        }
+      });
+  }
+
+  private createNewUserInApplication(): void {
+    const stringify = { name: this._authContext.userProfile.name, id: this._authContext.userProfile.id }
+    const model = JSON.stringify(stringify);
+    const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    this.http.post(`api/publishers/create`, model, options)
+      .subscribe(res => console.log('HTTP response', res), err => console.log('HTTP response', err));
   }
 
   logout(): Promise<any> {
@@ -53,7 +80,6 @@ export class OpenIdConnectService {
   }
 
   getAccessToken(): string {
-    debugger;
     return this.user ? this.user.access_token : '';
   }
 
@@ -61,5 +87,16 @@ export class OpenIdConnectService {
     return this.userManager.signoutRedirectCallback();
   }
 
+  loadSecurityContext(): Observable<AuthContext> {
+    return this.http.get<AuthContext>(`api/publishers/AuthContext`);
+  }
+
+  get authContext(): AuthContext {
+    return this._authContext;
+  }
+
+  register(userRegistration: UserRegistration) {
+    return this.http.post(`${this.configService.authApiURI}/account/register`, userRegistration);
+  }
 }
 

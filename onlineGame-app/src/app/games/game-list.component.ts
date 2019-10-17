@@ -7,6 +7,9 @@ import {ColumnSortedEvent} from "./sortService";
 import { Page } from "./gameModel";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GameSearchService} from "./game.search.service";
+import { System } from "./gameModel";
+import { PolicesService } from "../shared/polices.service";
+import { finalize } from 'rxjs/operators';
 
 @Component({
   templateUrl: './game-list.component.html',
@@ -36,7 +39,8 @@ export class GameListComponent implements OnInit {
   constructor(private spinner: NgxSpinnerService,
     private gameService: GameService,
     private service: SortColumnService,
-    private searchQueryService: GameSearchService) {
+    private searchQueryService: GameSearchService,
+    private policesService: PolicesService) {
   }
 
   visibleComments(value: number) {
@@ -66,7 +70,9 @@ export class GameListComponent implements OnInit {
     const g = this.service.getGames(games, criteria);
     this.games = g;
     this.filteredGames = g;
-  }
+    }
+
+  deleteGame(id: string) {this.gameService.delete(id).subscribe(_=>this.getPages(1));}
 
   onSorted($event: ColumnSortedEvent) {
     this.getGames(this.filteredGames, $event);
@@ -74,6 +80,10 @@ export class GameListComponent implements OnInit {
 
   getPageFromService($event) {
     this.getPages($event);
+  }
+
+  canEditProject(publisherId : System.Guid):boolean {
+   return this.policesService.canEdit(publisherId.toString());
   }
 
   searchQuery() {
@@ -85,16 +95,18 @@ export class GameListComponent implements OnInit {
 
   getPages(pageNumber: number) {
     this.spinner.show();
-    this.gameService.getPageGames(pageNumber, this.queryString).subscribe(
+      this.gameService.getPageGames(pageNumber, this.queryString)
+        .pipe(finalize(() => {
+          this.spinner.hide();
+        }))
+        .subscribe(
       games => {
         console.log(games.headers.get('x-pagination'));
         this.page = Object.assign(new Page(), JSON.parse(games.headers.get('x-pagination')));
         this.getGames([...games.body], { sortColumn: 'id', sortDirection: 'asc' });
-        this.spinner.hide();
       },
       error => {
         this.errorMessage = error;
-        this.spinner.hide();
       }
     );
   }

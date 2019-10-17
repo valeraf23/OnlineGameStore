@@ -7,7 +7,7 @@ namespace OnlineGameStore.Data.ValidationRules
     {
         public PublisherForCreateModelValidator()
         {
-            RuleFor(x => x.Name).Length(5,10);
+            RuleFor(x => x.Name).Length(4,10);
         }
     }
 }

@@ -30,6 +30,9 @@ import { OpenIdConnectService} from "./shared/open-id-connect.service";
 import { AddAuthorizationHeaderInterceptor } from './shared/add-authorization-header-interceptor';
 import { HomeComponent } from './home/home.component';
 import { UnauthorizedComponent} from "./unauthorized/unauthorized.component";
+import { RequireAuthenticatedUserRouteGuardService} from "./shared/require-authenticated-user-route-guard.service";
+import { AccountModule } from "./account/account.module";
+import { HttpErrorInterceptor} from "./games/http-error.interceptor";
 
 
 @NgModule({
@@ -60,26 +63,32 @@ import { UnauthorizedComponent} from "./unauthorized/unauthorized.component";
     ReactiveFormsModule,
     FontAwesomeModule,
     VirtualScrollerModule,
+    AccountModule,
     NgMultiSelectDropDownModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
-      { path: 'games', component: GameListComponent },
-      { path: 'new-games', component: GameDetailComponent, canDeactivate: [CanDeactivateGuard] },
-      { path: 'games/:id', component: GameEditComponent, canDeactivate: [CanDeactivateGuard] },
-      { path: 'games/:id/comments/:commentId', component: CommentView },
-      { path: 'description/:id', component: GameLookComponent },
+      { path: 'games', component: GameListComponent, canActivate: [RequireAuthenticatedUserRouteGuardService] },
+      { path: 'new-games', component: GameDetailComponent, canDeactivate: [CanDeactivateGuard] , canActivate: [RequireAuthenticatedUserRouteGuardService] },
+      { path: 'games/:id', component: GameEditComponent, canDeactivate: [CanDeactivateGuard], canActivate: [RequireAuthenticatedUserRouteGuardService]},
+      { path: 'games/:id/comments/:commentId', component: CommentView, canActivate: [RequireAuthenticatedUserRouteGuardService] },
+      { path: 'description/:id', component: GameLookComponent, canActivate: [RequireAuthenticatedUserRouteGuardService] },
       { path: 'unauthorized', component: UnauthorizedComponent },
       { path: '', redirectTo: 'games', pathMatch: 'full' },
       { path: '**', redirectTo: 'games', pathMatch: 'full' },
     ]),
     NgbModule.forRoot()
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-  useClass: AddAuthorizationHeaderInterceptor,
-  multi: true
+    providers: [{
+        provide: HTTP_INTERCEPTORS,
+        useClass: AddAuthorizationHeaderInterceptor,
+        multi: true
     },
-    ConfirmationDialogService, CanDeactivateGuard, OpenIdConnectService],
+      {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpErrorInterceptor,
+            multi: true
+        },
+    ConfirmationDialogService, CanDeactivateGuard, OpenIdConnectService, RequireAuthenticatedUserRouteGuardService],
   entryComponents: [ConfirmationDialogComponent],
   bootstrap: [AppComponent]
 })

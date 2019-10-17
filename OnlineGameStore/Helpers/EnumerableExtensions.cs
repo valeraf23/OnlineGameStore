@@ -7,6 +7,11 @@ namespace OnlineGameStore.Api.Helpers
 {
     public static class EnumerableExtensions
     {
+        public static void Do<T>(this IEnumerable<T> sequence, Action<T> action)
+        {
+            foreach (var obj in sequence)
+                action(obj);
+        }
 
         public static IEnumerable<ExpandoObject> ShapeData<TSource>(
             this IEnumerable<TSource> source,

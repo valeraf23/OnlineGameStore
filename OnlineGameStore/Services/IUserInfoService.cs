@@ -4,7 +4,7 @@
     {
         string UserId { get; set; }
         string Name { get; set; }
-        string Role { get; set; }
+        string[] Roles { get; set; }
 
     }
 }

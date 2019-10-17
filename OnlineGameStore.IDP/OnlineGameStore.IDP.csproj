@@ -14,4 +14,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OnlineGameStore.Common\OnlineGameStore.Common.csproj" />
+  </ItemGroup>
+
 </Project>
