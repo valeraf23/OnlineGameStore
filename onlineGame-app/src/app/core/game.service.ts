@@ -65,11 +65,7 @@ export class GameService {
     const options = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
-    return this.http.post(
-      `api/games/${idGame}/comments/${commentId}`,
-      comment,
-      options
-    );
+    return this.http.post(`api/games/${idGame}/comments/${commentId}`, comment, options);
   }
 
   getPlatformTypes(): Observable<IPlatformType[]> {

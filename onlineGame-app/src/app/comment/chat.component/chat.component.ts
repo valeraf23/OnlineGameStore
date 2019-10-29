@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { GameService } from 'src/app/core/game.service';
-import { CommentService } from '../comment.service';
+import { OpenIdConnectService } from 'src/app/core/authentication/open-id-connect.service';
 
 @Component({
   selector: 'app-chat',
@@ -10,7 +10,7 @@ import { CommentService } from '../comment.service';
 export class ChatComponent implements OnInit {
   constructor(
     private gameService: GameService,
-    private commentService: CommentService
+    private openIdConnectService: OpenIdConnectService
   ) {}
 
   @Input()
@@ -19,13 +19,18 @@ export class ChatComponent implements OnInit {
   @Input()
   commentId: string;
 
+  get UserName(): string {
+    return this.openIdConnectService.authContext.userProfile.name;
+  }
   message = {
-    name: '',
+    name: this.UserName,
     body: ''
   };
 
   sendMessage() {
-    if (this.isCanAddComment()) { return; }
+    if (this.isCanAddComment()) {
+      return;
+    }
 
     if (this.commentId !== '') {
       this.gameService
@@ -40,14 +45,10 @@ export class ChatComponent implements OnInit {
         .addCommentToGame(this.gameId, JSON.stringify(this.message))
         .subscribe();
     }
-
-    this.commentService.sendComment();
   }
 
   private isCanAddComment(): boolean {
-    return (
-      this.gameId === '' && this.message.body === '' && this.message.name === ''
-    );
+    return this.gameId === '' && this.message.body === '';
   }
 
   ngOnInit() {}

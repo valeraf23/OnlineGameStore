@@ -2,7 +2,6 @@ import { Component, OnInit, AfterViewInit} from '@angular/core';
 import { GameService } from '../../core/game.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CommentService} from '../../comment/comment.service';
 import { IGame } from 'src/app/models/IGame';
 import { IGenre } from 'src/app/models/IGenre';
 
@@ -20,7 +19,7 @@ export class GameLookComponent implements OnInit, AfterViewInit {
 
   constructor(private spinner: NgxSpinnerService,
               private gameService: GameService,
-              private route: ActivatedRoute, private router: Router, private commentService: CommentService) {
+              private route: ActivatedRoute, private router: Router) {
   }
 
   ngAfterViewInit(): void {
@@ -35,7 +34,7 @@ export class GameLookComponent implements OnInit, AfterViewInit {
   }
 
   onBack(): void {
-    this.router.navigate(['/games']);
+    this.router.navigate(['/games'], {queryParamsHandling: 'preserve'});
   }
 
   getSubGenres(genres: IGenre[]): string {
@@ -44,8 +43,6 @@ export class GameLookComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.spinner.show();
-    this.commentService.commentsQuery$.subscribe(() => this.ngAfterViewInit()
-  );
     this.id = this.route.snapshot.paramMap.get('id');
   }
 

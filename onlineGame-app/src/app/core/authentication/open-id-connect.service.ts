@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { UserManager, User, Log } from 'oidc-client';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthContext } from '../../shared/authContext';
+import { AuthContext } from '../../account/authContext';
 import { ConfigService } from '../../../environments/config.service';
-import { UserRegistration } from '../../shared/user.registration';
+import { UserRegistration } from '../../account/user.registration';
 import { Observable } from 'rxjs';
 
 @Injectable({

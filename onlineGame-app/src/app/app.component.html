@@ -1,28 +1,46 @@
 <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
   <a class='navbar-brand' href="#">{{pageTitle}}</a>
-  <a *ngIf="isLoggedIn()" style="color:#00FFFF">Welcome {{authContext?.userProfile?.name}}</a>
   <ul *ngIf="isLoggedIn()" class='navbar-nav mr-auto'>
-    <li class="nav-item"><a class='nav-link' routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/games']">Games</a></li>
-    <li class="nav-item"><a class='nav-link' routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/new-games']">Create</a></li>
+    <li class="nav-item"><a class='nav-link' routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+        [routerLink]="['/games']">Games</a></li>
+    <li class="nav-item"><a class='nav-link' routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+        [routerLink]="['/games', '​​​​​00000000-0000-0000-0000-000000000000​​​​​', 'edit']">Create</a></li>
   </ul>
-  <form *ngIf="isLoggedIn()" class="form-inline" (ngSubmit)="searchGames(searchQuery)">
-    <div class="form-group mx-sm-3 mb-2">
-      <input type="search" [(ngModel)]="searchQuery" name="searchQuery" class="form-control" placeholder="Search Games">
-      <span
-        class="glyphicon glyphicon-remove form-control-feedback"
-        *ngIf="searchQuery?.length" (click)="searchQuery=''">
-      </span>
-    </div>
-    <button type="submit" class="btn btn-primary mb-2">Search</button>
-  </form>
-  <span>
-    <button class="logged btn btn-info mb-2" *ngIf="!isLoggedIn()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/register']">Registration</button>
-    <button class="logged btn btn-info mb-2" *ngIf="!isLoggedIn()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/login']">Login</button>
-    <button class="logged btn btn-info mb-2" *ngIf="isLoggedIn()" mat-button (click)="logout()">Logout</button>
-  </span>
+
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item" *ngIf="isLoggedIn()">
+      <a class="nav-link" style="color:#00FFFF">Welcome {{authContext?.userProfile?.name}}</a>
+    </li>
+    <li>
+      <form *ngIf="isLoggedIn()" class="form-inline" (ngSubmit)="searchGames(searchQuery)">
+        <div class="form-group mx-sm-3 mb-2">
+          <input type="search" [(ngModel)]="searchQuery" name="searchQuery" class="form-control"
+            placeholder="Search Games">
+          <span class="glyphicon glyphicon-remove form-control-feedback" *ngIf="searchQuery?.length"
+            (click)="searchQuery=''">
+          </span>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Search</button>
+      </form>
+    </li>
+    <li *ngIf="!isLoggedIn()">
+      <button class="logged btn btn-info mb-2" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+        [routerLink]="['account/register']">Registration</button>
+      <button class="logged btn btn-info mb-2" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+        [routerLink]="['account/login']">Login</button>
+    </li>
+    <li *ngIf="isLoggedIn()">
+      <button class="logged btn btn-info mb-2" mat-button (click)="logout()">Logout</button>
+    </li>
+  </ul>
 </nav>
-<div class='container'>
-  <ngx-spinner [fullScreen]="false" type="timer" size="medium"><p style="color: white" > Loading... </p>
-  </ngx-spinner>
-  <router-outlet></router-outlet>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ngx-spinner [fullScreen]="false" type="timer" size="medium">
+        <p style="color: white"> Loading... </p>
+      </ngx-spinner>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>

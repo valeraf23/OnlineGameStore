@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnChanges } from '@angular/core';
 import { GameService } from '../../core/game.service';
 import { SortColumnService } from '../sortTable/sortColumnService';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -10,6 +10,7 @@ import { Page } from 'src/app/models/Page';
 import { IGenre } from 'src/app/models/IGenre';
 import { ColumnSortedEvent } from '../sortTable/sortService';
 import { Guid } from 'guid-typescript';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   templateUrl: './game-list.component.html',
@@ -39,12 +40,13 @@ export class GameListComponent implements OnInit, AfterViewInit {
   commentsIndex = -1;
 
   constructor(
+    private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private gameService: GameService,
     private service: SortColumnService,
     private searchQueryService: GameSearchService,
     private policesService: PolicesService
-  ) {}
+  ) { }
 
   visibleComments(value: number) {
     if (this.commentsIndex === value) {
@@ -60,7 +62,6 @@ export class GameListComponent implements OnInit, AfterViewInit {
 
   performFilter(filterBy: string): IGame[] {
     filterBy = filterBy.toLocaleLowerCase();
-    console.log(this.games[0].name);
     return this.games.filter(
       (g: IGame) => g.name.toLocaleLowerCase().indexOf(filterBy) !== -1
     );
@@ -73,7 +74,7 @@ export class GameListComponent implements OnInit, AfterViewInit {
   getGames(games: IGame[], criteria: ColumnSortedEvent) {
     const g = this.service.getGames(games, criteria);
     this.games = g;
-    this.filteredGames = g;
+    this.filteredGames = this.performFilter(this.listFilter);
   }
 
   deleteGame(id: string) {
@@ -110,8 +111,7 @@ export class GameListComponent implements OnInit, AfterViewInit {
       )
       .subscribe(
         games => {
-          this.page = Object.assign(new Page(), JSON.parse(games.headers.get('x-pagination'))
-          );
+          this.page = Object.assign(new Page(), JSON.parse(games.headers.get('x-pagination')));
           this.getGames([...games.body], {
             sortColumn: 'id',
             sortDirection: 'asc'
@@ -124,6 +124,9 @@ export class GameListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(queryParams => {
+      this.listFilter = queryParams.filterBy || '';
+    });
     this.searchQuery();
   }
 

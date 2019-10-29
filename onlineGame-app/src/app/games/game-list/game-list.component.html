@@ -10,7 +10,8 @@
       </div>
     </div>
     <div class='table-responsive'>
-      <table appSortableTable (sorted)="onSorted($event)" class='table' *ngIf='games && games.length'>
+      <table class="table mb-0" appSortableTable (sorted)="onSorted($event)" class='table'
+        *ngIf='games && games.length'>
         <thead>
           <tr>
             <th>
@@ -34,7 +35,7 @@
         <tbody>
           <tr *ngFor='let game of filteredGames; let gameIndex = index;'>
             <td><a routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-                [routerLink]="['/description',game.id]">{{ game.name}}</a></td>
+                [routerLink]="['/games',game.id]" [queryParams]="{filterBy:ListFilter}">{{ game.name}}</a></td>
             <td>{{ game.description}}</td>
             <td>{{ game.publisher.name}}</td>
             <td>{{ game.platformTypes | joinStr:'type':', ' }}</td>
@@ -61,7 +62,7 @@
             </td>
             <td><a href="api/games/{{game.id}}/download">Download</a></td>
             <td><button [disabled]="!canEditProject(game.publisher.id)" class="btn btn-primary"
-                [routerLink]="['/games', game.id]">Edit</button></td>
+                [routerLink]="['/games', game.id,'edit']" [queryParams]="{filterBy:ListFilter}">Edit</button></td>
             <td><button [disabled]="!canEditProject(game.publisher.id)" class="btn btn-primary"
                 (click)="deleteGame(game.id)">Delete</button></td>
           </tr>

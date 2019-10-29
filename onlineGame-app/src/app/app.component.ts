@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GameSearchService } from './core/game-search.service';
 import { Router } from '@angular/router';
-import { AuthContext } from './shared/authContext';
+import { AuthContext } from './account/authContext';
 import { OpenIdConnectService } from './core/authentication/open-id-connect.service';
 
 @Component({
@@ -35,12 +35,12 @@ export class AppComponent implements OnInit {
     return this.openIdConnectService.isLoggedIn();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (window.location.href.indexOf('?postLogout=true') > 0) {
-      this.openIdConnectService.signoutRedirectCallback().then(() => {
-        const url = this.route.url.substring(0, this.route.url.indexOf('?'));
-        this.route.navigateByUrl(url);
-      });
+     await this.openIdConnectService.signoutRedirectCallback();
+     const url = this.route.url.substring(0, this.route.url.indexOf('?'));
+     this.route.navigateByUrl(url);
+      }
     }
   }
-}
+

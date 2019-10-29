@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommentService } from './comment.service';
+import { Component, Input } from '@angular/core';
 import { IComment } from '../models/IComment';
 import { Guid } from 'guid-typescript';
 
@@ -8,8 +7,8 @@ import { Guid } from 'guid-typescript';
   templateUrl: './comments.popup.component.html',
   styleUrls: ['./comments.popup.component.scss']
 })
-export class CommentsPopupComponent implements OnInit {
-  constructor(private commentService: CommentService) {}
+export class CommentsPopupComponent {
+  constructor() { }
 
   @Input()
   comment: IComment;
@@ -17,9 +16,4 @@ export class CommentsPopupComponent implements OnInit {
   @Input()
   gameId: Guid;
 
-  setComment() {
-    this.commentService.setComment(this.comment);
-  }
-
-  ngOnInit() {}
 }

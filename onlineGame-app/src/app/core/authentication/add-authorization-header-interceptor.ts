@@ -37,7 +37,7 @@ export class AddAuthorizationHeaderInterceptor implements HttpInterceptor {
             respError &&
             (respError.status === 401 || respError.status === 403)
           ) {
-            this.router.navigate(['/unauthorized']);
+            this.router.navigateByUrl('/account/unauthorized');
           }
         }
       );

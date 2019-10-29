@@ -1,0 +1,8 @@
+<div (click)="toggleContent()" [ngClass]="visible? 'fa fa-angle-double-down': 'fa fa-angle-double-right'">
+  <p class="showAnswer">{{visible?'Hide Answers':'Show Answers'}}</p>
+  <ng-content *ngIf="visible" select="[comment]"></ng-content>
+  <div  class="addAnswer" (click)="toggleContentAnswer() ;$event.stopPropagation()">
+    <p>Add Answer</p>
+    <ng-content *ngIf="visibleAnswer" select="[answer]"></ng-content>
+  </div>
+</div>

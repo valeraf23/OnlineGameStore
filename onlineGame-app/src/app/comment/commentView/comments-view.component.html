@@ -1,19 +1,18 @@
 <div>
   <div class="messages">
+    <div (click)="display() ;$event.stopPropagation()">
+      <p>Add Comment</p>
+      <app-chat *ngIf="isvisible" [gameId]="gameId"></app-chat>
+    </div>
     <div class="message" *ngFor="let comment of comments let commentIndex = index; debugger">
-      <div class="message-text">
+      <div style=" margin: 0px" class="message-text">
         <span>{{comment.name}}</span>
         <p>{{comment.body}}</p>
-        <div [ngClass]="isDisplayed[commentIndex]? 'fa fa-angle-double-down': 'fa fa-angle-double-right'"
-          (click)="display(commentIndex)" *ngIf="comment.answers.length>0">
-          <app-comments-selector [hidden]="!isDisplayed[commentIndex]" [comments]="comment.answers"></app-comments-selector>
-        </div>
-      </div>
-      <div>
-        <p class="answer" (click)="displayForm(commentIndex) ;$event.stopPropagation()">Answer</p>
-        <app-chat [gameId]="gameId" [commentId]="comment.id" [hidden]="!isFormDisplayed[commentIndex]"></app-chat>
+        <app-collapsible-comment-selector *ngIf="comment.answers.length>0">
+          <app-comments-selector comment [comments]="comment.answers"></app-comments-selector>
+          <app-chat answer [gameId]="gameId" [commentId]="comment.id"></app-chat>
+        </app-collapsible-comment-selector>
       </div>
     </div>
   </div>
-  <app-chat [gameId]="gameId"></app-chat>
 </div>

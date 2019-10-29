@@ -13,3 +13,5 @@ export interface IGame {
   genres: IGenre[];
   platformTypes: IPlatformType[];
 }
+
+

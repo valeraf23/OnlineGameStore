@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { finalize } from 'rxjs/operators';
-import { UserRegistration } from '../../shared/user.registration';
+import { UserRegistration } from '../user.registration';
 import { OpenIdConnectService } from 'src/app/core/authentication/open-id-connect.service';
 
 @Component({
