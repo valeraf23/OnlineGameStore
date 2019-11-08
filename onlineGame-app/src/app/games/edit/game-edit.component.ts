@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IGame } from 'src/app/models/IGame';
 import { IAddGame } from 'src/app/models/IAddGame';
@@ -10,9 +10,18 @@ import { IPlatformType } from 'src/app/models/IPlatformType';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { finalize } from 'rxjs/operators';
 import { Guid } from 'guid-typescript';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ValidatorFn,
+  AbstractControl
+} from '@angular/forms';
 import { CanComponentDeactivate } from 'src/app/core/can-deactivate-component.interface';
 import { Toastr, TOASTR_TOKEN } from 'src/app/shared/toast.services';
+import { GenericValidator } from 'src/app/shared/generic-validator';
+import { debounceTime } from 'rxjs/operators';
+import { NgMultiselectValidators } from 'src/app/shared/ngMultiselect-validators';
 
 @Component({
   selector: 'app-edit-games-selector',
@@ -24,16 +33,9 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
   errorMessage: string;
 
   gameForm: FormGroup;
-  name: FormControl;
-  platformTypes: FormControl;
-  genres: FormControl;
-  description: FormControl;
+
   dropdownList = [];
   dropdownListGenres = [];
-  selectedItems = [];
-  selectedItemsGenre = [];
-  onSelectAllIsTriggered = false;
-  onItemSelectGenreIsTriggered = false;
 
   dropdownSettings = {
     singleSelection: false,
@@ -48,8 +50,14 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
   private dataIsValid: { [key: string]: boolean } = {};
 
   private currentProduct: IAddGame = GameEditComponent.getDefault();
+  private originalProduct: IAddGame = GameEditComponent.getDefault();
 
-  private originalProduct: IAddGame;
+  displayMessage: { [key: string]: string } = {};
+
+  private validationMessages: { [key: string]: { [key: string]: string } };
+  private genericValidator: GenericValidator;
+  displayMessageForDropDown: { [key: string]: boolean } = {};
+  private isDropDownTouched: { [key: string]: boolean } = {};
 
   static getDefault(): IAddGame {
     return {
@@ -74,8 +82,30 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
     private gameService: GameService,
     private route: ActivatedRoute,
     private router: Router,
+    private fb: FormBuilder,
     @Inject(TOASTR_TOKEN) private toaster: Toastr
-  ) {}
+  ) {
+    this.validationMessages = {
+      name: {
+        required: 'Game name is required.',
+        minlength: 'Game name must be at least 5 characters.',
+        maxlength: 'Game name cannot exceed 50 characters.'
+      },
+      platformTypes: {
+        required: 'Platform Types is required.'
+      },
+      genres: {
+        required: 'Genres is required.'
+      },
+      description: {
+        required: 'Game description is required.',
+        minlength: 'Game description must be at least 3 characters.',
+        maxlength: 'Game description cannot exceed 500 characters.'
+      }
+    };
+
+    this.genericValidator = new GenericValidator(this.validationMessages);
+  }
 
   get isDirty(): boolean {
     return (
@@ -92,10 +122,12 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
   getFormValues(): void {
     const session: IAddGame = {
       id: this.game.id,
-      name: this.name.value,
-      description: this.description.value,
-      genresId: this.selectedItemsGenre.map(x => x.item_id),
-      platformTypesId: this.selectedItems.map(x => x.item_id)
+      name: this.gameForm.get('name').value,
+      description: this.gameForm.get('description').value,
+      genresId: this.gameForm.get('genres').value.map(x => x.item_id),
+      platformTypesId: this.gameForm
+        .get('platformTypes')
+        .value.map(x => x.item_id)
     };
     this.currentProduct = session;
   }
@@ -128,6 +160,24 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
         const platformTypes = resolvedData.resolvedData.platformTypes;
         this.onGameRetrieved(game, genres, platformTypes);
       });
+
+    this.gameForm.valueChanges.pipe(debounceTime(1000)).subscribe(_ => {
+      this.displayMessage = this.genericValidator.processMessages(
+        this.gameForm
+      );
+      const platform = 'platformTypes';
+      const genre = 'genres';
+      debugger
+      this.displayMessageForDropDown[platform] = this.IsMultiselectDirty(
+        platform
+      );
+      this.displayMessageForDropDown[genre] = this.IsMultiselectDirty(genre);
+    });
+  }
+
+  onChangePlatformTypes(key: string) {
+    debugger
+    this.isDropDownTouched[key] = true;
   }
 
   gameToAddGameModel(game: IGame): IAddGame {
@@ -148,7 +198,7 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
     return true;
   }
 
-  setGameInfo(
+  poplateGame(
     platformTypes: IPlatformType[],
     genres: IGenre[],
     game: IGame
@@ -163,22 +213,22 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
         item_id: x.id,
         item_text: x.name
       }));
+
     if (game) {
       this.game = this.gameToAddGameModel(game);
-      this.selectedItems = platformTypes
-        .filter(p => game.platformTypes.some(gp => gp.id === p.id))
-        .map(x => ({
-          item_id: x.id,
-          item_text: x.type
-        }));
-      this.selectedItemsGenre = genres
-        .filter(p => game.genres.some(gp => gp.id === p.id))
-        .map(x => ({
-          item_id: x.id,
-          item_text: x.name
-        }));
-      this.name.setValue(this.game.name);
-      this.description.setValue(this.game.description);
+      this.gameForm.patchValue({
+        name: this.game.name,
+        platformTypes: platformTypes
+          .filter(p => game.platformTypes.some(gp => gp.id === p.id))
+          .map(x => ({ item_id: x.id, item_text: x.type })),
+        genres: genres
+          .filter(p => game.genres.some(gp => gp.id === p.id))
+          .map(x => ({
+            item_id: x.id,
+            item_text: x.name
+          })),
+        description: this.game.description
+      });
     }
   }
 
@@ -187,29 +237,11 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
     genres: IGenre[],
     platformTypes: IPlatformType[]
   ): void {
-    this.setGameInfo(platformTypes, genres, game);
+    this.poplateGame(platformTypes, genres, game);
     if (this.game.id.toString() === Guid.createEmpty().toString()) {
       this.pageTitle = 'Add Game';
     } else {
       this.pageTitle = `Edit Game: ${this.game.name}`;
-    }
-  }
-
-  async deleteProduct(): Promise<void> {
-    if (!this.game.id.toString()) {
-      this.onSaveComplete(`${this.game.name} was deleted`);
-    } else {
-      try {
-        const confirmed = await this.confirmationDialogService.confirm(
-          'Please confirm..',
-          `Really delete the game: ${this.game.name}?`
-        );
-        if (confirmed) {
-          this.onSaveComplete(`${this.game.name} was deleted`);
-        }
-      } catch (e) {
-        this.errorMessage = e;
-      }
     }
   }
 
@@ -232,6 +264,8 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
 
   save(): void {
     if (this.isValid()) {
+      //this.gameForm.markAsPristine();
+
       if (this.game.id.toString() === Guid.EMPTY) {
         this.gameService.postGame(JSON.stringify(this.game)).subscribe({
           next: () =>
@@ -264,7 +298,7 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
     this.dataIsValid = {};
     if (
       this.game.name &&
-      this.name.value.length >= 5 &&
+      this.game.name.length >= 5 &&
       this.game.description &&
       this.game.description.length >= 3 &&
       this.game.genresId.length > 0 &&
@@ -276,20 +310,26 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
     }
   }
 
-  initForm(): void {
-    this.name = new FormControl(null, Validators.required);
-    this.platformTypes = new FormControl(null, Validators.required);
-    this.genres = new FormControl(null, Validators.required);
-    this.description = new FormControl(null, [
-      Validators.required,
-      Validators.maxLength(400)
-    ]);
+  private IsMultiselectDirty(key: string): boolean {
+    return (!!this.isDropDownTouched[key] && this.isDropDownTouched[key]) && this.displayMessage[key] !== '';
+  }
 
-    this.gameForm = new FormGroup({
-      name: this.name,
-      platformTypes: this.platformTypes,
-      genres: this.genres,
-      description: this.description
+  initForm(): void {
+    this.gameForm = this.fb.group({
+      name: [
+        '',
+        [Validators.required, Validators.minLength(5), Validators.maxLength(50)]
+      ],
+      platformTypes: [[], [NgMultiselectValidators.validateNgMultiselect()]],
+      genres: [[], [NgMultiselectValidators.validateNgMultiselect()]],
+      description: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(500)
+        ]
+      ]
     });
   }
 

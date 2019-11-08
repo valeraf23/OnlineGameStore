@@ -4,7 +4,6 @@ import { GameListComponent } from './game-list/game-list.component';
 import { CanDeactivateGuard } from '../core/can-deactivate-guard.service';
 import { GameInfoResolver } from './edit/game-info-resolver.service';
 import { GameLookComponent } from './games-looks-description/game-look.component';
-import { RequireAuthenticatedUserRouteGuardService } from '../core/authentication/require-authenticated-user-route-guard.service';
 import { JoinStringArrayPipe } from '../core/join-strings-array.pipe';
 import { GenreDetailComponent } from './ganres-details/genre-detail.component';
 import { NgbdPaginationAdvancedComponent } from './pagination/pagination-advanced';
@@ -22,19 +21,21 @@ import { ChatComponent } from '../comment/chat.component/chat.component';
 import { CollapsibleCommentComponent } from '../comment/collapsible-comment/collapsible-comment.component';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { GameEditComponent } from './edit/game-edit.component';
+import { ErrorHighlightDirective } from './edit/ng-multiselect-dropdown-directives';
 
 const routes: Routes = [
-  { path: 'games', component: GameListComponent, canActivate: [RequireAuthenticatedUserRouteGuardService], },
   {
-    path: 'games/:id/edit',
+    path: '',
+    component: GameListComponent
+  },
+  {
+    path: ':id/edit',
     component: GameEditComponent,
     canDeactivate: [CanDeactivateGuard],
-    canActivate: [RequireAuthenticatedUserRouteGuardService],
     resolve: { info: GameInfoResolver }
   },
   {
-    path: 'games/:id',
-    canActivate: [RequireAuthenticatedUserRouteGuardService],
+    path: ':id',
     component: GameLookComponent
   }
 ];
@@ -59,16 +60,14 @@ const routes: Routes = [
     NgbdPaginationAdvancedComponent,
     SortableColumnComponent,
     SortableTableDirective,
+    ErrorHighlightDirective,
     ConfirmationDialogComponent,
     GameEditComponent,
     GameLookComponent,
-   GameEditComponent,
+    GameEditComponent,
     GameListComponent
   ],
-  providers: [
-    ConfirmationDialogService,
-    CanDeactivateGuard
-  ],
-  entryComponents: [ConfirmationDialogComponent],
+  providers: [ConfirmationDialogService, CanDeactivateGuard],
+  entryComponents: [ConfirmationDialogComponent]
 })
-export class GameModule { }
+export class GameModule {}

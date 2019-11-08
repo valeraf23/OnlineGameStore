@@ -10,7 +10,6 @@ import { OpenIdConnectService } from './core/authentication/open-id-connect.serv
 import { Error404Component } from './errors/404.component';
 import { AppRoutingModule } from './app-route.module';
 import { AccountModule } from './account/account.module';
-import { GameModule } from './games/game.module';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -24,7 +23,6 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     HttpClientModule,
     AccountModule,
-    GameModule,
     AppRoutingModule
   ],
   providers: [

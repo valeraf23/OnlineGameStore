@@ -1,34 +1,43 @@
 <div class="col-md-auto">
   <h3>{{pageTitle}}</h3>
 </div>
-<div class="ccol-md-6">
+<div class="ccol-md-6" *ngIf="!errorMessage">
   <form [formGroup]="gameForm" (ngSubmit)="save()" autocomplete="off">
-    <div class="form-group" [ngClass]="{'error': name.invalid && name.dirty }">
+    <div class="form-group">
       <label for="gameName">Name:</label>
-      <em *ngIf="name.invalid && name.dirty">Required</em>
-      <input formControlName="name" id="gameName" type="text" class="form-control" placeholder="game name..." />
+      <input formControlName="name" id="gameName" type="text" class="form-control" placeholder="game name..."
+        [ngClass]="{'is-invalid': displayMessage.name }" />
+      <span class="invalid-feedback">
+        {{displayMessage['name']}}
+      </span>
     </div>
     <div class="form-group">
       <label for="platformTypes">PlatformTypes:</label>
-      <ng-multiselect-dropdown formControlName="platformTypes"
-        [placeholder]="'platform Types...'" [data]="dropdownList" [(ngModel)]="selectedItems"
-        [settings]="dropdownSettings">
+      <ng-multiselect-dropdown formControlName="platformTypes" [placeholder]="'platform Types...'" [data]="dropdownList"
+        [(ngModel)]="gameForm.get('platformTypes').value" (click)="onChangePlatformTypes('platformTypes')" [settings]="dropdownSettings"  appErrorHighlight="{{displayMessageForDropDown['platformTypes']}}">
       </ng-multiselect-dropdown>
+      <span *ngIf="displayMessageForDropDown['platformTypes']" class='text-danger' padding>
+        {{displayMessage['platformTypes']}}</span>
     </div>
-
     <div class="form-group">
       <label for="genres">Genres:</label>
-      <ng-multiselect-dropdown formControlName="genres"
-        [placeholder]="'select genres...'" [data]="dropdownListGenres" [(ngModel)]="selectedItemsGenre"
-        [settings]="dropdownSettings">
+      <ng-multiselect-dropdown formControlName="genres" [placeholder]="'select genres...'" [data]="dropdownListGenres"
+        [(ngModel)]="gameForm.get('genres').value" (click)="onChangePlatformTypes('genres')" [settings]="dropdownSettings"  appErrorHighlight="{{displayMessageForDropDown['genres']}}">
       </ng-multiselect-dropdown>
+      <span *ngIf="displayMessageForDropDown['genres']" class='text-danger' padding> {{displayMessage['genres']}}</span>
     </div>
     <div class="form-group">
       <label for="description">Description:</label>
-      <textarea formControlName="description" id="description" rows=3 class="form-control"
-        placeholder="description..."></textarea>
+      <textarea formControlName="description" id="description" rows=3 class="form-control" placeholder="description..."
+        [ngClass]="{'is-invalid': displayMessage.description }"></textarea>
+      <span class="invalid-feedback">
+        {{displayMessage['description']}}
+      </span>
     </div>
     <button type="submit" [disabled]="!isCanSave()" class="btn btn-primary">Save</button>
     <button type="button" class="btn btn-primary" (click)="cancel()">Cancel</button>
   </form>
+</div>
+
+<div class="alert alert-danger" *ngIf="errorMessage">{{errorMessage}}
 </div>
