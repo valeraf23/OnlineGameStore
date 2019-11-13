@@ -1,0 +1,4 @@
+<div>
+  <p class="toggle" (click)="toggleContent() ;$event.stopPropagation()" [ngClass]="visible? 'fa fa-angle-double-down': 'fa fa-angle-double-right'">{{visible? textOff:textOn}}</p>
+  <ng-content *ngIf="visible"></ng-content>
+</div>

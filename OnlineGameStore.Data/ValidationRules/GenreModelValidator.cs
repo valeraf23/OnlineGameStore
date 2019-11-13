@@ -3,7 +3,7 @@ using OnlineGameStore.Data.Dtos;
 
 namespace OnlineGameStore.Data.ValidationRules
 {
-    public class GenreModelValidator : AbstractValidator<CommentModel>
+    public class GenreModelValidator : AbstractValidator<GenreModel>
     {
         public GenreModelValidator()
         {

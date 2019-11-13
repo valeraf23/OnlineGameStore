@@ -34,12 +34,12 @@
     </li>
   </ul>
 </nav>
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <ngx-spinner [fullScreen]="false" type="timer" size="medium">
+<div class="container-fluid">
+    <ngx-spinner [fullScreen]="false" type="timer" size="medium">
         <p style="color: white"> Loading... </p>
       </ngx-spinner>
+  <div class="row">
+    <div class="col-md-12">
       <router-outlet></router-outlet>
     </div>
   </div>

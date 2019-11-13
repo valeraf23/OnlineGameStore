@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineGame.DataAccess;
 using OnlineGameStore.Data.Data;
 using OnlineGameStore.Domain.Entities;
+using Z.EntityFramework.Plus;
 
 namespace OnlineGameStore.Data.Repository
 {
@@ -30,12 +31,14 @@ namespace OnlineGameStore.Data.Repository
         {
             var allGames =
                 await EntityDbSet
+                    .Include(game => game.Comments)
+                    .ThenInclude(i => i.Answers)
                     .Include(game => game.Publisher)
                     .Include(game => game.GameGenre)
                     .ThenInclude(gameGenre => gameGenre.Genre)
                     .ThenInclude(genre => genre.SubGenres)
                     .Include(game => game.GamePlatformType)
-                    .ThenInclude(gamePlatformType => gamePlatformType.PlatformType).ToListAsync();
+                    .ThenInclude(gamePlatformType => gamePlatformType.PlatformType).IncludeFilter(x => x.Comments.Where(c => c.ParentComment == null)).ToListAsync();
             return allGames.Where(predicate);
         }
     }

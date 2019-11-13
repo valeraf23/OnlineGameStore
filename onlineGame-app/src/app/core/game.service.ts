@@ -50,6 +50,10 @@ export class GameService {
     return this.http.get<IComment>(`api/games/${id}/comments/${commentsId}`);
   }
 
+  getComments(id: string): Observable<IComment[]> {
+    return this.http.get<IComment[]>(`api/games/${id}/comments`);
+  }
+
   addCommentToGame(idGame: string, comment: string): Observable<any> {
     const options = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })

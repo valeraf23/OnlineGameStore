@@ -12,11 +12,8 @@ export class CommentsViewComponent {
   comments: IComment[];
 
   @Input()
+  commentId: Guid;
+
+  @Input()
   gameId: Guid;
-
-  isvisible = false;
-
-  display() {
-    this.isvisible = !this.isvisible;
-  }
 }

@@ -20,7 +20,8 @@ namespace OnlineGameStore.Data.Data
         public DbSet<PlatformType> PlatformTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        { 
+            modelBuilder.ApplyConfiguration(new GameEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CommentEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new GameGenreEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new GamePlatformTypeEntityTypeConfiguration());

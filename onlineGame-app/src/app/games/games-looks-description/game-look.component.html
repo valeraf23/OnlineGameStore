@@ -25,20 +25,37 @@
         <div class='row'>
           <div class='col-md-4'>Genres:</div>
           <div class='col-md-8'>
-            <app-genre-detail-selector [genres]='game.genres' [subGenres]='getSubGenres(game.genres)'></app-genre-detail-selector>
+            <app-genre-detail-selector [genres]='game.genres' [subGenres]='getSubGenres(game.genres)'>
+            </app-genre-detail-selector>
           </div>
         </div>
       </div>
     </div>
     <div class="font-weight-bold">Comments:</div>
     <div>
-      <app-comments-selector [gameId]="game.id" [comments]="game.comments"></app-comments-selector>
+      <div class="messages">
+        <app-collapsible-selector textOn="Add Comment" textOff="Hide">
+          <app-chat [gameId]="game.id"></app-chat>
+        </app-collapsible-selector>
+      </div>
+      <div class="message" *ngFor="let comment of comments let commentIndex = index">
+        <div style=" margin: 0px" class="message-text">
+          <span>{{comment.name}}</span>
+          <p>{{comment.body}}</p>
+          <app-collapsible-selector textOn="Add Answer" textOff="Hide">
+            <app-chat [gameId]="game.id" [commentId]="comment.id"></app-chat>
+          </app-collapsible-selector>
+          <app-collapsible-selector textOn="Show Answers" textOff="Hide" *ngIf="comment.answers.length>0">
+            <app-comments-selector comment [comments]="comment.answers" [commentId]="comment.id" [gameId]="game.id"></app-comments-selector>
+          </app-collapsible-selector>
+        </div>
+      </div>
     </div>
   </div>
+</div>
 
-  <div class='card-footer'>
-    <button class='btn btn-outline-secondary' (click)='onBack()' style='width:80px'>
-      <i class='fa fa-chevron-left'></i> Back
-    </button>
-  </div>
+<div class='card-footer'>
+  <button class='btn btn-outline-secondary' (click)='onBack()' style='width:80px'>
+    <i class='fa fa-chevron-left'></i> Back
+  </button>
 </div>

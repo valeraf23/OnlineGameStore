@@ -6,9 +6,7 @@ import { ElementRef, Directive, Input, Renderer2 } from '@angular/core';
 export class ErrorHighlightDirective {
   constructor(private element: ElementRef, private renderer: Renderer2) {}
   @Input() set appErrorHighlight(condition: string) {
-
-    debugger
-    if (condition ==='true') {
+    if (condition === 'true') {
       this.renderer.addClass(this.element.nativeElement.querySelector('.multiselect-dropdown'), 'border');
       this.renderer.addClass(this.element.nativeElement.querySelector('.multiselect-dropdown'), 'border-danger');
     } else {

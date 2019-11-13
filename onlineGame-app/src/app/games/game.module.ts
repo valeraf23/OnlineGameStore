@@ -18,10 +18,12 @@ import { SharedModule } from '../shared/shared.module';
 import { CommentsViewComponent } from '../comment/commentView/comments-view.component';
 import { CommentsPopupComponent } from '../comment/comments.popup.component';
 import { ChatComponent } from '../comment/chat.component/chat.component';
-import { CollapsibleCommentComponent } from '../comment/collapsible-comment/collapsible-comment.component';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { GameEditComponent } from './edit/game-edit.component';
 import { ErrorHighlightDirective } from './edit/ng-multiselect-dropdown-directives';
+import { CollapsibleComponent } from '../comment/collabsible/collapsible.component';
+import { CommentsService } from '../comment/comments.service';
+
 
 const routes: Routes = [
   {
@@ -51,10 +53,10 @@ const routes: Routes = [
   ],
   exports: [],
   declarations: [
+    CollapsibleComponent,
     CommentsPopupComponent,
     CommentsViewComponent,
     ChatComponent,
-    CollapsibleCommentComponent,
     JoinStringArrayPipe,
     GenreDetailComponent,
     NgbdPaginationAdvancedComponent,
@@ -67,7 +69,7 @@ const routes: Routes = [
     GameEditComponent,
     GameListComponent
   ],
-  providers: [ConfirmationDialogService, CanDeactivateGuard],
+  providers: [ConfirmationDialogService, CanDeactivateGuard, CommentsService],
   entryComponents: [ConfirmationDialogComponent]
 })
 export class GameModule {}
