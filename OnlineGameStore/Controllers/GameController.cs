@@ -170,14 +170,6 @@ namespace OnlineGameStore.Api.Controllers
         private async Task<IList<GameModel>> GetGameModels(GameResourceParameters gameResourceParameters)
         {
             var games = (await _gameService.GetGamesAsync()).ToList();
-//            var gamesWithComments = games.Select(async g =>
-//            {
-//                var comments = await _commentService.GetAllCommentsForGame(g.Id);
-//                g.Comments = comments.ToList();
-//                return g;
-//            }).ToList();
-
-          //  var results = (await Task.WhenAll(gamesWithComments)).ToList();
             var gameModels = games.AsQueryable()
                 .ApplySort(gameResourceParameters.OrderBy);
             return _gameControllerHelper.ApplyFilters(gameModels, gameResourceParameters).ToList();
