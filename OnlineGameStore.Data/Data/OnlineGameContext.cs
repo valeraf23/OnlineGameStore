@@ -21,7 +21,7 @@ namespace OnlineGameStore.Data.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         { 
-            modelBuilder.ApplyConfiguration(new GameEntityTypeConfiguration());
+           // modelBuilder.ApplyConfiguration(new GameEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CommentEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new GameGenreEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new GamePlatformTypeEntityTypeConfiguration());

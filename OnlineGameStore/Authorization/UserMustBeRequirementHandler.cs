@@ -22,7 +22,7 @@ namespace OnlineGameStore.Api.Authorization
             _gameService = gameService;
         }
 
-        private Either<NotAllowed, Allowed> IfAdmin(UserMustBeRequirementRole requirement)
+        private Either<NotAllowed, Allowed> IfAdmin()
         {
             if (_userInfoService.Roles.All(y => y != UserRoles.Admin)) return new NotAllowed();
 
@@ -47,7 +47,7 @@ namespace OnlineGameStore.Api.Authorization
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
             UserMustBeRequirementRole requirement)
         {
-            IfAdmin(requirement)
+            IfAdmin()
                 .DoWhenRight(() => context.Succeed(requirement))
                 .DoWhenLeft(() =>
                     IfCreator(context)

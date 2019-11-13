@@ -29,6 +29,7 @@ namespace OnlineGameStore.Data.Repository
 
         public override async Task<IEnumerable<Game>> GetAsync(Func<Game, bool> predicate)
         {
+         //   .IncludeFilter(x => x.Comments.Where(c => c.ParentComment == null))
             var allGames =
                 await EntityDbSet
                     .Include(game => game.Comments)
@@ -38,7 +39,7 @@ namespace OnlineGameStore.Data.Repository
                     .ThenInclude(gameGenre => gameGenre.Genre)
                     .ThenInclude(genre => genre.SubGenres)
                     .Include(game => game.GamePlatformType)
-                    .ThenInclude(gamePlatformType => gamePlatformType.PlatformType).IncludeFilter(x => x.Comments.Where(c => c.ParentComment == null)).ToListAsync();
+                    .ThenInclude(gamePlatformType => gamePlatformType.PlatformType).ToListAsync();
             return allGames.Where(predicate);
         }
     }
