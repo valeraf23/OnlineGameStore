@@ -8,7 +8,7 @@ namespace OnlineGameStore.Data.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Game> builder)
         {
-            builder.HasMany<Comment>().WithOne(p=>p.Game).HasForeignKey(d => d.GameId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany<Comment>().WithOne(p=>p.Game).HasForeignKey(d => d.GameId).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
