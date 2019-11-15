@@ -13,9 +13,7 @@ import { Guid } from 'guid-typescript';
 import {
   FormGroup,
   FormBuilder,
-  Validators,
-  ValidatorFn,
-  AbstractControl
+  Validators
 } from '@angular/forms';
 import { CanComponentDeactivate } from 'src/app/core/can-deactivate-component.interface';
 import { Toastr, TOASTR_TOKEN } from 'src/app/shared/toast.services';
@@ -167,7 +165,6 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
       );
       const platform = 'platformTypes';
       const genre = 'genres';
-      debugger
       this.displayMessageForDropDown[platform] = this.IsMultiselectDirty(
         platform
       );
@@ -176,7 +173,6 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
   }
 
   onChangePlatformTypes(key: string) {
-    debugger
     this.isDropDownTouched[key] = true;
   }
 
@@ -264,8 +260,6 @@ export class GameEditComponent implements OnInit, CanComponentDeactivate {
 
   save(): void {
     if (this.isValid()) {
-      //this.gameForm.markAsPristine();
-
       if (this.game.id.toString() === Guid.EMPTY) {
         this.gameService.postGame(JSON.stringify(this.game)).subscribe({
           next: () =>
