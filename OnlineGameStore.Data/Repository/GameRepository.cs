@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using OnlineGame.DataAccess;
 using OnlineGameStore.Data.Data;
 using OnlineGameStore.Domain.Entities;
-using Z.EntityFramework.Plus;
 
 namespace OnlineGameStore.Data.Repository
 {
@@ -29,7 +28,6 @@ namespace OnlineGameStore.Data.Repository
 
         public override async Task<IEnumerable<Game>> GetAsync(Func<Game, bool> predicate)
         {
-         //   .IncludeFilter(x => x.Comments.Where(c => c.ParentComment == null))
             var allGames =
                 await EntityDbSet
                     .Include(game => game.Comments)
