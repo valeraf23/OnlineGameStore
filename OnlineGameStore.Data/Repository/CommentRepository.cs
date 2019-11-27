@@ -26,8 +26,8 @@ namespace OnlineGameStore.Data.Repository
         public override Task<IEnumerable<Comment>> GetAllAsync() => GetAsync(x => true);
 
         public override async Task<IEnumerable<Comment>> GetAsync(Func<Comment, bool> predicate) =>
-            await Context.Comments.Include(i => i.Answers).AsEnumerable()
-                .Where(x => x.ParentComment == null && predicate(x)).ToAsyncEnumerable().ToList();
+            await Context.Comments.Include(i => i.Answers)
+                .Where(x => x.ParentComment == null && predicate(x)).ToListAsync();
 
      
     }
