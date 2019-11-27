@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -58,43 +59,32 @@ namespace OnlineGameStore.Api.Helpers
         private string CreateGamesResourceUri(HttpContext httpContext, GameResourceParameters gameResourceParameters,
             ResourceUriType type)
         {
-            const string action = "GetGames";
+            var f = GetLink(httpContext, gameResourceParameters);
             switch (type)
             {
                 case ResourceUriType.PreviousPage:
-                    return _linkGenerator.GetPathByAction(httpContext, action, values:
-                        new
-                        {
-                            fields = gameResourceParameters.Fields,
-                            orderBy = gameResourceParameters.OrderBy,
-                            searchQuery = gameResourceParameters.SearchQuery,
-                            genre = gameResourceParameters.Genre,
-                            pageNumber = gameResourceParameters.PageNumber - 1,
-                            pageSize = gameResourceParameters.PageSize
-                        });
+                    return f(n => n - 1);
                 case ResourceUriType.NextPage:
-                    return _linkGenerator.GetPathByAction(httpContext, action, values:
-                        new
-                        {
-                            fields = gameResourceParameters.Fields,
-                            orderBy = gameResourceParameters.OrderBy,
-                            searchQuery = gameResourceParameters.SearchQuery,
-                            genre = gameResourceParameters.Genre,
-                            pageNumber = gameResourceParameters.PageNumber + 1,
-                            pageSize = gameResourceParameters.PageSize
-                        });
+                    return f(n => n + 1);
                 default:
-                    return _linkGenerator.GetPathByAction(httpContext, action, values:
-                        new
-                        {
-                            fields = gameResourceParameters.Fields,
-                            orderBy = gameResourceParameters.OrderBy,
-                            searchQuery = gameResourceParameters.SearchQuery,
-                            genre = gameResourceParameters.Genre,
-                            pageNumber = gameResourceParameters.PageNumber,
-                            pageSize = gameResourceParameters.PageSize
-                        });
+                    return f(n => n);
             }
+        }
+
+        private Func<Func<int, int>, string> GetLink(HttpContext httpContext,
+            GameResourceParameters gameResourceParameters, string action = "GetGames")
+        {
+            return getPageNumber => _linkGenerator.GetPathByAction(httpContext, action, values:
+                new
+                {
+                    fields = gameResourceParameters.Fields,
+                    orderBy = gameResourceParameters.OrderBy,
+                    searchQuery = gameResourceParameters.SearchQuery,
+                    genre = gameResourceParameters.Genre,
+                    pageNumber = getPageNumber(gameResourceParameters.PageNumber),
+                    pageSize = gameResourceParameters.PageSize
+                });
+
         }
     }
 }
