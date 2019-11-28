@@ -36,9 +36,9 @@ namespace OnlineGameStore.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPlatformType(PlatformTypeModel publisher) =>
             (await _platformTypeRepository.SaveSafe(publisher))
-            .Map(created => (IActionResult) Ok(created))
-            .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-            .Reduce(error => error.ToObjectResult(), error => error != null)
-            .Reduce(_ => ModelState.ToObjectResult());
+            .OnSuccess(created => (IActionResult) Ok(created))
+            .OnFailure(_ => BadRequest(), error => error is ArgumentNullError)
+            .OnFailure(error => error.ToObjectResult(), error => error != null)
+            .OnFailure(_ => ModelState.ToObjectResult());
     }
 }

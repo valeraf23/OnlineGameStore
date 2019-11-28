@@ -36,7 +36,7 @@ namespace OnlineGameStore.Data.Services.Implementations
 
         private async Task<Either<Error, TModel>> Save(TModel gameModel) =>
             (await Repository.SaveAsync(gameModel.ToEntity<TEntity>()))
-            .Map(e => e.ToModel<TModel>());
+            .OnSuccess(e => e.ToModel<TModel>());
 
         private async Task<Either<Error, TModel>> Update(Guid id, TModel gameModel)
         {
@@ -45,7 +45,7 @@ namespace OnlineGameStore.Data.Services.Implementations
             Mapper.Map(gameModel, existEntity);
             existEntity.Id = id;
             return (await Repository.SaveAsync(existEntity))
-                .Map(e => e.ToModel<TModel>());
+                .OnSuccess(e => e.ToModel<TModel>());
         }
     }
 }

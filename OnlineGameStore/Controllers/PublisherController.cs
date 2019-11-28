@@ -51,10 +51,10 @@ namespace OnlineGameStore.Api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> AddPublisher(PublisherModel publisher) =>
             (await _publisherRepository.SaveSafe(publisher))
-            .Map(created => (IActionResult) Ok(created))
-            .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-            .Reduce(error => error.ToObjectResult(), error => error != null)
-            .Reduce(_ => ModelState.ToObjectResult());
+            .OnSuccess(created => (IActionResult) Ok(created))
+            .OnFailure(_ => BadRequest(), error => error is ArgumentNullError)
+            .OnFailure(error => error.ToObjectResult(), error => error != null)
+            .OnFailure(_ => ModelState.ToObjectResult());
 
         [HttpPut("{id}")]
         public IActionResult UpdatePublisher(Guid id, [FromBody] PublisherForCreateModel publisher)
@@ -67,10 +67,10 @@ namespace OnlineGameStore.Api.Controllers
 
             Mapper.Map(publisher, existPublisher);
             return _publisherRepository.SaveSafe(existPublisher).GetAwaiter().GetResult()
-                .Map(x => (IActionResult) NoContent())
-                .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-                .Reduce(error => error.ToObjectResult(), error => error != null)
-                .Reduce(_ => ModelState.ToObjectResult());
+                .OnSuccess(x => (IActionResult) NoContent())
+                .OnFailure(_ => BadRequest(), error => error is ArgumentNullError)
+                .OnFailure(error => error.ToObjectResult(), error => error != null)
+                .OnFailure(_ => ModelState.ToObjectResult());
         }
 
         [HttpPatch("{id}")]
@@ -87,10 +87,10 @@ namespace OnlineGameStore.Api.Controllers
             publisher.ApplyTo(publisherPatch);
             Mapper.Map(publisherPatch, existPublisher);
             return _publisherRepository.SaveSafe(existPublisher).GetAwaiter().GetResult()
-                .Map(x => (IActionResult) NoContent())
-                .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-                .Reduce(error => error.ToObjectResult(), error => error != null)
-                .Reduce(_ => ModelState.ToObjectResult());
+                .OnSuccess(x => (IActionResult) NoContent())
+                .OnFailure(_ => BadRequest(), error => error is ArgumentNullError)
+                .OnFailure(error => error.ToObjectResult(), error => error != null)
+                .OnFailure(_ => ModelState.ToObjectResult());
         }
 
         [HttpGet("AuthContext")]

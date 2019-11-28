@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using OnlineGame.DataAccess.Interfaces;
 
 namespace OnlineGameStore.Domain.Entities
 {
-    public class Game : IGuidIdentity
+    public class Game : Entity
     {
         [Required] [MaxLength(50)] public string Name { get; set; }
 
@@ -20,6 +19,5 @@ namespace OnlineGameStore.Domain.Entities
 
         public virtual ICollection<GameGenre> GameGenre { get; set; } = new List<GameGenre>();
         public virtual ICollection<GamePlatformType> GamePlatformType { get; set; } = new List<GamePlatformType>();
-        [Key] public Guid Id { get; set; }
     }
 }
