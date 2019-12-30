@@ -77,19 +77,19 @@ namespace OnlineGameStore.Api.Controllers
         [ServiceFilter(typeof(AssignPublisherIdForGameModelAttribute))]
         public async Task<IActionResult> CreateGame(GameForCreationModel game) =>
             (await _gameService.SaveSafe(Mapper.Map<GameModel>(game)))
-            .Map(GetRoute)
-            .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-            .Reduce(error => error.ToObjectResult(), error => error != null)
-            .Reduce(_ => ModelState.ToObjectResult());
+            .OnSuccess(GetRoute)
+            .OnFailure(_ => BadRequest(), error => error is ArgumentNullError)
+            .OnFailure(error => error.ToObjectResult(), error => error != null)
+            .OnFailure(_ => ModelState.ToObjectResult());
 
         [HttpPut("{id}")]
         [Authorize(Policy = "UserMustBeCreator")]
         public IActionResult UpdateGame(Guid id, GameForCreationModel game) =>
             _gameService.UpdateSafe(id, Mapper.Map<GameModel>(game)).GetAwaiter().GetResult()
-                .Map(x => (IActionResult) NoContent())
-                .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-                .Reduce(error => error.ToObjectResult(), error => error != null)
-                .Reduce(_ => ModelState.ToObjectResult());
+                .OnSuccess(x => (IActionResult) NoContent())
+                .OnFailure(_ => BadRequest(), error => error is ArgumentNullError)
+                .OnFailure(error => error.ToObjectResult(), error => error != null)
+                .OnFailure(_ => ModelState.ToObjectResult());
 
         [HttpPatch("{id}")]
         public IActionResult PartiallyUpdatePublisher(Guid id, JsonPatchDocument<PublisherForCreateModel> publisher)
@@ -100,27 +100,27 @@ namespace OnlineGameStore.Api.Controllers
             var publisherPatch = Mapper.Map<PublisherForCreateModel>(existPublisher);
             publisher.ApplyTo(publisherPatch);
             return _gameService.UpdateSafe(id, Mapper.Map<GameModel>(publisherPatch)).GetAwaiter().GetResult()
-                .Map(x => (IActionResult) NoContent())
-                .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-                .Reduce(error => error.ToObjectResult(), error => error != null)
-                .Reduce(_ => ModelState.ToObjectResult());
+                .OnSuccess(x => (IActionResult) NoContent())
+                .OnFailure(_ => BadRequest(), error => error is ArgumentNullError)
+                .OnFailure(error => error.ToObjectResult(), error => error != null)
+                .OnFailure(_ => ModelState.ToObjectResult());
         }
 
         [HttpPost("{id}/comments")]
         public async Task<IActionResult> AddCommentToGame(Guid id, [FromBody] CommentModel model) =>
             (await _commentService.AddCommentToGameAsync(id, model))
-            .Map(GetRoute)
-            .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-            .Reduce(error => error.ToObjectResult(), error => error != null)
-            .Reduce(_ => ModelState.ToObjectResult());
+            .OnSuccess(GetRoute)
+            .OnFailure(_ => BadRequest(), error => error is ArgumentNullError)
+            .OnFailure(error => error.ToObjectResult(), error => error != null)
+            .OnFailure(_ => ModelState.ToObjectResult());
 
         [HttpPost("{id}/comments/{commentId}")]
         public async Task<IActionResult> AddAnswerToComment(Guid id, Guid commentId, [FromBody] CommentModel model) =>
             (await _commentService.AddAnswerToCommentAsync(id, commentId, model))
-            .Map(x => (IActionResult) Ok(x))
-            .Reduce(_ => BadRequest(), error => error is ArgumentNullError)
-            .Reduce(error => error.ToObjectResult(), error => error != null)
-            .Reduce(_ => ModelState.ToObjectResult());
+            .OnSuccess(x => (IActionResult) Ok(x))
+            .OnFailure(_ => BadRequest(), error => error is ArgumentNullError)
+            .OnFailure(error => error.ToObjectResult(), error => error != null)
+            .OnFailure(_ => ModelState.ToObjectResult());
 
         [HttpGet]
         [Route("{id}/download")]

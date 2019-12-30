@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using OnlineGame.DataAccess.Interfaces;
 
 namespace OnlineGameStore.Domain.Entities
 {
-    public class Genre : IGuidIdentity
+    public class Genre : Entity
     {
         [Required] [MaxLength(50)] public string Name { get; set; }
 
@@ -13,6 +12,5 @@ namespace OnlineGameStore.Domain.Entities
         public Guid? ParentId { get; set; }
         public virtual Genre ParentGenre { get; set; }
         public virtual ICollection<Genre> SubGenres { get; set; } = new List<Genre>();
-        [Key] public Guid Id { get; set; }
     }
 }

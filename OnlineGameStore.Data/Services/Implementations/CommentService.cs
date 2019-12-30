@@ -32,7 +32,7 @@ namespace OnlineGameStore.Data.Services.Implementations
         {
             var entity = comment.ToEntity<Comment>();
             entity.GameId = gameId;
-            return (await Repository.SaveAsync(entity)).Map(e => e.ToModel<CommentModel>());
+            return (await Repository.SaveAsync(entity)).OnSuccess(e => e.ToModel<CommentModel>());
         }
 
         public async Task<Either<Error, CommentModel>> AddAnswerToCommentAsync(Guid gameId, Guid commentId,
@@ -41,7 +41,7 @@ namespace OnlineGameStore.Data.Services.Implementations
             var entity = comment.ToEntity<Comment>();
             entity.ParentId = commentId;
             entity.GameId = gameId;
-            return (await Repository.SaveAsync(entity)).Map(e => e.ToModel<CommentModel>());
+            return (await Repository.SaveAsync(entity)).OnSuccess(e => e.ToModel<CommentModel>());
         }
 
         public async Task<IEnumerable<CommentModel>> GetCommentsForGameAsync(Guid gameId,

@@ -20,24 +20,27 @@ namespace OnlineGameStore.Tests.TestProject
             expected.Should().Be(actually);
         }
 
-//
-//        [Test]
-//        public async Task Add_Comment_To_Game()
-//        {
-//            var expected = new CommentModel
-//            {
-//                Name = "Some_Comment",
-//                Body = "Some_body"
-//            };
-//
-//            await _commentService.AddCommentToGame(GamesTestData.ThirdGame.Id, expected);
-//
-//            var actual =
-//                (await _commentService.GetCommentsForGame(GamesTestData.ThirdGame.Id, x => x.Name == expected.Name))
-//                .FirstOrDefault();
-//            Assert.NotNull(actual);
-//            expected.Name.Should().BeEquivalentTo(actual.Name);
-//            expected.Body.Should().BeEquivalentTo(actual.Body);
-//        }
+        [Test]
+        public async Task Add_New_Comment()
+        {
+            var gameId = GamesTestData.FirstGame.Id;
+            var comments = await _commentService.GetAllCommentsForGame(GamesTestData.FirstGame.Id);
+            var parentCommentId = comments.First();
+            var newAnswer = new CommentModel
+            {
+                Name = "Answer",
+                Body = "This is answer"
+            };
+            await _commentService.AddAnswerToCommentAsync(gameId, parentCommentId.Id, newAnswer);
+            var commentsWithAnswer = await _commentService.GetAllCommentsForGame(GamesTestData.FirstGame.Id)
+                .ContinueWith(x => x.Result.FirstOrDefault(c => c.Id == parentCommentId.Id));
+            var answer = commentsWithAnswer.Answers.FirstOrDefault(x=>x.Body == newAnswer.Body);
+
+            MultiplyAssertion.For(() =>
+            {
+                answer.Should().NotBeNull();
+                answer.Body.Should().Be(newAnswer.Body);
+            });
+        }
     }
 }

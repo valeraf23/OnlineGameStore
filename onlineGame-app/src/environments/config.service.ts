@@ -32,6 +32,6 @@ export class ConfigService {
       userStore: new WebStorageStateStore({ store: window.localStorage }),
       automaticSilentRenew: true,
       silent_redirect_uri: `${this.clientRoot}/assets/silent-redirect.html`
-    }
-  };
+    };
+  }
 }

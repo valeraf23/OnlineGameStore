@@ -58,7 +58,7 @@ namespace OnlineGameStore.Data.Services.Implementations
             Mapper.Map(gameModel, existEntity);
             existEntity.Id = id;
             existEntity.PublisherId = publisherId;
-            return (await Repository.SaveAsync(existEntity)).Map(e => e.ToModel<GameModel>());
+            return (await Repository.SaveAsync(existEntity)).OnSuccess(e => e.ToModel<GameModel>());
         }
     }
 }

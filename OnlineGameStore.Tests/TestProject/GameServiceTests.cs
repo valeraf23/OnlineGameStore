@@ -55,18 +55,17 @@ namespace OnlineGameStore.Tests.TestProject
         public async Task Can_Create_New_Game_Safe()
         {
             var res = await _gameService.SaveSafe(Mapper.Map<GameModel>(new GameForCreationModel()));
-            const string expected = "UnprocessableError";
-            var actually = res.Map(created => created.Name)
-                .Reduce(_ => expected, error => error is UnprocessableError)
-                .Reduce(_ => "InternalServerError");
-            actually.Should().Be(expected);
+            var actually = res.OnSuccess(created => created.Name)
+                .OnFailure(er => er.ToString(), error => error is UnprocessableError)
+                .OnFailure(_ => "InternalServerError");
+            actually.Should().Be("Name: You should fill out a Name.\r\nDescription: You should fill out a Description.\r\n");
         }
 
         [Test]
         public async Task Can_Get_All_Games()
         {
             var games = await _gameService.GetGamesAsync();
-            Assert.True(games.Count() > 1);
+            games.Count().Should().BeGreaterThan(1);
         }
 
         [Test]
@@ -75,7 +74,7 @@ namespace OnlineGameStore.Tests.TestProject
             _gameService.DeleteGameById(GamesTestData.FourthGame.Id);
             var games = await _gameService.GetGamesAsync();
             var isGameExist = games.Any(x => x.Name == GamesTestData.FourthGame.Name);
-            Assert.False(isGameExist, "Game was not deleted");
+            isGameExist.Should().BeFalse("Game was not deleted");
         }
 
         [Test]
