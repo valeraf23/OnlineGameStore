@@ -39,7 +39,6 @@ namespace OnlineGameStore.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<OnlineGameContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Local"),
                     b => b.MigrationsAssembly("OnlineGameStore.Api")));

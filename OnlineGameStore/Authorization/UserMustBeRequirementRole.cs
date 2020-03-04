@@ -11,6 +11,8 @@ namespace OnlineGameStore.Api.Authorization
         {
             Role = role;
         }
+
+        //dfsdfdsf
     }
 }
 
